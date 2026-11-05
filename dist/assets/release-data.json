@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "product": "DMC Player",
-  "version": "2.6.0",
-  "preparedAtUtc": "2026-11-05T22:46:19.6261192Z",
-  "generatedAtUtc": "2026-11-05T22:46:21.278Z",
+  "version": "2.6.1",
+  "preparedAtUtc": "2026-11-05T23:05:09.3526085Z",
+  "generatedAtUtc": "2026-11-05T23:05:11.086Z",
   "platform": {
     "operatingSystem": "Windows",
     "architecture": "x64",
@@ -12,25 +12,25 @@
   "files": [
     {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.6.0.exe",
-      "sizeBytes": 112999580,
-      "sha256": "46a7f19874b3f9125ab699c258f939fcf86c5dabfb5918b69278161d2564934b",
+      "filename": "DMC-Player-Setup-2.6.1.exe",
+      "sizeBytes": 113000139,
+      "sha256": "66facce574a8744b2f9f7e80d022a4f27a1861b682d9541c627680d9176dc3dc",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.0/DMC-Player-Setup-2.6.0.exe",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.1/DMC-Player-Setup-2.6.1.exe",
       "sizeMiB": 107.8,
       "sizeLabel": "113.0 MB"
     },
     {
       "kind": "portable",
-      "filename": "DMC-Player-2.6.0-win-x64.zip",
-      "sizeBytes": 135644692,
-      "sha256": "9ee8b2187a64dcf594caa9140cf2c3a0d49637606f43cf4f9e96b6fd72dd3991",
+      "filename": "DMC-Player-2.6.1-win-x64.zip",
+      "sizeBytes": 135645554,
+      "sha256": "17f5a7157493ce830494e9d4ffe176720ca9f46beefc0303a4c050b36807f3f4",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.0/DMC-Player-2.6.0-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.1/DMC-Player-2.6.1-win-x64.zip",
       "sizeMiB": 129.4,
       "sizeLabel": "135.6 MB"
     }
@@ -38,25 +38,25 @@
   "downloads": {
     "installer": {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.6.0.exe",
-      "sizeBytes": 112999580,
-      "sha256": "46a7f19874b3f9125ab699c258f939fcf86c5dabfb5918b69278161d2564934b",
+      "filename": "DMC-Player-Setup-2.6.1.exe",
+      "sizeBytes": 113000139,
+      "sha256": "66facce574a8744b2f9f7e80d022a4f27a1861b682d9541c627680d9176dc3dc",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.0/DMC-Player-Setup-2.6.0.exe",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.1/DMC-Player-Setup-2.6.1.exe",
       "sizeMiB": 107.8,
       "sizeLabel": "113.0 MB"
     },
     "portable": {
       "kind": "portable",
-      "filename": "DMC-Player-2.6.0-win-x64.zip",
-      "sizeBytes": 135644692,
-      "sha256": "9ee8b2187a64dcf594caa9140cf2c3a0d49637606f43cf4f9e96b6fd72dd3991",
+      "filename": "DMC-Player-2.6.1-win-x64.zip",
+      "sizeBytes": 135645554,
+      "sha256": "17f5a7157493ce830494e9d4ffe176720ca9f46beefc0303a4c050b36807f3f4",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.0/DMC-Player-2.6.0-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.1/DMC-Player-2.6.1-win-x64.zip",
       "sizeMiB": 129.4,
       "sizeLabel": "135.6 MB"
     }
@@ -223,7 +223,7 @@
     "portablePayloadVerified": true,
     "method": "Extraction and hashes; no application/runtime installation or system-default changes",
     "sourceFilesVerified": 9,
-    "releaseManifestSha256": "c1c251591969e403769725f8eeb47e27c9d496eaeaaab61b52043fc3d8edb05d",
-    "checksumFileSha256": "793e9b70db19aa65deeab875aeb06c08f775242dc4933e2874de111c9099206a"
+    "releaseManifestSha256": "0a337518f0a5316c7a51acf788d49452d2e03a8934b8175cd0e53de4243934a1",
+    "checksumFileSha256": "483dfb8c7efd630d3965513ac635d4b649e5577c4d0460a5a8e4babe1721c424"
   }
 }
