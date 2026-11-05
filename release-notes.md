@@ -20,13 +20,13 @@ This build is unsigned; Windows may show an unknown-publisher or reputation prom
 ## Validation
 
 - 9/9 starter channels decoded real video through LibVLC using silent dummy outputs.
-- 8 parser/download/storage checks and 5 isolated UI/native playback checks passed.
+- 8 parser/download/storage checks and 6 isolated UI/native playback checks passed.
 - Existing queue (6), help (8), provider catalog (8), visual/layout, installer (9) and release-package (3) checks passed.
 - Individual community streams are not playback-verified.
 
 ## SHA-256
 
 ```text
-296687498de81c9e0cbee9418cc08ea21d535337dcfc6704e3a98a31898bab36  DMC-Player-Setup-2.5.0.exe
-85e9357ac6da64dd50ae5607db92cd726523a50b7a275084fcae30e876125060  DMC-Player-2.5.0-win-x64.zip
+7a4b5ad971cc3c3e76a787e0912eedbee9ee1901b5e0448980c65191b29c4ebc  DMC-Player-Setup-2.5.0.exe
+e73a90d999f5fe973e70ffc34b1f7692ed597b6069df9d94dd8a89561a7c30fa  DMC-Player-2.5.0-win-x64.zip
 ```
