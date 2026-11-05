@@ -1,0 +1,165 @@
+{
+    "schemaVersion":  1,
+    "product":  "DMC Player",
+    "version":  "2.4.0",
+    "preparedAtUtc":  "2026-11-05T19:04:33.0044959Z",
+    "platform":  {
+                     "operatingSystem":  "Windows",
+                     "architecture":  "x64",
+                     "minimumVersion":  "10.0.17763"
+                 },
+    "files":  [
+                  {
+                      "kind":  "installer",
+                      "filename":  "DMC-Player-Setup-2.4.0.exe",
+                      "sizeBytes":  112971847,
+                      "sha256":  "6c39a9c60fd55164fd9c49be4b0ca6a93a61252683aad1cb72722131b401131f",
+                      "signed":  false,
+                      "signatureStatus":  "NotSigned",
+                      "architecture":  "x64",
+                      "installScope":  "currentUser"
+                  },
+                  {
+                      "kind":  "portable",
+                      "filename":  "DMC-Player-2.4.0-win-x64.zip",
+                      "sizeBytes":  135603653,
+                      "sha256":  "c9c4d09f238762c58fc07cf9d21a813f735c928c253520046cf0dd2db3ee8342",
+                      "architecture":  "x64",
+                      "installScope":  "none"
+                  }
+              ],
+    "assets":  [
+                   {
+                       "kind":  "brand",
+                       "filename":  "assets/DMC-Player-Logo.svg",
+                       "sizeBytes":  563,
+                       "sha256":  "86ba2d08ab79cba1272febd783583919a3d87f7758d32c04c9101b44e6309c5a"
+                   },
+                   {
+                       "kind":  "brand",
+                       "filename":  "assets/DMC-Player-Mark.svg",
+                       "sizeBytes":  195,
+                       "sha256":  "f018eb61364336ac39153cc690d20928c9fdf91e99a71373ef24978575d2718b"
+                   },
+                   {
+                       "kind":  "brand",
+                       "filename":  "assets/DMC-Player-Icon.png",
+                       "sizeBytes":  8831,
+                       "sha256":  "fe99bb618d42e13660f1d778ea548dd35903b322c0abb9512be7165e4548f992"
+                   }
+               ],
+    "documentation":  [
+                          {
+                              "kind":  "faq",
+                              "filename":  "docs/FAQ.md",
+                              "sizeBytes":  8905,
+                              "sha256":  "5911e10119a238439b1a8e2336b202a57dc27f85d8e0d900b03e60a806013649"
+                          },
+                          {
+                              "kind":  "tvSources",
+                              "filename":  "docs/TV-sources.md",
+                              "sizeBytes":  4711,
+                              "sha256":  "1cdd185913a70ba3ae464f18edb07e21fdca3f50f6ac7a5635937c93e126b040"
+                          }
+                      ],
+    "runtimes":  {
+                     "dotnetDesktop":  {
+                                           "included":  true,
+                                           "targetFramework":  "net10.0-windows"
+                                       },
+                     "vlc":  {
+                                 "included":  true,
+                                 "architecture":  "x64"
+                             },
+                     "webView2":  {
+                                      "requiredFor":  "Embedded streaming websites",
+                                      "requiredForLocalFiles":  false,
+                                      "runtimeIncluded":  false,
+                                      "installerOffersWhenMissing":  true,
+                                      "officialBootstrapperIncludedInInstaller":  true,
+                                      "runtimeDownloadRequiresInternet":  true
+                                  }
+                 },
+    "fileAssociations":  {
+                             "extensions":  [
+                                                ".3gp",
+                                                ".aac",
+                                                ".aif",
+                                                ".aiff",
+                                                ".asf",
+                                                ".avi",
+                                                ".flac",
+                                                ".flv",
+                                                ".m2ts",
+                                                ".m2v",
+                                                ".m3u",
+                                                ".m3u8",
+                                                ".m4a",
+                                                ".m4v",
+                                                ".mkv",
+                                                ".mov",
+                                                ".mp3",
+                                                ".mp4",
+                                                ".mpeg",
+                                                ".mpg",
+                                                ".mts",
+                                                ".ogg",
+                                                ".ogv",
+                                                ".opus",
+                                                ".pls",
+                                                ".ts",
+                                                ".vob",
+                                                ".wav",
+                                                ".webm",
+                                                ".wma",
+                                                ".wmv"
+                                            ],
+                             "count":  31,
+                             "registrationScope":  "currentUser",
+                             "defaultSelection":  "Windows Settings",
+                             "setsUserDefaultsAutomatically":  false
+                         },
+    "viewModes":  {
+                      "contextMenu":  true,
+                      "fullScreen":  true,
+                      "fullScreenShortcut":  "F11",
+                      "exitFullScreenShortcut":  "Escape",
+                      "miniPlayer":  true,
+                      "restoresWindowState":  true
+                  },
+    "queue":  {
+                  "explicitAddRequired":  true,
+                  "normalOpensAddItems":  false,
+                  "automaticWatchHistory":  false,
+                  "manualQueuesPersist":  true,
+                  "legacyAutomaticQueuesRestored":  false
+              },
+    "streamingCatalogue":  {
+                               "entries":  18,
+                               "officialWebsites":  true,
+                               "liveTvFinder":  true,
+                               "searchScope":  "Provider names, channel keywords and categories",
+                               "knownServiceUrlsOpenInEmbeddedPlayer":  true,
+                               "protectedProgrammePlaybackVerified":  false
+                           },
+    "watchTogether":  {
+                          "inviteProtocol":  "dmc-watch",
+                          "protocolRegisteredByInstaller":  true,
+                          "automaticRelay":  "Pinggy free TCP",
+                          "accountRequired":  false,
+                          "maximumFreeSessionMinutes":  60,
+                          "requiresWindowsOpenSshClient":  true,
+                          "serviceAvailabilityGuaranteed":  false,
+                          "sharedSources":  [
+                                                "Local media files",
+                                                "Direct HTTP/HTTPS streams"
+                                            ],
+                          "embeddedWebsitesShared":  false
+                      },
+    "verification":  {
+                         "installerChecksPassed":  true,
+                         "installerPayloadFiles":  983,
+                         "portablePayloadVerified":  true,
+                         "method":  "Extraction and hashes; no application/runtime installation or system-default changes"
+                     }
+}
