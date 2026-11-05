@@ -97,6 +97,119 @@
     })();
   }
 
+  all('[data-game-carousel]').forEach(carousel => {
+    const slides = [...carousel.querySelectorAll('[data-game-slide]')];
+    const previous = carousel.querySelector('#demo-previous');
+    const next = carousel.querySelector('#demo-next');
+    const cycle = carousel.querySelector('#demo-cycle');
+    const name = carousel.querySelector('#demo-game-name');
+    const count = carousel.querySelector('#demo-scene-count');
+    const source = carousel.querySelector('#demo-game-source');
+    if (!slides.length || !previous || !next || !cycle || !name || !count || !source) return;
+
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const failed = new Set();
+    let current = Math.max(0, slides.findIndex(slide => slide.classList.contains('is-active')));
+    let paused = motion.matches;
+    let hovered = false;
+    let focused = carousel.contains(document.activeElement);
+    let visible = !('IntersectionObserver' in window);
+    let stopped = false;
+    let timer;
+    const available = () => slides.filter(slide => !failed.has(slide));
+    const ready = () => available().filter(slide => slide.complete && slide.naturalWidth > 0);
+
+    function schedule() {
+      clearTimeout(timer);
+      timer = undefined;
+      if (stopped || paused || hovered || focused || document.hidden || !visible || ready().length < 2) return;
+      timer = setTimeout(() => { move(1); }, 6000);
+    }
+    function render() {
+      const usable = available();
+      const active = slides[current];
+      slides.forEach(slide => {
+        const selected = usable.length > 0 && slide === active;
+        slide.classList.toggle('is-active', selected);
+        slide.setAttribute('aria-hidden', String(!selected));
+      });
+      if (usable.length) {
+        name.textContent = active.dataset.gameTitle;
+        count.textContent = `${usable.indexOf(active) + 1} / ${usable.length}`;
+        source.href = active.dataset.sourceUrl;
+        source.title = active.dataset.gameCredit;
+        source.setAttribute('aria-label', `${active.dataset.gameTitle} screenshot source: ${active.dataset.gameCredit}`);
+      } else {
+        name.textContent = 'Game screenshots unavailable';
+        count.textContent = '0 / 0';
+      }
+      source.hidden = !usable.length;
+      previous.disabled = next.disabled = cycle.disabled = ready().length < 2;
+      cycle.setAttribute('aria-pressed', String(paused));
+      cycle.setAttribute('aria-label', paused ? 'Play game backgrounds' : 'Pause game backgrounds');
+      cycle.title = paused ? 'Play game backgrounds' : 'Pause game backgrounds';
+      cycle.textContent = paused ? '▶' : 'Ⅱ';
+      carousel.classList.toggle('screenshots-unavailable', !usable.length);
+      schedule();
+    }
+    function move(direction) {
+      const loaded = ready();
+      if (loaded.length > 1) {
+        const position = loaded.indexOf(slides[current]);
+        const index = position < 0 ? (direction > 0 ? 0 : loaded.length - 1) : (position + direction + loaded.length) % loaded.length;
+        current = slides.indexOf(loaded[index]);
+      }
+      render();
+    }
+    previous.addEventListener('click', () => move(-1));
+    next.addEventListener('click', () => move(1));
+    cycle.addEventListener('click', () => { paused = !paused; render(); });
+    carousel.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') { hovered = true; schedule(); } });
+    carousel.addEventListener('pointerleave', () => { hovered = false; schedule(); });
+    carousel.addEventListener('focusin', () => { focused = true; schedule(); });
+    carousel.addEventListener('focusout', event => { focused = carousel.contains(event.relatedTarget); schedule(); });
+    document.addEventListener('visibilitychange', schedule);
+    motion.addEventListener('change', event => { if (event.matches) { paused = true; render(); } });
+
+    slides.forEach(slide => {
+      function unavailable() {
+        failed.add(slide);
+        if (slides[current] === slide) {
+          const replacement = ready()[0] || available()[0];
+          if (replacement) current = slides.indexOf(replacement);
+        }
+        render();
+      }
+      slide.addEventListener('error', unavailable);
+      slide.addEventListener('load', () => {
+        failed.delete(slide);
+        if (!slides[current].complete || !slides[current].naturalWidth || failed.has(slides[current])) current = slides.indexOf(slide);
+        render();
+      });
+      if (slide.complete && !slide.naturalWidth) failed.add(slide);
+    });
+    if (failed.has(slides[current])) {
+      const replacement = ready()[0] || available()[0];
+      if (replacement) current = slides.indexOf(replacement);
+    }
+    let observer;
+    if ('IntersectionObserver' in window) {
+      observer = new window.IntersectionObserver(entries => {
+        visible = entries.some(entry => entry.isIntersecting);
+        schedule();
+      }, { threshold: 0.1 });
+      observer.observe(carousel);
+    }
+    window.addEventListener('pagehide', () => { stopped = true; clearTimeout(timer); observer?.disconnect(); });
+    window.addEventListener('pageshow', () => {
+      if (!stopped) return;
+      stopped = false;
+      if (observer) { visible = false; observer.observe(carousel); }
+      schedule();
+    });
+    render();
+  });
+
   const stage = one('#demo-stage');
   const mini = one('#mini-demo');
   const lock = one('#demo-lock');
