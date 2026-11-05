@@ -1,121 +1,152 @@
 (() => {
   'use strict';
+  const one = selector => document.querySelector(selector);
+  const all = selector => [...document.querySelectorAll(selector)];
   let release;
-  let faq = [];
-  const $ = (selector) => document.querySelector(selector);
-  const all = (selector) => [...document.querySelectorAll(selector)];
   let toastTimer;
-  function toast(message) { const element = $('#toast'); element.textContent = message; element.classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => element.classList.remove('visible'), 2600); }
+  function toast(message) {
+    const element = one('#toast');
+    if (!element) return;
+    element.textContent = message;
+    element.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => element.classList.remove('visible'), 3000);
+  }
+
+  const menu = one('.main-nav');
+  const toggle = one('.menu-toggle');
+  if (menu && toggle) {
+    function closeMenu() { menu.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open)); menu.classList.toggle('open', open);
+    });
+    menu.addEventListener('click', event => { if (event.target.closest('a')) closeMenu(); });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { closeMenu(); toggle.focus(); }
+    });
+    document.addEventListener('click', event => { if (!event.target.closest('.site-header')) closeMenu(); });
+    window.addEventListener('resize', () => { if (window.innerWidth > 760) closeMenu(); });
+  }
 
   async function loadRelease() {
     try {
       const response = await fetch('./assets/release-data.json');
       if (!response.ok) throw new Error('Release information unavailable');
-      release = await response.json();
-      for (const type of ['installer', 'portable']) {
-        const file = release.downloads[type];
+      const data = await response.json();
+      if (!/^\d+\.\d+\.\d+$/.test(data.version) || !data.downloads) throw new Error('Invalid release information');
+      for (const kind of ['installer', 'portable']) {
+        const file = data.downloads[kind];
         const url = new URL(file.url, location.href);
-        if (!['https:', 'http:'].includes(url.protocol) || url.origin !== location.origin && url.protocol !== 'https:') throw new Error('Invalid download address');
-        all(`[data-download="${type}"]`).forEach(link => { link.href = file.url; link.setAttribute('download', file.filename); });
-        all(`[data-size="${type}"]`).forEach(node => { node.textContent = file.sizeLabel; });
-        all(`[data-hash="${type}"]`).forEach(node => { node.textContent = file.sha256; });
+        if (url.protocol !== 'https:' || url.username || url.password || !url.pathname.endsWith('/' + file.filename)
+            || !/^[a-f\d]{64}$/i.test(file.sha256)) throw new Error('Invalid download details');
       }
-      all('[data-version]').forEach(node => { node.textContent = `Version ${release.version}`; });
-      $('#download-status').textContent = `Version ${release.version} · Downloads include VLC and .NET. WebView2 is offered by Setup when missing.`;
-      const installerUrl = new URL(release.downloads.installer.url, location.href);
-      if (installerUrl.hostname === 'github.com') $('#release-link').href = installerUrl.href.split('/download/')[0] + '/tag/v' + release.version;
+      release = data;
+      for (const kind of ['installer', 'portable']) {
+        const file = release.downloads[kind];
+        all(`[data-download="${kind}"]`).forEach(link => { link.href = file.url; link.setAttribute('download', file.filename); });
+        all(`[data-size="${kind}"]`).forEach(element => { element.textContent = file.sizeLabel; });
+        all(`[data-hash="${kind}"]`).forEach(element => { element.textContent = file.sha256; });
+      }
+      all('[data-version]').forEach(element => { element.textContent = `Version ${release.version}`; });
+      all('[data-release-link]').forEach(link => { link.href = `https://github.com/mccomish/dmc-player-downloads/releases/tag/v${release.version}`; });
+      const status = one('#download-status');
+      if (status) status.textContent = `Version ${release.version} · Includes VLC and .NET. Setup offers WebView2 when missing.`;
     } catch (_) {
-      $('#download-status').textContent = 'Download information could not load. Please refresh, or use Release files & notes below.';
-      all('[data-download]').forEach(link => { link.href = $('#release-link').href; link.removeAttribute('download'); });
+      const status = one('#download-status');
+      if (status) status.textContent = 'Live release details could not load. The download buttons use the packaged release links. Check Release files & notes below if you need help.';
     }
   }
   all('[data-copy-hash]').forEach(button => button.addEventListener('click', async () => {
-    const value = release?.downloads[button.dataset.copyHash]?.sha256 || $(`[data-hash="${button.dataset.copyHash}"]`).textContent;
-    try { await navigator.clipboard.writeText(value); toast('Checksum copied'); }
-    catch (_) { toast('Select the checksum to copy it'); }
+    const kind = button.dataset.copyHash;
+    const value = release?.downloads?.[kind]?.sha256 ?? one(`[data-hash="${kind}"]`)?.textContent;
+    if (!value) return;
+    try { await navigator.clipboard.writeText(value.trim()); toast('Checksum copied.'); }
+    catch (_) { toast('Could not copy automatically. Select the checksum and copy it manually.'); }
   }));
+  loadRelease();
 
-  const shots = {
-    player: ['./assets/dmc-player.png', 'DMC Player main window with local file and direct stream controls.', 'Actual DMC Player interface. Your files and links supply the video.'],
-    tv: ['./assets/dmc-live-tv.png', 'DMC Player direct live TV channel picker.', 'Choose a channel and watch directly. Import lists and keep favourites separately from the queue.'],
-    queue: ['./assets/dmc-player-queue.png', 'DMC Player with a manually chosen queue.', 'Queue items are added only when you choose. Ordinary opens play on their own.']
-  };
-  function selectShot(button, focus = false) {
-    all('[data-shot]').forEach(tab => { const selected = tab === button; tab.setAttribute('aria-selected', String(selected)); tab.tabIndex = selected ? 0 : -1; });
-    const [src, alt, caption] = shots[button.dataset.shot];
-    $('#screenshot').src = src; $('#screenshot').alt = alt;
-    $('#screenshot-caption').textContent = caption; $('#screenshot-panel').setAttribute('aria-labelledby', button.id);
-    if (focus) button.focus();
-  }
-  all('[data-shot]').forEach((button, index, tabs) => {
-    button.addEventListener('click', () => selectShot(button));
-    button.addEventListener('keydown', e => {
-      let next;
-      if (e.key === 'ArrowRight') next = (index + 1) % tabs.length;
-      if (e.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
-      if (e.key === 'Home') next = 0;
-      if (e.key === 'End') next = tabs.length - 1;
-      if (next !== undefined) { e.preventDefault(); selectShot(tabs[next], true); }
-    });
-  });
-
-  function renderFaq() {
-    const words = $('#faq-search').value.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
-    const matches = faq.filter(entry => words.every(word => `${entry.question} ${entry.answer}`.toLocaleLowerCase().includes(word)));
-    const fragment = document.createDocumentFragment();
-    for (const entry of matches) {
-      const detail = document.createElement('details'); detail.className = 'faq-item';
-      const summary = document.createElement('summary'); summary.textContent = entry.question;
-      const answer = document.createElement('p'); answer.textContent = entry.answer;
-      detail.append(summary, answer); fragment.append(detail);
+  const faqList = one('#faq-list');
+  const faqSearch = one('#faq-search');
+  if (faqList && faqSearch) {
+    let faq = [];
+    function renderFaq() {
+      const words = faqSearch.value.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+      const entries = faq.filter(entry => words.every(word => `${entry.question} ${entry.answer}`.toLocaleLowerCase().includes(word)));
+      const fragment = document.createDocumentFragment();
+      for (const entry of entries) {
+        const details = document.createElement('details'); details.className = 'faq-item';
+        const summary = document.createElement('summary'); summary.textContent = entry.question;
+        const answer = document.createElement('p'); answer.textContent = entry.answer;
+        details.append(summary, answer); fragment.append(details);
+      }
+      if (!entries.length) { const empty = document.createElement('p'); empty.className = 'small-note'; empty.textContent = 'No matching questions. Try another word, or open the full FAQ document below.'; fragment.append(empty); }
+      faqList.replaceChildren(fragment);
+      const count = one('#faq-count');
+      if (count) count.textContent = words.length ? `${entries.length} of ${faq.length} answers` : `${faq.length} answers from the in-app help`;
     }
-    if (!matches.length) { const empty = document.createElement('p'); empty.className = 'muted'; empty.textContent = 'No matching questions. Try another word, or read the full FAQ below.'; fragment.append(empty); }
-    $('#faq-list').replaceChildren(fragment);
+    faqSearch.addEventListener('input', renderFaq);
+    (async () => {
+      try {
+        const response = await fetch('./assets/faq.json');
+        if (!response.ok) throw new Error('FAQ unavailable');
+        const data = await response.json();
+        if (!Array.isArray(data.entries) || !data.entries.every(entry => typeof entry.question === 'string' && typeof entry.answer === 'string')) throw new Error('Invalid FAQ');
+        faq = data.entries; renderFaq();
+      } catch (_) { faqList.textContent = 'The interactive FAQ could not load. Use the full FAQ document below.'; }
+    })();
   }
-  async function loadFaq() {
-    try {
-      const response = await fetch('./assets/faq.json'); if (!response.ok) throw new Error('FAQ unavailable');
-      const data = await response.json(); faq = data.entries; renderFaq();
-    } catch (_) { $('#faq-list').textContent = 'The interactive FAQ could not load. Use the full FAQ link below.'; }
-  }
-  $('#faq-search').addEventListener('input', renderFaq);
 
-  const stage = $('#demo-stage'), mini = $('#mini-demo');
-  let locked = false, moving = null;
-  function clampPosition(x, y) { mini.style.left = `${Math.max(0, Math.min(x, stage.clientWidth - mini.offsetWidth))}px`; mini.style.top = `${Math.max(0, Math.min(y, stage.clientHeight - mini.offsetHeight))}px`; }
-  function lockDemo() {
-    locked = !locked; mini.classList.toggle('locked', locked); $('#demo-lock').setAttribute('aria-pressed', String(locked));
-    $('#demo-hint').textContent = locked ? 'Position locked. In the app, Ctrl+Alt+L unlocks clicks.' : 'Drag the mini player. Try its lock.';
+  const stage = one('#demo-stage');
+  const mini = one('#mini-demo');
+  const lock = one('#demo-lock');
+  const play = one('#demo-play');
+  if (stage && mini && lock && play) {
+    let locked = false;
+    let moving = null;
+    function clamp(x, y) {
+      mini.style.left = `${Math.max(0, Math.min(x, stage.clientWidth - mini.offsetWidth))}px`;
+      mini.style.top = `${Math.max(0, Math.min(y, stage.clientHeight - mini.offsetHeight))}px`;
+    }
+    function toggleLock() {
+      locked = !locked; moving = null;
+      mini.classList.toggle('locked', locked); lock.setAttribute('aria-pressed', String(locked));
+      lock.setAttribute('aria-label', locked ? 'Unlock demo position' : 'Lock demo position');
+      const hint = one('#demo-hint');
+      if (hint) hint.textContent = locked ? 'Position locked. The app unlocks with Ctrl+Alt+L.' : 'Move it. Resize it. Try the lock.';
+    }
+    lock.addEventListener('click', toggleLock);
+    play.addEventListener('click', () => {
+      const paused = mini.classList.toggle('paused');
+      play.textContent = paused ? '▶' : 'Ⅱ';
+      play.setAttribute('aria-label', paused ? 'Play demo animation' : 'Pause demo animation');
+    });
+    mini.addEventListener('pointerdown', event => {
+      if (locked || event.target.closest('button') || event.button !== 0) return;
+      event.preventDefault(); mini.focus({ preventScroll: true });
+      moving = { x:event.clientX, y:event.clientY, left:mini.offsetLeft, top:mini.offsetTop, width:mini.offsetWidth, height:mini.offsetHeight, resize:event.target.id === 'demo-resize' };
+      mini.setPointerCapture(event.pointerId);
+    });
+    mini.addEventListener('pointermove', event => {
+      if (!moving) return;
+      if (moving.resize) {
+        const ratio = 260 / 157;
+        const maximum = Math.min(stage.clientWidth - moving.left, (stage.clientHeight - moving.top) * ratio);
+        const width = Math.min(Math.max(180, moving.width + event.clientX - moving.x), maximum);
+        mini.style.width = `${width}px`; mini.style.height = `${width / ratio}px`;
+      } else clamp(moving.left + event.clientX - moving.x, moving.top + event.clientY - moving.y);
+    });
+    for (const eventName of ['pointerup', 'pointercancel', 'lostpointercapture']) mini.addEventListener(eventName, () => { moving = null; });
+    mini.addEventListener('keydown', event => {
+      if (event.target !== mini) return;
+      if (event.key.toLowerCase() === 'l') { event.preventDefault(); toggleLock(); return; }
+      if (locked) return;
+      const movement = {ArrowLeft:[-10,0],ArrowRight:[10,0],ArrowUp:[0,-10],ArrowDown:[0,10]}[event.key];
+      if (movement) { event.preventDefault(); clamp(mini.offsetLeft + movement[0], mini.offsetTop + movement[1]); }
+    });
+    window.addEventListener('resize', () => {
+      if (mini.offsetWidth > stage.clientWidth - 12) { const width = stage.clientWidth - 12; mini.style.width = `${width}px`; mini.style.height = `${width / (260 / 157)}px`; }
+      clamp(mini.offsetLeft, mini.offsetTop);
+    });
   }
-  $('#demo-lock').addEventListener('click', lockDemo);
-  $('#demo-play').addEventListener('click', () => {
-    const paused = mini.classList.toggle('paused'); $('#demo-play').textContent = paused ? '▶' : 'Ⅱ'; $('#demo-play').setAttribute('aria-label', paused ? 'Play demo animation' : 'Pause demo animation');
-  });
-  mini.addEventListener('pointerdown', e => {
-    if (locked || e.target.closest('button') || e.button !== 0) return;
-    e.preventDefault(); mini.focus({ preventScroll: true });
-    moving = { x: e.clientX, y: e.clientY, left: mini.offsetLeft, top: mini.offsetTop, width: mini.offsetWidth, height: mini.offsetHeight, resize: e.target.id === 'demo-resize' };
-    mini.setPointerCapture(e.pointerId);
-  });
-  mini.addEventListener('pointermove', e => {
-    if (!moving) return;
-    if (moving.resize) {
-      const width = Math.min(Math.max(180, moving.width + e.clientX - moving.x), stage.clientWidth - moving.left);
-      const height = Math.min(width / (240 / 145), stage.clientHeight - moving.top);
-      mini.style.width = `${width}px`; mini.style.height = `${height}px`;
-    } else clampPosition(moving.left + e.clientX - moving.x, moving.top + e.clientY - moving.y);
-  });
-  for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) mini.addEventListener(type, () => { moving = null; });
-  mini.addEventListener('keydown', e => {
-    if (e.target !== mini) return;
-    if (e.key.toLowerCase() === 'l') { e.preventDefault(); lockDemo(); return; }
-    if (locked) return;
-    const movement = { ArrowLeft: [-10, 0], ArrowRight: [10, 0], ArrowUp: [0, -10], ArrowDown: [0, 10] }[e.key];
-    if (movement) { e.preventDefault(); clampPosition(mini.offsetLeft + movement[0], mini.offsetTop + movement[1]); }
-  });
-  window.addEventListener('resize', () => {
-    if (mini.offsetWidth > stage.clientWidth - 12) { mini.style.width = `${stage.clientWidth - 12}px`; mini.style.height = `${(stage.clientWidth - 12) / (240 / 145)}px`; }
-    clampPosition(mini.offsetLeft, mini.offsetTop);
-  });
-  loadRelease(); loadFaq();
 })();

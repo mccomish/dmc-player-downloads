@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "product": "DMC Player",
+  "version": "2.6.0",
+  "releaseUrl": "https://github.com/mccomish/dmc-player-downloads/releases/tag/v2.6.0",
+  "installer": {
+    "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.0/DMC-Player-Setup-2.6.0.exe",
+    "filename": "DMC-Player-Setup-2.6.0.exe",
+    "sizeBytes": 112999580,
+    "sha256": "46a7f19874b3f9125ab699c258f939fcf86c5dabfb5918b69278161d2564934b"
+  }
+}
