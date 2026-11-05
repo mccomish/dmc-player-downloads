@@ -1,6 +1,49 @@
 # TV and streaming catalogue
 
-Checked 5 November 2026. The catalogue links to official websites inside DMC Player. These are viewing destinations, not extracted media URLs, a programme search index, or a guarantee that protected titles will play in WebView2. The broadcaster's accounts, subscriptions, location rules and supported-device requirements apply.
+Checked 5 November 2026. **File → Live TV** opens a direct channel browser. Selecting a channel and pressing Watch channel sends its media URL to the native VLC player. **File → Streaming services** retains the separate directory of official provider websites.
+
+## Built-in direct channels
+
+The starter list contains nine broadcaster-origin feeds. The exact feed addresses and primary-source provenance are recorded below. Public availability can change by location, programme, CDN policy or broadcaster decision; a successful check is not an uptime or future-playback guarantee.
+
+| Channel | Official source and provenance | Direct media URL |
+| --- | --- | --- |
+| Sky News | [Official viewing page](https://news.sky.com/watch-live). Full ad-supported dynamic stream URL in the official live-page HTML; query parameters retained. | [HLS stream](https://linear901-oo-hls0-prd-gtm.delivery.skycdp.com/v1/master/6404a5d732e04991ed59ac7790b61cc065c9aabd/prod-gb-lin-skynews-hls-25-web/master.m3u8?ads.cdn=https://linear901-oo-hls0-prd-gtm.delivery.skycdp.com&ads.csid=sitesection:SkyNews:Web&manifest.mthost=7a38d30e7dd84cd0872ab4f691c38f58&manifest.region=mediatailor.eu-west-1.amazonaws.com) |
+| DW English | [Official viewing page](https://www.dw.com/en/live-tv/channel-english). HLS master URL embedded in the official live-page HTML. | [HLS stream](https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/master.m3u8) |
+| NHK WORLD-JAPAN | [Official viewing page](https://www3.nhk.or.jp/nhkworld/en/live_tv/). The official live-page script references [hlslive_web.json](https://livepl.nhkworld.jp/hlslive_web.json), whose main.jstrm value is the stream URL. | [HLS stream](https://masterpl.hls.nhkworld.jp/hls/w/live/master.m3u8) |
+| TRT World | [Official viewing page](https://www.trtworld.com/live). English live feed embedded in the official live-page HTML. | [HLS stream](https://tv-trtworld.medya.trt.com.tr/master.m3u8) |
+| CGTN Documentary | [Official viewing page](https://www.cgtn.com/channel/documentary). Its official player script loads [channel-doc.json](https://news.cgtn.com/tv/channel-doc.json); the first data entry is the direct stream. | [HLS stream](https://english-livebkali.cgtn.com/live/doccgtn.m3u8) |
+| Bloomberg Europe | [Official viewing page](https://www.bloomberg.com/live/europe). HLS manifest served directly from the broadcaster's www.bloomberg.com origin. | [HLS stream](https://www.bloomberg.com/media-manifest/streams/eu.m3u8) |
+| Classic Arts Showcase | [Official viewing page](https://www.classicartsshowcase.org/watch-classic-arts-showcase/). HLS master URL embedded in the official viewing page. Classical music, ballet, opera and arts. | [HLS stream](https://classicarts.akamaized.net/hls/live/1024257/CAS/master.m3u8) |
+| FashionTV Paris L Original | [Official viewing page](https://www.fashiontv.com/). Official site data marks this stream is_live_streaming:true. Fashion and lifestyle; portrait content may be letterboxed. | [HLS stream](https://ftv1.b-cdn.net/bfdbb576-83f7-11f0-9f89-0200170e3e04_1000028043_HLS/manifest.m3u8) |
+| TRT Arabi | [Official viewing page](https://www.trtworld.com/live). Arabic live feed embedded alongside the English feed in the official live-page HTML. | [HLS stream](https://tv-trtarabi.medya.trt.com.tr/master.m3u8) |
+
+Each listed master manifest and a child media playlist returned HTTP 200, and a small media-segment sample returned HTTP 206 during source checks. All nine feeds used no encryption: DW and Sky contained an explicit EXT-X-KEY METHOD=NONE declaration; the others contained no key declaration. These HTTP checks do not by themselves prove decoded playback in DMC Player. Separate native VLC playback checks are recorded in the release's test reports when performed. No account cookies, altered access headers, location bypass or removed advertising were used for these checks. DMC Player plays the original feed from its source; the catalogue does not copy or host the video.
+
+## More channels and imported lists
+
+The Live TV browser offers explicit buttons to load community-maintained UK and English-language lists. Nothing is fetched from these lists until the user chooses to load one. The [IPTV-org project](https://github.com/iptv-org/iptv) publishes lists for streaming players and describes them as user-submitted links to publicly available streams.
+
+| Optional list | Address | Entries when checked |
+| --- | --- | ---: |
+| UK | [M3U channel list](https://iptv-org.github.io/iptv/countries/uk.m3u) | 304 |
+| English-language | [M3U channel list](https://iptv-org.github.io/iptv/languages/eng.m3u) | 3,043 |
+
+These counts describe playlist entries, not guaranteed unique, working or locally available channels. A channel may have multiple quality feeds or regional variants; URLs can stop working, be geo-restricted or require an official player. Community entries are labelled as such and have not been individually verified by DMC Player. The project's playlist licence does not grant rights to the TV programmes. Broadcaster requirements still apply.
+
+Users can also import an M3U/M3U8 channel-list file or load an HTTP/HTTPS M3U address supplied by their own provider or network TV tuner. Channel lists stay separate from the optional playback queue. Opening a channel does not add it to that queue. A single HLS manifest is a media stream rather than a channel list; use File ? Open stream for that address.
+
+## Freeview and an aerial lineup
+
+[Freeview explains](https://www.freeview.co.uk/help/what-is-freeview) that its broadcast service uses an aerial and a receiver. Having a channel on a Freeview TV does not mean the broadcaster publishes a permanent unauthenticated internet feed. Freeview's [PC/laptop instructions](https://www.freeview.co.uk/watch-on-your-device) direct viewers to the channels' official players.
+
+To watch an existing household aerial lineup directly in a software player, a compatible network tuner can provide local streams. For example, the [HDHomeRun HTTP API](https://info.hdhomerun.com/info/http_api) documents a lineup.m3u channel list and per-channel HTTP video URLs. In Live TV, load the M3U address for the user's own tuner on their local network. DMC Player does not discover, tune or configure tuner hardware in this release, and no physical tuner or aerial reception was tested. USB tuner driver integration is not included. Device support, channel availability and any licence or protected-channel requirements remain with the tuner/broadcaster.
+
+BBC iPlayer, ITVX, STV and other account-based or protected services remain available through Streaming services. The direct starter list does not promise their full Freeview lineups. It does not extract protected stream URLs or remove sign-in, subscription, geographical or DRM controls.
+
+## Official streaming websites
+
+The following separate directory contains official viewing destinations rather than direct media feeds. Opening one uses WebView2 inside DMC Player. Provider accounts, subscriptions, location rules and supported-device requirements apply. A listing does not guarantee signed-in protected programme playback.
 
 | Provider | Official destination / supporting information |
 | --- | --- |
@@ -23,6 +66,6 @@ Checked 5 November 2026. The catalogue links to official websites inside DMC Pla
 | Prime Video | [Official website](https://www.primevideo.com/). Membership, rentals and add-on subscriptions vary. |
 | Disney+ | [Official website](https://www.disneyplus.com/). Subscription and provider playback requirements apply. |
 
-No stable broadcaster-documented external-player HLS feed was verified for this release. The app therefore opens the official player rather than recycling unverified IPTV playlists. It does not extract account cookies, remove adverts, or change DRM or geographical controls. WebView2 uses its normal native rendering; [Microsoft documents the protected-video limitation of the separate composition control](https://learn.microsoft.com/en-us/dotnet/api/microsoft.web.webview2.wpf.webview2compositioncontrol), which DMC Player does not use.
+WebView2 uses its normal native rendering; [Microsoft documents the protected-video limitation of the separate composition control](https://learn.microsoft.com/en-us/dotnet/api/microsoft.web.webview2.wpf.webview2compositioncontrol), which DMC Player does not use.
 
-Catalogue and UI tests use local data and callbacks. The separate opt-in public navigation report, when run, measures only whether selected public home pages loaded in an isolated WebView2 profile. Account login, live broadcasts, and protected programme playback are separate checks and must not be inferred from page navigation.
+Catalogue and UI tests use local fixtures and callbacks. The separate opt-in public navigation report, when run, measures only whether selected public home pages loaded in an isolated WebView2 profile. Account login, live broadcasts and protected programme playback are separate checks and must not be inferred from page navigation.

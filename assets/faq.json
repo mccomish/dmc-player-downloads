@@ -23,11 +23,15 @@
     },
     {
       "question": "How do I find live TV and free channels?",
-      "answer": "Choose File → Live TV for the live-TV category, or File → Streaming services to search the full directory. Filter by category and select a provider, then choose Watch live or Open in player. The directory links to official provider websites; it does not crawl for pirated streams, extract protected media addresses or supply unofficial channel playlists. Use the provider's own guide to find programmes. A free listing can still require an account, show adverts or restrict viewing by location."
+      "answer": "Choose File → Live TV, search or filter the channel list and press Watch channel. Direct channels play in the VLC engine, with DMC's normal volume and mini controls. Open More channels / import a playlist for the optional UK and English community lists from IPTV-org, an M3U file or a playlist URL. Community entries are public submitted links, not broadcaster-verified listings; availability, adverts and location restrictions vary. Add to favourites saves a channel separately from the play queue. File → Streaming services opens official provider websites when a service requires its own web player."
+    },
+    {
+      "question": "Can I get all my Freeview channels here?",
+      "answer": "A Freeview TV receives many channels through its aerial and tuner. That does not mean each channel has an unrestricted internet stream. BBC iPlayer, ITVX and similar services may require their own signed-in player. If you already have a network TV tuner or Tvheadend server, import its M3U channel-list URL in Live TV to play its supported channels directly. DMC Player does not turn a PC without TV tuner hardware into an aerial receiver."
     },
     {
       "question": "Will every TV channel or service play here?",
-      "answer": "No. The directory opens provider websites in WebView2; it does not guarantee embedded playback or access to every programme. Availability depends on your country, account, subscription, supported browser and the provider's DRM or output rules. Live TV can also have local licence requirements; check which rules apply to you. Sign in on the provider's page when required. DMC Player does not bypass sign-in, location, subscription or content-protection restrictions, and website playback is not relayed through watch together."
+      "answer": "No. A public stream can stop working, restrict your country or require a different player. Community lists are not a guarantee of availability, permission or a complete Freeview lineup. Protected service websites use WebView2 and their DRM, account and subscription rules still apply; DMC Player does not guarantee embedded playback. Live viewing may have local TV licence requirements. The app does not bypass sign-in, location or content protection. Website playback is not relayed through watch together. Imported channel directives for DRM keys, cookies and custom player options are not executed."
     },
     {
       "question": "How do I put the picture over FiveM?",
@@ -71,7 +75,7 @@
     },
     {
       "question": "Where are my queue and service sign-ins stored?",
-      "answer": "Player data normally lives in %LOCALAPPDATA%\\DMC Player. If an older %LOCALAPPDATA%\\Sidecar folder exists and the new folder contains neither a library.json file nor a WebProfile folder, the player keeps using Sidecar. An empty new folder or Relay-only metadata does not change that choice. The library.json file stores your manually chosen queue, its resume positions, volume and preferences, including full queued stream addresses. Older automatic-queue lists are not restored. WebProfile stores the browser session; DMC Player does not read your account passwords or cookies."
+      "answer": "Player data normally lives in %LOCALAPPDATA%\\DMC Player. If an older %LOCALAPPDATA%\\Sidecar folder exists and the new folder contains neither a library.json file nor a WebProfile folder, the player keeps using Sidecar. An empty new folder or Relay-only metadata does not change that choice. The library.json file stores your manually chosen queue, its resume positions, volume and preferences, including full queued stream addresses. Older automatic-queue lists are not restored. Explicitly loaded TV lists and favourites are saved separately in tv-channels.json and tv-favorites.json, including their full stream addresses. Watching a channel does not create history or add it to the queue. WebProfile stores the browser session; DMC Player does not read your account passwords or cookies."
     },
     {
       "question": "Why are a global shortcut or mouse lock unavailable?",

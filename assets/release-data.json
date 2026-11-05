@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "product": "DMC Player",
-  "version": "2.4.0",
-  "preparedAtUtc": "2026-11-05T19:04:33.0044959Z",
-  "generatedAtUtc": "2026-11-05T22:14:30.071Z",
+  "version": "2.5.0",
+  "preparedAtUtc": "2026-11-05T22:29:17.4529888Z",
+  "generatedAtUtc": "2026-11-05T22:29:19.260Z",
   "platform": {
     "operatingSystem": "Windows",
     "architecture": "x64",
@@ -12,25 +12,25 @@
   "files": [
     {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.4.0.exe",
-      "sizeBytes": 112971847,
-      "sha256": "6c39a9c60fd55164fd9c49be4b0ca6a93a61252683aad1cb72722131b401131f",
+      "filename": "DMC-Player-Setup-2.5.0.exe",
+      "sizeBytes": 112988216,
+      "sha256": "296687498de81c9e0cbee9418cc08ea21d535337dcfc6704e3a98a31898bab36",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.4.0/DMC-Player-Setup-2.4.0.exe",
-      "sizeMiB": 107.7,
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.5.0/DMC-Player-Setup-2.5.0.exe",
+      "sizeMiB": 107.8,
       "sizeLabel": "113.0 MB"
     },
     {
       "kind": "portable",
-      "filename": "DMC-Player-2.4.0-win-x64.zip",
-      "sizeBytes": 135603653,
-      "sha256": "c9c4d09f238762c58fc07cf9d21a813f735c928c253520046cf0dd2db3ee8342",
+      "filename": "DMC-Player-2.5.0-win-x64.zip",
+      "sizeBytes": 135627780,
+      "sha256": "85e9357ac6da64dd50ae5607db92cd726523a50b7a275084fcae30e876125060",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.4.0/DMC-Player-2.4.0-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.5.0/DMC-Player-2.5.0-win-x64.zip",
       "sizeMiB": 129.3,
       "sizeLabel": "135.6 MB"
     }
@@ -38,25 +38,25 @@
   "downloads": {
     "installer": {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.4.0.exe",
-      "sizeBytes": 112971847,
-      "sha256": "6c39a9c60fd55164fd9c49be4b0ca6a93a61252683aad1cb72722131b401131f",
+      "filename": "DMC-Player-Setup-2.5.0.exe",
+      "sizeBytes": 112988216,
+      "sha256": "296687498de81c9e0cbee9418cc08ea21d535337dcfc6704e3a98a31898bab36",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.4.0/DMC-Player-Setup-2.4.0.exe",
-      "sizeMiB": 107.7,
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.5.0/DMC-Player-Setup-2.5.0.exe",
+      "sizeMiB": 107.8,
       "sizeLabel": "113.0 MB"
     },
     "portable": {
       "kind": "portable",
-      "filename": "DMC-Player-2.4.0-win-x64.zip",
-      "sizeBytes": 135603653,
-      "sha256": "c9c4d09f238762c58fc07cf9d21a813f735c928c253520046cf0dd2db3ee8342",
+      "filename": "DMC-Player-2.5.0-win-x64.zip",
+      "sizeBytes": 135627780,
+      "sha256": "85e9357ac6da64dd50ae5607db92cd726523a50b7a275084fcae30e876125060",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.4.0/DMC-Player-2.4.0-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.5.0/DMC-Player-2.5.0-win-x64.zip",
       "sizeMiB": 129.3,
       "sizeLabel": "135.6 MB"
     }
@@ -78,13 +78,13 @@
       "sha256": "602acfd73482252538fcf07ff3045e0c8ed93b80769e205f9d5cc232255b4bfc"
     },
     {
-      "filename": "dmc-services.png",
-      "url": "./assets/dmc-services.png",
-      "alt": "DMC Player directory of official live TV and streaming websites.",
-      "width": 680,
-      "height": 600,
-      "sizeBytes": 39006,
-      "sha256": "8305a2f379dd3701d030f0b31632c1c373c46a02ce0f57a977f293eed048a466"
+      "filename": "dmc-live-tv.png",
+      "url": "./assets/dmc-live-tv.png",
+      "alt": "DMC Player direct live TV channels with search, favourites and optional playlist import.",
+      "width": 760,
+      "height": 740,
+      "sizeBytes": 40253,
+      "sha256": "259798a271051e1443fe1bc9e454d9da1c33e3578fe14d93fddd6cd22397effb"
     },
     {
       "filename": "dmc-player-queue.png",
@@ -179,6 +179,19 @@
     "knownServiceUrlsOpenInEmbeddedPlayer": true,
     "protectedProgrammePlaybackVerified": false
   },
+  "liveTv": {
+    "nativePlayback": true,
+    "starterChannels": 9,
+    "communityListsOptional": true,
+    "communityProvider": "IPTV-org",
+    "m3uFileImport": true,
+    "m3uUrlImport": true,
+    "favourites": true,
+    "separateFromPlayQueue": true,
+    "automaticRequestsOnOpen": false,
+    "allListedChannelsGuaranteed": false,
+    "freeviewRequiresTunerForAerialChannels": true
+  },
   "watchTogether": {
     "inviteProtocol": "dmc-watch",
     "protocolRegisteredByInstaller": true,
@@ -199,7 +212,7 @@
     "portablePayloadVerified": true,
     "method": "Extraction and hashes; no application/runtime installation or system-default changes",
     "sourceFilesVerified": 9,
-    "releaseManifestSha256": "672cbfad8ad052e55189189a9db814d31b41a4d8dbcd855fff7e73877eb8ea8c",
-    "checksumFileSha256": "fba5f6ed6e951ce6eb452a1c0e19f8485abcd2c7c31c46c2e0e97ee6e89d44e6"
+    "releaseManifestSha256": "519699dfdda63210a3a91e441e809723499e5c0a9a4c79639640cd5e8cde97f5",
+    "checksumFileSha256": "bedcb3db95d067806642c2264d270a99770b3defa37d4d92b7fc606bd8b1028e"
   }
 }

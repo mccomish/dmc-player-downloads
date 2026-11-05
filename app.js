@@ -37,7 +37,7 @@
 
   const shots = {
     player: ['./assets/dmc-player.png', 'DMC Player main window with local file and direct stream controls.', 'Actual DMC Player interface. Your files and links supply the video.'],
-    tv: ['./assets/dmc-services.png', 'Official TV and streaming service finder in DMC Player.', 'Search official services and open their own player. Provider restrictions still apply.'],
+    tv: ['./assets/dmc-live-tv.png', 'DMC Player direct live TV channel picker.', 'Choose a channel and watch directly. Import lists and keep favourites separately from the queue.'],
     queue: ['./assets/dmc-player-queue.png', 'DMC Player with a manually chosen queue.', 'Queue items are added only when you choose. Ordinary opens play on their own.']
   };
   function selectShot(button, focus = false) {
