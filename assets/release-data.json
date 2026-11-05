@@ -3,7 +3,7 @@
   "product": "DMC Player",
   "version": "2.4.0",
   "preparedAtUtc": "2026-11-05T19:04:33.0044959Z",
-  "generatedAtUtc": "2026-11-05T21:59:45.627Z",
+  "generatedAtUtc": "2026-11-05T22:14:30.071Z",
   "platform": {
     "operatingSystem": "Windows",
     "architecture": "x64",
@@ -19,7 +19,7 @@
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "./downloads/DMC-Player-Setup-2.4.0.exe",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.4.0/DMC-Player-Setup-2.4.0.exe",
       "sizeMiB": 107.7,
       "sizeLabel": "113.0 MB"
     },
@@ -30,7 +30,7 @@
       "sha256": "c9c4d09f238762c58fc07cf9d21a813f735c928c253520046cf0dd2db3ee8342",
       "architecture": "x64",
       "installScope": "none",
-      "url": "./downloads/DMC-Player-2.4.0-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.4.0/DMC-Player-2.4.0-win-x64.zip",
       "sizeMiB": 129.3,
       "sizeLabel": "135.6 MB"
     }
@@ -45,7 +45,7 @@
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "./downloads/DMC-Player-Setup-2.4.0.exe",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.4.0/DMC-Player-Setup-2.4.0.exe",
       "sizeMiB": 107.7,
       "sizeLabel": "113.0 MB"
     },
@@ -56,7 +56,7 @@
       "sha256": "c9c4d09f238762c58fc07cf9d21a813f735c928c253520046cf0dd2db3ee8342",
       "architecture": "x64",
       "installScope": "none",
-      "url": "./downloads/DMC-Player-2.4.0-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.4.0/DMC-Player-2.4.0-win-x64.zip",
       "sizeMiB": 129.3,
       "sizeLabel": "135.6 MB"
     }
