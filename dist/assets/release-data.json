@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "product": "DMC Player",
-  "version": "2.6.1",
-  "preparedAtUtc": "2026-11-05T23:05:09.3526085Z",
-  "generatedAtUtc": "2026-11-05T23:05:11.086Z",
+  "version": "2.7.0",
+  "preparedAtUtc": "2026-11-05T23:57:15.1300921Z",
+  "generatedAtUtc": "2026-11-05T23:57:38.398Z",
   "platform": {
     "operatingSystem": "Windows",
     "architecture": "x64",
@@ -12,53 +12,53 @@
   "files": [
     {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.6.1.exe",
-      "sizeBytes": 113000139,
-      "sha256": "66facce574a8744b2f9f7e80d022a4f27a1861b682d9541c627680d9176dc3dc",
+      "filename": "DMC-Player-Setup-2.7.0.exe",
+      "sizeBytes": 113011394,
+      "sha256": "02f70e9e2ed11dd899667314247f5bc1b02149355af6f64c15ec1f5051e32505",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.1/DMC-Player-Setup-2.6.1.exe",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.7.0/DMC-Player-Setup-2.7.0.exe",
       "sizeMiB": 107.8,
       "sizeLabel": "113.0 MB"
     },
     {
       "kind": "portable",
-      "filename": "DMC-Player-2.6.1-win-x64.zip",
-      "sizeBytes": 135645554,
-      "sha256": "17f5a7157493ce830494e9d4ffe176720ca9f46beefc0303a4c050b36807f3f4",
+      "filename": "DMC-Player-2.7.0-win-x64.zip",
+      "sizeBytes": 135660127,
+      "sha256": "194a61e3cb6f31d3d377d7db4d6bfc083d1f43a2dae2c396b49b357d7906aa01",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.1/DMC-Player-2.6.1-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.7.0/DMC-Player-2.7.0-win-x64.zip",
       "sizeMiB": 129.4,
-      "sizeLabel": "135.6 MB"
+      "sizeLabel": "135.7 MB"
     }
   ],
   "downloads": {
     "installer": {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.6.1.exe",
-      "sizeBytes": 113000139,
-      "sha256": "66facce574a8744b2f9f7e80d022a4f27a1861b682d9541c627680d9176dc3dc",
+      "filename": "DMC-Player-Setup-2.7.0.exe",
+      "sizeBytes": 113011394,
+      "sha256": "02f70e9e2ed11dd899667314247f5bc1b02149355af6f64c15ec1f5051e32505",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.1/DMC-Player-Setup-2.6.1.exe",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.7.0/DMC-Player-Setup-2.7.0.exe",
       "sizeMiB": 107.8,
       "sizeLabel": "113.0 MB"
     },
     "portable": {
       "kind": "portable",
-      "filename": "DMC-Player-2.6.1-win-x64.zip",
-      "sizeBytes": 135645554,
-      "sha256": "17f5a7157493ce830494e9d4ffe176720ca9f46beefc0303a4c050b36807f3f4",
+      "filename": "DMC-Player-2.7.0-win-x64.zip",
+      "sizeBytes": 135660127,
+      "sha256": "194a61e3cb6f31d3d377d7db4d6bfc083d1f43a2dae2c396b49b357d7906aa01",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.6.1/DMC-Player-2.6.1-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.7.0/DMC-Player-2.7.0-win-x64.zip",
       "sizeMiB": 129.4,
-      "sizeLabel": "135.6 MB"
+      "sizeLabel": "135.7 MB"
     }
   },
   "downloadsIncluded": false,
@@ -213,9 +213,14 @@
     "serviceAvailabilityGuaranteed": false,
     "sharedSources": [
       "Local media files",
-      "Direct HTTP/HTTPS streams"
+      "Direct HTTP/HTTPS streams",
+      "YouTube video pages and playback state"
     ],
-    "embeddedWebsitesShared": false
+    "youtubePlaybackSynchronized": true,
+    "youtubeRequiresEachParticipantsOwnAccess": true,
+    "youtubeMinimumVersion": "2.7.0",
+    "embeddedWebsiteMediaRelayed": false,
+    "subscriptionWebsitePlaybackSynchronized": false
   },
   "verification": {
     "installerChecksPassed": true,
@@ -223,7 +228,7 @@
     "portablePayloadVerified": true,
     "method": "Extraction and hashes; no application/runtime installation or system-default changes",
     "sourceFilesVerified": 9,
-    "releaseManifestSha256": "0a337518f0a5316c7a51acf788d49452d2e03a8934b8175cd0e53de4243934a1",
-    "checksumFileSha256": "483dfb8c7efd630d3965513ac635d4b649e5577c4d0460a5a8e4babe1721c424"
+    "releaseManifestSha256": "22c7c86a891baac4d1cddc1a266980d24e044ae03f0e17e12609aa22b3649a16",
+    "checksumFileSha256": "f1323418db23fe640931df3c3fa26a04d37f6cfe84bc26f914c6e9e58b1bf97c"
   }
 }

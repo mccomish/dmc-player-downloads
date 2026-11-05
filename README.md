@@ -25,6 +25,8 @@ This checks release sizes, checksums, bundled documentation, screenshot metadata
 
 The second command checks the game-background carousel's navigation, timing, pause controls, reduced-motion preference and image-failure handling without browser dependencies. Its screenshot list and source credits live in `scripts/game-screenshots.json`; the images are served locally from `dist/assets/games`. `scripts/demo-gallery.mjs` renders the shared Home and The player demo. Run the page builder after changing that list or template.
 
+Watch-together copy describes three source types: local files, direct streams and YouTube video co-watching from DMC Player 2.7. Both players need 2.7 or later for YouTube; every participant loads YouTube independently. The session shares a canonical public video URL, title and playback state, without account sessions or YouTube media bytes. Subscription websites remain unsupported by Watch together. Keep the documented ad/loading/autoplay limits and possible manual Play action when changing this copy.
+
 ## Update a release
 
 1. Build and verify the new application release in the original player workspace.

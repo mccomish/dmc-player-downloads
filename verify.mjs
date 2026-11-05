@@ -286,11 +286,18 @@ await check('screenshots_match_prepared_asset_hashes', async () => {
 await check('published_claims_preserve_known_limits', async () => {
   requireValue(release?.streamingCatalogue?.protectedProgrammePlaybackVerified === false, 'Protected website playback must remain marked unverified.');
   requireValue(release.watchTogether?.maximumFreeSessionMinutes === 60 && release.watchTogether?.serviceAvailabilityGuaranteed === false, 'Free relay limits are missing.');
+  requireValue(release.watchTogether.youtubePlaybackSynchronized === true && release.watchTogether.youtubeMinimumVersion === '2.7.0'
+    && release.watchTogether.embeddedWebsiteMediaRelayed === false && release.watchTogether.subscriptionWebsitePlaybackSynchronized === false,
+    'Release metadata must describe YouTube synchronization and retain website media-sharing limits.');
   requireValue(release.queue?.normalOpensAddItems === false && release.queue?.automaticWatchHistory === false && release.queue?.explicitAddRequired === true, 'Manual queue/no-history semantics are missing.');
   requireValue(release.files.find(file => file.kind === 'installer')?.signed === false, 'Installer signature status is incorrect.');
   requireValue(/60(?:[\s-]+minute|\s*minutes|\s*min)/i.test(combinedContent), 'The user-facing content omits the free relay session limit.');
   requireValue(/unsigned|not (?:code[- ]?)?signed/i.test(combinedContent), 'The user-facing content omits the unsigned build status.');
   requireValue(!/(?:works with|supports|plays) (?:absolutely )?(?:every|all) (?:streaming|paid|protected) (?:service|website)/i.test(combinedContent), 'The site overstates streaming website compatibility.');
+  const watchCopy = visibleText(pages.get(resolve(dist, 'watch-together.html')).document);
+  requireValue(/YouTube/i.test(watchCopy) && /2\.7 or later/i.test(watchCopy) && /each person loads YouTube independently/i.test(watchCopy), 'YouTube co-watching must explain the required version and independent playback.');
+  requireValue(/subscription websites are not relayed or synchroni[sz]ed/i.test(watchCopy), 'The site must retain subscription-website watch-session limits.');
+  requireValue(/ads, loading, autoplay/i.test(watchCopy) && /press Play in YouTube/i.test(watchCopy), 'YouTube playback delays and the possible manual Play action are missing.');
   const publicHtml = [...pages.values()].map(page => page.document).join('\n');
   requireValue(!/trusted by\s+[\d,]+|\b[45]\.\d\s*(?:\/\s*5|stars)|lorem ipsum|support@/i.test(publicHtml), 'Unprovided social proof, support contact, or placeholder copy was found.');
   return { protectedProgrammePlaybackVerified: false, freeRelayMinutes: 60, automaticWatchHistory: false, installerSigned: false, note: 'Structural/text checks; browser review is still required for layout and interaction.' };
