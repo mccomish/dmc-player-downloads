@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const websiteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repositoryRoot = path.resolve(websiteRoot, '..');
-const options = { version: '2.5.0', includeDownloads: false, downloadBase: './downloads' };
+const options = { version: '2.6.0', includeDownloads: false, downloadBase: './downloads' };
 for (let index = 2; index < process.argv.length; index++) {
   const argument = process.argv[index];
   if (argument === '--include-downloads') options.includeDownloads = true;
@@ -16,7 +16,7 @@ for (let index = 2; index < process.argv.length; index++) {
     if (!value || value.startsWith('--')) throw new Error(`Missing value for ${argument}.`);
     options[argument === '--version' ? 'version' : 'downloadBase'] = value;
   } else if (argument === '--help') {
-    console.log('Usage: node website/scripts/prepare-release.mjs [--version 2.5.0] [--include-downloads] [--download-base ./downloads|https://host/path]');
+    console.log('Usage: node website/scripts/prepare-release.mjs [--version 2.6.0] [--include-downloads] [--download-base ./downloads|https://host/path]');
     process.exit(0);
   } else throw new Error(`Unknown argument: ${argument}`);
 }
@@ -130,6 +130,7 @@ const data = {
   queue: release.queue,
   streamingCatalogue: release.streamingCatalogue,
   liveTv: release.liveTv,
+  updates: release.updates,
   watchTogether: release.watchTogether,
   verification: {
     ...release.verification,
@@ -144,6 +145,14 @@ await atomicWrite(path.join(assetsRoot, 'faq.md'), sourceFaq);
 await atomicWrite(path.join(assetsRoot, 'tv-sources.md'), await verifiedBytes(verifiedDocument('tvSources')));
 await atomicWrite(path.join(assetsRoot, 'faq.json'), `${JSON.stringify(faq, null, 2)}\n`);
 await atomicWrite(path.join(assetsRoot, 'release-data.json'), `${JSON.stringify(data, null, 2)}\n`);
+const installer = data.downloads.installer;
+const officialBase = `https://github.com/mccomish/dmc-player-downloads/releases/download/v${release.version}`;
+const updateManifest = {
+  schemaVersion: 1, product: release.product, version: release.version,
+  releaseUrl: `https://github.com/mccomish/dmc-player-downloads/releases/tag/v${release.version}`,
+  installer: { url: `${officialBase}/${installer.filename}`, filename: installer.filename, sizeBytes: installer.sizeBytes, sha256: installer.sha256 },
+};
+await atomicWrite(path.join(websiteRoot, 'dist', 'update.json'), `${JSON.stringify(updateManifest, null, 2)}\n`);
 console.log(`Prepared DMC Player ${release.version}: ${verified.size} source hashes verified; ${screenshots.length} lossless screenshots; ${faq.entries.length} FAQ entries; downloads ${options.includeDownloads ? 'copied and reverified' : 'excluded (use --include-downloads to bundle)'}.`);
 
 function normalizeDownloadBase(value) {

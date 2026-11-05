@@ -2,6 +2,8 @@
 
 This repository contains the static download website and release information for DMC Player. Application installers and portable packages are attached to GitHub Releases; they are not stored as normal Git files. The player's application source is maintained separately.
 
+The seven public pages are Home, The player, Live TV, Watch together, Download, Help and About. They share `dist/site.css` and `dist/app.js`. Page templates live in `scripts/build-pages.mjs`; their generated HTML is committed so GitHub Pages can serve it directly. All pages use relative `.html` links for project-path hosting. The site identifies DMC Player as free software created for gamers by Darryl McComish.
+
 ## Local preview
 
 Requires Node.js. There are no npm dependencies.
@@ -25,7 +27,7 @@ This checks release sizes, checksums, bundled documentation, screenshot metadata
 1. Build and verify the new application release in the original player workspace.
 2. Publish its installer, portable ZIP and release information as GitHub Release assets.
 3. Run `scripts/prepare-release.mjs` from the original workspace with `--download-base` set to that real versioned release URL.
-4. Update the website's static version/checksum fallback values if the application version changes. Run the verifier and inspect the page on desktop and mobile.
+4. Run `node scripts/build-pages.mjs` to regenerate every page's static version, download and checksum fallback values from the prepared release metadata. Run the verifier and inspect the page on desktop and mobile.
 5. Commit the site, push `main`, and publish `dist` to the `gh-pages` branch. GitHub Pages serves that branch's root.
 
 The included Render and Vercel configurations are alternatives for hosting the same small static site. Download binaries remain in GitHub Releases.

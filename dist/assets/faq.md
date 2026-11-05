@@ -82,5 +82,5 @@ Another application may already own the key combination. Close an older DMC Play
 
 ## How do I update, and why might Windows warn about Setup?
 
-This build has no automatic update checker or configured website link. To update, use a newer installer or portable package from a source you trust. The current installer is unsigned, so Windows may show an unknown-publisher or reputation warning. DMC Player does not silently download or install updates.
+DMC Player checks its public release information when it starts and every six hours while it remains open. When a newer version is available, an Update button appears beside the menu in the full player; mini mode stays clear. Choose Help → Check for updates to check manually. Download update saves the installer and verifies its size and published SHA-256; Install update verifies it again, opens Setup and closes the player, ending any watch session. Choose when to install and relaunch the player after Setup. Your saved queue, channels and service sign-ins are retained. DMC Player and its updates are free. The installer is currently unsigned, so Windows may show an unknown-publisher or reputation warning. Nothing is silently downloaded or installed. Versions before 2.6 need a manual update from the DMC Player download website to get this feature.
 

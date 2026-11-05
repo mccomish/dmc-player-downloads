@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "product":  "DMC Player",
-    "version":  "2.5.0",
-    "preparedAtUtc":  "2026-11-05T22:31:59.8091552Z",
+    "version":  "2.6.0",
+    "preparedAtUtc":  "2026-11-05T22:46:19.6261192Z",
     "platform":  {
                      "operatingSystem":  "Windows",
                      "architecture":  "x64",
@@ -11,9 +11,9 @@
     "files":  [
                   {
                       "kind":  "installer",
-                      "filename":  "DMC-Player-Setup-2.5.0.exe",
-                      "sizeBytes":  112988263,
-                      "sha256":  "7a4b5ad971cc3c3e76a787e0912eedbee9ee1901b5e0448980c65191b29c4ebc",
+                      "filename":  "DMC-Player-Setup-2.6.0.exe",
+                      "sizeBytes":  112999580,
+                      "sha256":  "46a7f19874b3f9125ab699c258f939fcf86c5dabfb5918b69278161d2564934b",
                       "signed":  false,
                       "signatureStatus":  "NotSigned",
                       "architecture":  "x64",
@@ -21,9 +21,9 @@
                   },
                   {
                       "kind":  "portable",
-                      "filename":  "DMC-Player-2.5.0-win-x64.zip",
-                      "sizeBytes":  135627816,
-                      "sha256":  "e73a90d999f5fe973e70ffc34b1f7692ed597b6069df9d94dd8a89561a7c30fa",
+                      "filename":  "DMC-Player-2.6.0-win-x64.zip",
+                      "sizeBytes":  135644692,
+                      "sha256":  "9ee8b2187a64dcf594caa9140cf2c3a0d49637606f43cf4f9e96b6fd72dd3991",
                       "architecture":  "x64",
                       "installScope":  "none"
                   }
@@ -52,8 +52,8 @@
                           {
                               "kind":  "faq",
                               "filename":  "docs/FAQ.md",
-                              "sizeBytes":  9786,
-                              "sha256":  "bbb6b1e9007e615d36dd720e2f58fe4fe4f2f54866e21e94b9976cf749d1d933"
+                              "sizeBytes":  10339,
+                              "sha256":  "21f3e0ae21d9bd0a98b0c6a41efaba3d48d8f070a05bf9208904613459c9c5f1"
                           },
                           {
                               "kind":  "tvSources",
@@ -155,6 +155,17 @@
                    "allListedChannelsGuaranteed":  false,
                    "freeviewRequiresTunerForAerialChannels":  true
                },
+    "updates":  {
+                    "automaticCheckOnStartup":  true,
+                    "periodicCheckHours":  6,
+                    "manifestUrl":  "https://mccomish.github.io/dmc-player-downloads/update.json",
+                    "downloadRequiresUserAction":  true,
+                    "installRequiresUserAction":  true,
+                    "installerSizeAndSha256Verified":  true,
+                    "manualCheckMenu":  "Help \u003e Check for updates",
+                    "introducedIn":  "2.6.0",
+                    "silentInstallation":  false
+                },
     "watchTogether":  {
                           "inviteProtocol":  "dmc-watch",
                           "protocolRegisteredByInstaller":  true,

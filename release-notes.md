@@ -1,32 +1,40 @@
-# DMC Player 2.5.0
+# DMC Player 2.6.0
 
-Live TV now opens direct channel streams in the native player instead of sending every channel to a website.
+A free Windows player, created for gamers by Darryl McComish.
 
-- Choose File > Live TV, select a channel and press Watch channel, or double-click it.
-- Nine starter broadcaster-origin streams have passed actual native VLC video decoding checks, including Sky News, DW, NHK WORLD-JAPAN and CGTN Documentary.
-- Optional one-click UK and English community lists from IPTV-org provide hundreds or thousands of submitted public stream entries. Listings are not a guarantee of permission, availability or playback in your country.
-- Import an M3U channel list from a file or URL, including a supported lineup from your own network TV tuner.
-- Search, category filters and favourites. Channel lists stay separate from the optional play queue; watching does not add history.
-- Direct TV uses DMC Player's normal volume, fullscreen, mini window and click-through controls.
+## New in 2.6.0
 
-Freeview aerial channels still require a TV tuner; they do not all have unrestricted internet streams. Services requiring their own signed-in web player remain under File > Streaming services. Sign-in, location, subscription, TV Licence and DRM requirements apply. Protected website playback remains unverified.
+- Automatic update checks at startup and every six hours while the player remains open.
+- A small Update button beside the menu appears only when a newer version is available. It stays hidden in mini mode and fullscreen.
+- Help > Check for updates provides a manual check.
+- Download update verifies the installer's exact size and SHA-256. A separate Install update action checks the file again, opens Setup and closes the player, ending any watch session.
+- No update is silently downloaded or installed. Updates, like DMC Player itself, are free.
+- Creator attribution is included in About and installer metadata.
 
-## Downloads and updating
+The download website has been rebuilt as seven separate pages: Home, The player, Live TV, Watch together, Download, Help and About.
 
-Use the Setup EXE for a normal per-user Windows x64 installation, or extract the complete portable ZIP and run DMCPlayer.exe. Close any older running DMC Player before updating. Your manually selected queue and embedded service sign-ins are retained. The installer includes VLC and .NET and offers WebView2 when missing.
+## Updating
 
-This build is unsigned; Windows may show an unknown-publisher or reputation prompt. Watch together still uses a free test relay with sessions up to 60 minutes and no availability guarantee. Website playback is not shared.
+Versions before 2.6 do not have the update checker. Close the running player and install 2.6 once from the website. Later releases can be downloaded through the new update button. Your saved queue, channel lists, favourites and service sign-ins are retained. Portable users can use Setup to move to an installed copy, or download and extract the new portable ZIP themselves.
+
+The installer remains unsigned, so Windows may show an unknown-publisher or reputation prompt. VLC and .NET are included; Setup offers WebView2 when missing.
+
+## Existing features and limits
+
+Direct Live TV, M3U import, favourites and optional community lists remain available. Community listings are not a guarantee of availability, permission or playback. Provider account, location, TV Licence, subscription and DRM requirements apply. Protected website playback remains unverified.
+
+Watch together uses a free test relay with sessions up to 60 minutes and no availability guarantee. Website playback is not shared. Normal media opens and channel watching do not add to the optional play queue or history.
 
 ## Validation
 
-- 9/9 starter channels decoded real video through LibVLC using silent dummy outputs.
-- 8 parser/download/storage checks and 6 isolated UI/native playback checks passed.
-- Existing queue (6), help (8), provider catalog (8), visual/layout, installer (9) and release-package (3) checks passed.
-- Individual community streams are not playback-verified.
+- 7 update backend checks and 8 isolated update UI checks passed, including separate download/install actions, cancellation, error recovery, miniature/fullscreen notice behavior and rejected launch metadata.
+- Existing help (8), queue (6) and visual/layout checks passed.
+- Installer (9) and release package (3) checks passed without installing or changing Windows defaults.
+- Live public update check/download is verified separately after publication; test suites never execute an installer.
 
 ## SHA-256
 
 ```text
-7a4b5ad971cc3c3e76a787e0912eedbee9ee1901b5e0448980c65191b29c4ebc  DMC-Player-Setup-2.5.0.exe
-e73a90d999f5fe973e70ffc34b1f7692ed597b6069df9d94dd8a89561a7c30fa  DMC-Player-2.5.0-win-x64.zip
+46a7f19874b3f9125ab699c258f939fcf86c5dabfb5918b69278161d2564934b  DMC-Player-Setup-2.6.0.exe
+9ee8b2187a64dcf594caa9140cf2c3a0d49637606f43cf4f9e96b6fd72dd3991  DMC-Player-2.6.0-win-x64.zip
 ```

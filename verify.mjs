@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { createReadStream } from 'node:fs';
-import { access, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { access, mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
 import { dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -9,13 +10,16 @@ const dist = resolve(siteRoot, 'dist');
 const args = process.argv.slice(2);
 const allowUnpublished = args.includes('--allow-unpublished-downloads');
 const checkRemote = args.includes('--check-remote');
+const requireUpdateManifest = args.includes('--require-update-manifest');
+const requiredPages = ['index.html', 'features.html', 'live-tv.html', 'watch-together.html', 'download.html', 'help.html', 'about.html'];
 const reportArgument = args.indexOf('--report');
-const reportPath = resolve(reportArgument < 0 ? resolve(siteRoot, 'verification.json') : args[reportArgument + 1] || 'verification.json');
+const reportPath = resolve(reportArgument < 0 ? resolve(siteRoot, 'reports/verification.json') : args[reportArgument + 1] || 'reports/verification.json');
 const checks = [];
 const startedAtUtc = new Date().toISOString();
 let release;
 let releaseData;
 let html = '';
+const pages = new Map();
 let combinedContent = '';
 let publishReady = true;
 
@@ -42,6 +46,20 @@ function attributes(tag) {
   const result = {};
   for (const match of tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)) result[match[1].toLowerCase()] = match[2] ?? match[3];
   return result;
+}
+function decodeEntities(value) {
+  return value.replace(/&(?:amp|#38|#x26);/gi, '&').replace(/&quot;/gi, '"').replace(/&apos;|&#39;/gi, "'").replace(/&nbsp;/gi, ' ')
+    .replace(/&#(\d+);/g, (_, number) => String.fromCodePoint(Number(number)))
+    .replace(/&#x([a-f\d]+);/gi, (_, number) => String.fromCodePoint(parseInt(number, 16)));
+}
+function visibleText(document) {
+  return decodeEntities(document.replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ').replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
+}
+function reference(url, base) {
+  const decoded = decodeEntities(url);
+  requireValue(!/^(?:javascript:|mailto:|tel:|\/)/i.test(decoded), `Unsupported, root-relative, or unprovided contact/link: ${url}`);
+  const [resource, fragment] = decoded.split('#', 2);
+  return { target: resource ? localPath(resource, base) : base, fragment: fragment === undefined ? undefined : decodeURIComponent(fragment) };
 }
 
 await check('release_metadata_matches_verified_packages', async () => {
@@ -106,37 +124,58 @@ await check('download_targets_are_concrete_and_available', async () => {
   return results;
 });
 
-await check('html_has_basic_accessible_document_structure', async () => {
-  html = await readFile(resolve(dist, 'index.html'), 'utf8');
-  requireValue(/<!doctype html>/i.test(html) && /<html\b[^>]*lang=["']en(?:-[\w]+)?["']/i.test(html), 'HTML5 document and English language declaration are required.');
-  requireValue(/<title>[^<]*DMC Player[^<]*<\/title>/i.test(html), 'The page title must identify DMC Player.');
-  requireValue(/<meta\b[^>]*name=["']viewport["']/i.test(html), 'Responsive viewport metadata is missing.');
-  requireValue((html.match(/<h1(?:\s|>)/gi) || []).length === 1 && /<main(?:\s|>)/i.test(html), 'The page needs one primary heading and a main landmark.');
-  const ids = [...html.matchAll(/\bid=["']([^"']+)["']/g)].map(match => match[1]);
-  requireValue(new Set(ids).size === ids.length, 'Duplicate element IDs were found.');
-  for (const tag of html.match(/<img\b[^>]*>/gi) || []) requireValue('alt' in attributes(tag), 'An image is missing alternative text.');
-  return { uniqueIds: ids.length, mainHeadingCount: 1 };
+await check('all_pages_have_accessible_document_structure', async () => {
+  const filenames = (await readdir(dist)).filter(filename => extname(filename) === '.html');
+  for (const filename of requiredPages) requireValue(filenames.includes(filename), `The requested page is missing: ${filename}`);
+  const titles = new Set();
+  const results = [];
+  for (const filename of filenames) {
+    const document = await readFile(resolve(dist, filename), 'utf8');
+    const title = document.match(/<title>([^<]+)<\/title>/i)?.[1]?.trim();
+    requireValue(/<!doctype html>/i.test(document) && /<html\b[^>]*lang=["']en(?:-[\w]+)?["']/i.test(document), `${filename}: HTML5 document and English language declaration are required.`);
+    requireValue(title && title.includes('DMC Player'), `${filename}: page title must identify DMC Player.`);
+    requireValue(!titles.has(title), `${filename}: page title duplicates another page.`); titles.add(title);
+    const meta = (document.match(/<meta\b[^>]*>/gi) || []).map(attributes);
+    requireValue(meta.some(tag => tag.name?.toLowerCase() === 'viewport' && tag.content?.includes('width=device-width')), `${filename}: responsive viewport metadata is missing.`);
+    requireValue(meta.some(tag => tag.name?.toLowerCase() === 'description' && tag.content?.trim()), `${filename}: page description is missing.`);
+    requireValue((document.match(/<h1(?:\s|>)/gi) || []).length === 1 && (document.match(/<main(?:\s|>)/gi) || []).length === 1, `${filename}: exactly one primary heading and main landmark are required.`);
+    const ids = (document.match(/<[a-z][^>]*>/gi) || []).map(attributes).filter(tag => tag.id !== undefined).map(tag => decodeEntities(tag.id));
+    requireValue(ids.every(Boolean) && new Set(ids).size === ids.length, `${filename}: empty or duplicate element IDs were found.`);
+    for (const tag of document.match(/<img\b[^>]*>/gi) || []) requireValue('alt' in attributes(tag), `${filename}: an image is missing alternative text.`);
+    requireValue(/<nav(?:\s|>)/i.test(document), `${filename}: navigation landmark is missing.`);
+    const skip = (document.match(/<a\b[^>]*>[\s\S]*?<\/a>/gi) || []).find(anchor => /skip (?:to )?(?:main )?content/i.test(visibleText(anchor)));
+    requireValue(skip && attributes(skip).href?.startsWith('#'), `${filename}: keyboard skip-to-content link is missing.`);
+    pages.set(resolve(dist, filename), { filename, document, ids: new Set(ids) });
+    results.push({ filename, title, uniqueIds: ids.length, mainHeadingCount: 1 });
+  }
+  html = pages.get(resolve(dist, 'index.html')).document;
+  return results;
 });
 
 await check('local_assets_and_fragment_links_exist', async () => {
-  requireValue(html, 'index.html could not be read.');
+  requireValue(pages.size >= requiredPages.length, 'All requested HTML pages must be readable before link validation.');
   const visited = new Set();
-  for (const tag of html.match(/<(?:a|link|script|img|source)\b[^>]*>/gi) || []) {
-    const attrs = attributes(tag);
-    const url = attrs.src ?? attrs.href;
-    if (!url || /^(?:https?:|data:)/i.test(url)) continue;
-    requireValue(!/^(?:javascript:|mailto:|tel:|\/)/i.test(url), `Unsupported, root-relative, or unprovided contact/link: ${url}`);
-    if (url.startsWith('#')) {
-      requireValue(url.length > 1 && new RegExp(`\\bid=["']${url.slice(1).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']`).test(html), `Broken fragment link: ${url}`);
-      continue;
+  let fragments = 0;
+  for (const [pagePath, { filename, document }] of pages) {
+    const linkedPages = new Set();
+    for (const tag of document.match(/<(?:a|link|script|img|source)\b[^>]*>/gi) || []) {
+      const attrs = attributes(tag);
+      const url = attrs.src ?? attrs.href;
+      if (!url || /^(?:https?:|data:)/i.test(url)) continue;
+      const ref = reference(url, url.startsWith('#') ? pagePath : dirname(pagePath));
+      const target = ref.target;
+      if (allowUnpublished && /^(?:\.\/)?downloads\//.test(url) && !await exists(target)) continue;
+      requireValue(await exists(target) && (await stat(target)).isFile(), `${filename}: missing local asset or page: ${url}`);
+      visited.add(target);
+      if (extname(target) === '.html') linkedPages.add(relative(dist, target).replaceAll(sep, '/'));
+      if (ref.fragment !== undefined) {
+        requireValue(ref.fragment.length > 0 && pages.get(target)?.ids.has(ref.fragment), `${filename}: broken fragment link: ${url}`); fragments++;
+      }
     }
-    const target = localPath(url);
-    if (allowUnpublished && /^(?:\.\/)?downloads\//.test(url) && !await exists(target)) continue;
-    requireValue(await exists(target), `Missing local asset: ${url}`);
-    visited.add(target);
+    for (const expected of requiredPages) requireValue(linkedPages.has(expected), `${filename}: shared navigation/footer does not link to ${expected}.`);
   }
   const textFiles = [...visited].filter(path => ['.js', '.css'].includes(extname(path)));
-  combinedContent = html + '\n' + (await Promise.all(textFiles.map(path => readFile(path, 'utf8')))).join('\n');
+  combinedContent = [...pages.values()].map(page => page.document).join('\n') + '\n' + (await Promise.all(textFiles.map(path => readFile(path, 'utf8')))).join('\n');
   for (const css of textFiles.filter(path => extname(path) === '.css')) {
     const content = await readFile(css, 'utf8');
     for (const match of content.matchAll(/url\(\s*["']?([^)'"\s]+)["']?\s*\)/g)) {
@@ -144,7 +183,58 @@ await check('local_assets_and_fragment_links_exist', async () => {
       requireValue(await exists(localPath(match[1], dirname(css))), `Missing CSS asset: ${match[1]}`);
     }
   }
-  return { localAssets: visited.size };
+  for (const script of textFiles.filter(path => extname(path) === '.js')) {
+    execFileSync(process.execPath, ['--check', script], { encoding: 'utf8', stdio: 'pipe' });
+    const source = await readFile(script, 'utf8');
+    for (const match of source.matchAll(/["'](\.\/assets\/[^"'`\s]+)["']/g))
+      requireValue(await exists(localPath(match[1], dirname(script))), `JavaScript references a missing asset: ${match[1]}`);
+  }
+  return { pages: pages.size, localAssets: visited.size, checkedFragments: fragments, scriptSyntaxChecked: textFiles.filter(path => extname(path) === '.js').length };
+});
+
+await check('download_pages_have_working_static_fallbacks', async () => {
+  requireValue(releaseData, 'Release data could not be read.');
+  const result = [];
+  for (const filename of ['index.html', 'download.html']) {
+    const document = pages.get(resolve(dist, filename))?.document;
+    requireValue(document, `${filename} could not be read.`);
+    const anchors = (document.match(/<a\b[^>]*>/gi) || []).map(attributes).filter(tag => tag['data-download']);
+    requireValue(anchors.some(tag => tag['data-download'] === 'installer'), `${filename}: a real installer download link is required.`);
+    if (filename === 'download.html') requireValue(anchors.some(tag => tag['data-download'] === 'portable'), 'download.html: a portable download link is required.');
+    for (const anchor of anchors) {
+      const expected = releaseData.downloads[anchor['data-download']];
+      requireValue(expected && decodeEntities(anchor.href || '') === expected.url, `${filename}: static ${anchor['data-download']} fallback is stale or invalid.`);
+    }
+    for (const match of document.matchAll(/<[^>]+data-hash=["']([^"']+)["'][^>]*>([^<]+)</gi))
+      requireValue(match[2].trim().toLowerCase() === releaseData.downloads[match[1]]?.sha256.toLowerCase(), `${filename}: static checksum is stale.`);
+    result.push({ filename, verifiedLinks: anchors.length });
+  }
+  return result;
+});
+
+await check('free_and_creator_identity_are_visible', async () => {
+  for (const filename of ['index.html', 'about.html']) {
+    const document = pages.get(resolve(dist, filename))?.document;
+    requireValue(document, `${filename} could not be read.`);
+    const text = visibleText(document.match(/<body\b[^>]*>([\s\S]*)<\/body>/i)?.[1] || '');
+    requireValue(/\bfree\b/i.test(text) && /Darryl McComish/.test(text), `${filename}: the free product and Darryl McComish attribution must be visible.`);
+    requireValue(/\bgamers?\b/i.test(text), `${filename}: the gamer focus is missing.`);
+  }
+  return { visibleOn: ['index.html', 'about.html'], creator: 'Darryl McComish', free: true };
+});
+
+await check('update_manifest_matches_the_verified_installer', async () => {
+  const path = resolve(dist, 'update.json');
+  if (!await exists(path)) {
+    if (requireUpdateManifest) { publishReady = false; throw new Error('The updater-capable release requires dist/update.json.'); }
+    return { present: false, required: false, note: 'Use --require-update-manifest when publishing an updater-capable release.' };
+  }
+  const update = await json(path);
+  const installer = releaseData?.downloads?.installer;
+  requireValue(update.schemaVersion === 1 && update.product === 'DMC Player' && update.version === release?.version, 'Update manifest product/schema/version differs from the verified release.');
+  requireValue(update.releaseUrl === `https://github.com/mccomish/dmc-player-downloads/releases/tag/v${release.version}`, 'Update release notes URL is not pinned to the expected repository/version.');
+  requireValue(installer && update.installer?.url === installer.url && update.installer?.filename === installer.filename && update.installer?.sizeBytes === installer.sizeBytes && update.installer?.sha256?.toLowerCase() === installer.sha256.toLowerCase(), 'Update installer URL/name/size/hash differs from the verified download.');
+  return { present: true, version: update.version, installer: installer.filename, exactPackageContract: true };
 });
 
 await check('faq_and_source_documentation_match_release', async () => {
@@ -159,7 +249,13 @@ await check('faq_and_source_documentation_match_release', async () => {
     results.push({ filename, sha256: entry.sha256 });
   }
   const faq = await json(resolve(dist, 'assets/faq.json'));
-  requireValue(Array.isArray(faq) ? faq.length > 0 : Object.keys(faq).length > 0, 'FAQ data is empty.');
+  const markdown = (await readFile(resolve(dist, 'assets/faq.md'), 'utf8')).replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');
+  const expectedEntries = markdown.split(/^## /m).slice(1).map(section => {
+    const newline = section.indexOf('\n');
+    return { question: section.slice(0, newline).trim(), answer: section.slice(newline + 1).trim() };
+  });
+  requireValue(faq.title === 'DMC Player FAQ' && expectedEntries.length > 0 && JSON.stringify(faq.entries) === JSON.stringify(expectedEntries), 'The searchable FAQ differs from the verified FAQ document.');
+  results.push({ searchableQuestions: expectedEntries.length, matchesVerifiedMarkdown: true });
   return results;
 });
 
@@ -186,7 +282,8 @@ await check('published_claims_preserve_known_limits', async () => {
   requireValue(/60(?:[\s-]+minute|\s*minutes|\s*min)/i.test(combinedContent), 'The user-facing content omits the free relay session limit.');
   requireValue(/unsigned|not (?:code[- ]?)?signed/i.test(combinedContent), 'The user-facing content omits the unsigned build status.');
   requireValue(!/(?:works with|supports|plays) (?:absolutely )?(?:every|all) (?:streaming|paid|protected) (?:service|website)/i.test(combinedContent), 'The site overstates streaming website compatibility.');
-  requireValue(!/trusted by\s+[\d,]+|\b[45]\.\d\s*(?:\/\s*5|stars)|lorem ipsum|support@|mailto:/i.test(html), 'Unprovided social proof, support contact, or placeholder copy was found.');
+  const publicHtml = [...pages.values()].map(page => page.document).join('\n');
+  requireValue(!/trusted by\s+[\d,]+|\b[45]\.\d\s*(?:\/\s*5|stars)|lorem ipsum|support@|mailto:/i.test(publicHtml), 'Unprovided social proof, support contact, or placeholder copy was found.');
   return { protectedProgrammePlaybackVerified: false, freeRelayMinutes: 60, automaticWatchHistory: false, installerSigned: false, note: 'Structural/text checks; browser review is still required for layout and interaction.' };
 });
 
