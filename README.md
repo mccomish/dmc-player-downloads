@@ -18,9 +18,12 @@ Open the printed localhost address. The server also supports the `/dmc-player-do
 
 ```sh
 node verify.mjs
+node scripts/verify-demo-carousel.mjs
 ```
 
 This checks release sizes, checksums, bundled documentation, screenshot metadata, local links, and the download contract. With the original player workspace available it also compares the local release binaries. `--check-remote` checks external download response headers; it does not claim a full remote SHA-256 verification. Use `--allow-unpublished-downloads` only for an unfinished local preview.
+
+The second command checks the game-background carousel's navigation, timing, pause controls, reduced-motion preference and image-failure handling without browser dependencies. Its screenshot list and source credits live in `scripts/game-screenshots.json`; the images are served locally from `dist/assets/games`. `scripts/demo-gallery.mjs` renders the shared Home and The player demo. Run the page builder after changing that list or template.
 
 ## Update a release
 
@@ -36,4 +39,4 @@ The included Render and Vercel configurations are alternatives for hosting the s
 
 `dist` contains the public website. Do not publish local preview downloads, environment files, host credentials or private application data. The website has no account system, analytics scripts or tracking pixels. Hosting providers still operate their own security logs.
 
-UI screenshots are synthetic renders of DMC Player with fixture content. The hero is a labelled illustration, not a captured game. Compatibility limitations in the app's FAQ are retained on the website.
+UI screenshots are synthetic renders of DMC Player with fixture content. The interactive demo uses real game screenshots from official Steam galleries behind an illustrated mini player; the current game's source is linked below it. This is a website demonstration, not a capture of DMC Player running over those games. Compatibility limitations in the app's FAQ are retained on the website.
