@@ -217,15 +217,19 @@ await check('download_pages_have_working_static_fallbacks', async () => {
   return result;
 });
 
-await check('free_and_creator_identity_are_visible', async () => {
+await check('free_product_and_gaming_focus_are_visible', async () => {
   for (const filename of ['index.html', 'about.html']) {
     const document = pages.get(resolve(dist, filename))?.document;
     requireValue(document, `${filename} could not be read.`);
     const text = visibleText(document.match(/<body\b[^>]*>([\s\S]*)<\/body>/i)?.[1] || '');
-    requireValue(/\bfree\b/i.test(text) && /Darryl McComish/.test(text), `${filename}: the free product and Darryl McComish attribution must be visible.`);
-    requireValue(/\bgamers?\b/i.test(text), `${filename}: the gamer focus is missing.`);
+    requireValue(/\bfree\b/i.test(text) && /DMC Player/.test(text), `${filename}: the free product identity must be visible.`);
+    requireValue(/\b(?:gamers?|gaming)\b/i.test(text), `${filename}: the gaming focus is missing.`);
   }
-  return { visibleOn: ['index.html', 'about.html'], creator: 'Darryl McComish', free: true };
+  for (const { filename, document } of pages.values()) {
+    const text = visibleText(document).replaceAll('d.mccomish@homehops.co.uk', '');
+    requireValue(!/\bDarryl\b/i.test(document) && !/\bMcComish\b/i.test(text), `${filename}: personal attribution remains in public copy or metadata.`);
+  }
+  return { visibleOn: ['index.html', 'about.html'], product: 'DMC Player', free: true, personalAttribution: false };
 });
 
 await check('update_manifest_matches_the_verified_installer', async () => {

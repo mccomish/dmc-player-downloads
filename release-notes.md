@@ -9,7 +9,7 @@ Fixes opacity and click-through lock failing with the Windows error "Windows cou
 
 ## Updating
 
-Close an older running copy before installing. Versions 2.6 and later can use Help > Check for updates; older versions need this installer once. Your saved queue, TV channels, favourites and service sign-ins are retained. DMC Player is free, created for gamers by Darryl McComish.
+Close an older running copy before installing. Versions 2.6 and later can use Help > Check for updates; older versions need this installer once. Your saved queue, TV channels, favourites and service sign-ins are retained. DMC Player is a free media player built for gaming sessions.
 
 The installer remains unsigned, so Windows may show an unknown-publisher or reputation prompt. VLC and .NET are included; Setup offers WebView2 when missing. Portable users should extract the complete ZIP into a new folder.
 

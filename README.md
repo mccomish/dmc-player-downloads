@@ -2,7 +2,7 @@
 
 This repository contains the static download website and release information for DMC Player. Application installers and portable packages are attached to GitHub Releases; they are not stored as normal Git files. The player's application source is maintained separately.
 
-The nine public pages are Home, The player, Live TV, Watch together, Download, Help, About, Privacy and Terms & conditions. Legal-page content lives in `scripts/legal-pages.mjs`; the public contact address is the one explicitly supplied by the creator. They share `dist/site.css` and `dist/app.js`. Page templates live in `scripts/build-pages.mjs`; their generated HTML is committed so GitHub Pages can serve it directly. All pages use relative `.html` links for project-path hosting. The site identifies DMC Player as free software created for gamers by Darryl McComish.
+The nine public pages are Home, The player, Live TV, Watch together, Download, Help, About, Privacy and Terms & conditions. Legal-page content lives in `scripts/legal-pages.mjs`; the public contact address is the one explicitly supplied by the creator. They share `dist/site.css` and `dist/app.js`. Page templates live in `scripts/build-pages.mjs`; their generated HTML is committed so GitHub Pages can serve it directly. All pages use relative `.html` links for project-path hosting. The site focuses on DMC Player as a free media player for gaming, its features and how to use it. The About page content lives in `scripts/product-about.mjs`.
 
 ## Local preview
 
