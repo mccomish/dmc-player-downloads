@@ -1,0 +1,7 @@
+node_modules/
+dist/downloads/
+*.tar.gz
+*.log
+.vercel/
+.env*
+reports/

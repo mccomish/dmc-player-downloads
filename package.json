@@ -1,0 +1,10 @@
+{
+  "name": "dmc-player-downloads",
+  "private": true,
+  "version": "2.4.0",
+  "description": "Static download website for DMC Player",
+  "scripts": {
+    "verify": "node verify.mjs",
+    "preview": "node scripts/serve.mjs"
+  }
+}

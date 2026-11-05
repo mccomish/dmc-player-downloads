@@ -1,0 +1,15 @@
+# Deploy this website directory as the repository root, or select it as Root Directory.
+# The build deliberately fails until real download URLs or package files are present.
+services:
+  - type: web
+    name: dmc-player
+    runtime: static
+    buildCommand: node verify.mjs
+    staticPublishPath: ./dist
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin

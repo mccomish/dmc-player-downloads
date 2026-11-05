@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 128">
+  <title>DMC Player</title>
+  <rect width="480" height="128" rx="12" fill="#141516"/>
+  <path transform="translate(16 16) scale(1.5)" fill="#F2753E" fill-rule="evenodd" d="M10 8h24l22 18v12L34 56H10Z M24 20v24l19-12Z"/>
+  <text x="132" y="74" font-family="Bahnschrift,Arial,sans-serif" font-size="50" font-weight="600" letter-spacing="2" fill="#F3F0EB">DMC</text>
+  <text x="291" y="73" font-family="Bahnschrift,Arial,sans-serif" font-size="34" letter-spacing="1" fill="#A3A09A">PLAYER</text>
+</svg>
