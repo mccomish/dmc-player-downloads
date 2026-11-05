@@ -14,7 +14,11 @@ Double-click a queue entry to start queue playback; the next queued item then pl
 
 ## Can I watch and search YouTube inside DMC Player?
 
-Choose File → YouTube to open YouTube inside the player and use its normal search. You can also paste an HTTPS YouTube watch, Shorts, live, playlist or youtu.be share link into Open stream. Video, playlist and timestamp details stay in the address. Use YouTube's video fullscreen control, then Ctrl+Alt+O to watch in mini mode. DMC Player opens YouTube pages; it does not download videos or relay them through watch together. Playback and Google sign-in depend on YouTube's embedded-browser rules; account access is not guaranteed or automated.
+Choose File → YouTube to open YouTube inside the player and use its normal search. You can also paste an HTTPS YouTube watch, Shorts, live, playlist or youtu.be share link into Open stream. Video, playlist and timestamp details stay in the address during ordinary browsing. Use YouTube's video fullscreen control, then Ctrl+Alt+O to watch in mini mode. From version 2.7, Watch together can synchronize a public video's play/pause, position and rate. Each person loads YouTube independently with their own access; DMC Player does not extract or relay YouTube video bytes or share account sessions. Playback and Google sign-in depend on YouTube's rules; account access is not guaranteed or automated.
+
+## How do I watch YouTube with friends?
+
+Update both players to DMC Player 2.7 or later. Start an actual YouTube video, then choose Tools → Watch together → Host and send the invite link. Home, search, account and playlist-only pages cannot be hosted. The session shares the video's canonical public URL, its title and playback state; extra URL parameters, cookies and sign-ins are not shared. Each guest opens the normal YouTube page independently. Ads, loading, autoplay and regional or account restrictions can delay playback; wait for ads to finish and press Play in YouTube if needed. The host controls synchronization; enabled guest requests from DMC's controls can change play/pause, seek and rate. Subscription websites remain unsupported by Watch together.
 
 ## Can I watch Netflix, Prime Video or Disney+?
 
@@ -30,7 +34,7 @@ A Freeview TV receives many channels through its aerial and tuner. That does not
 
 ## Will every TV channel or service play here?
 
-No. A public stream can stop working, restrict your country or require a different player. Community lists are not a guarantee of availability, permission or a complete Freeview lineup. Protected service websites use WebView2 and their DRM, account and subscription rules still apply; DMC Player does not guarantee embedded playback. Live viewing may have local TV licence requirements. The app does not bypass sign-in, location or content protection. Website playback is not relayed through watch together. Imported channel directives for DRM keys, cookies and custom player options are not executed.
+No. A public stream can stop working, restrict your country or require a different player. Community lists are not a guarantee of availability, permission or a complete Freeview lineup. Protected service websites use WebView2 and their DRM, account and subscription rules still apply; DMC Player does not guarantee embedded playback. Live viewing may have local TV licence requirements. The app does not bypass sign-in, location or content protection. YouTube video playback can be synchronized from version 2.7, with each person loading YouTube independently; subscription websites are not relayed or synchronized. Imported channel directives for DRM keys, cookies and custom player options are not executed.
 
 ## How do I put the picture over FiveM?
 
@@ -54,7 +58,7 @@ Exclusive fullscreen games can cover ordinary always-on-top desktop windows; swi
 
 ## How can friends watch with me over the internet?
 
-Open a file or direct stream, choose Tools → Watch together, then press Host. Choose Copy link when the invitation is ready and send it to friends. They need DMC Player 2.3 or later. An installed copy opens invite links; otherwise, select Join and paste the link. A host can have up to eight guests. Keep the host player open while watching. Stopping hosting expires the link. Free test links last up to 60 minutes; start a new room to keep watching.
+Open a file or direct stream, or start a YouTube video, then choose Tools → Watch together and press Host. Choose Copy link when the invitation is ready and send it to friends. Use DMC Player 2.7 or later on both players for YouTube synchronization. An installed copy opens invite links; otherwise, select Join and paste the link. A host can have up to eight guests. Keep the host player open while watching. Stopping hosting expires the link. Free test links last up to 60 minutes; start a new room to keep watching.
 
 ## Is the automatic relay always available?
 
@@ -66,7 +70,7 @@ Expand Advanced direct connection in Watch together. Internet mode needs a publi
 
 ## Do friends need the file or a subscription?
 
-Local media streams from the host, so guests do not need their own copy; the host needs upload capacity for each guest. For a direct network stream, every guest needs permission to open that source. Embedded subscription services are not relayed or synchronized by watch together. Volume, subtitles and window size remain local.
+Local media streams from the host, so guests do not need their own copy; the host needs upload capacity for each guest. For a direct network stream, every guest needs permission to open that source. For YouTube, each person loads the normal video page independently and needs their own access; no account session or video bytes are sent from the host. Embedded subscription services are not relayed or synchronized by Watch together. Volume, subtitles and window size remain local.
 
 ## How do I make DMC Player my default media app?
 
