@@ -1,33 +1,32 @@
-# DMC Player 2.4.0
+# DMC Player 2.5.0
 
-A Windows x64 media player for your own files, direct media links and official streaming websites.
+Live TV now opens direct channel streams in the native player instead of sending every channel to a website.
 
-## Downloads
+- Choose File > Live TV, select a channel and press Watch channel, or double-click it.
+- Nine starter broadcaster-origin streams have passed actual native VLC video decoding checks, including Sky News, DW, NHK WORLD-JAPAN and CGTN Documentary.
+- Optional one-click UK and English community lists from IPTV-org provide hundreds or thousands of submitted public stream entries. Listings are not a guarantee of permission, availability or playback in your country.
+- Import an M3U channel list from a file or URL, including a supported lineup from your own network TV tuner.
+- Search, category filters and favourites. Channel lists stay separate from the optional play queue; watching does not add history.
+- Direct TV uses DMC Player's normal volume, fullscreen, mini window and click-through controls.
 
-- **DMC-Player-Setup-2.4.0.exe**: recommended per-user installer; includes VLC and .NET, Start menu entry, default-player registration and watch-invite links. Offers Microsoft WebView2 when missing.
-- **DMC-Player-2.4.0-win-x64.zip**: extract the complete folder and run DMCPlayer.exe.
+Freeview aerial channels still require a TV tuner; they do not all have unrestricted internet streams. Services requiring their own signed-in web player remain under File > Streaming services. Sign-in, location, subscription, TV Licence and DRM requirements apply. Protected website playback remains unverified.
 
-Close an older running copy before updating. Existing manually chosen queues, preferences and embedded service sign-ins are retained.
+## Downloads and updating
 
-## Features
+Use the Setup EXE for a normal per-user Windows x64 installation, or extract the complete portable ZIP and run DMCPlayer.exe. Close any older running DMC Player before updating. Your manually selected queue and embedded service sign-ins are retained. The installer includes VLC and .NET and offers WebView2 when missing.
 
-- Borderless mini window, resize/drag, always-on-top and click-through lock for borderless-windowed games.
-- Full screen and a right-click menu. F11 toggles full screen; Escape restores the previous window.
-- Normal media opens play on their own. Queues contain only items deliberately added.
-- Searchable directory of 18 official TV and streaming services, including BBC iPlayer, ITVX and STV Player.
-- Watch together: Host, then Copy link. The free test relay requires Windows OpenSSH on the host and sessions last up to 60 minutes.
+This build is unsigned; Windows may show an unknown-publisher or reputation prompt. Watch together still uses a free test relay with sessions up to 60 minutes and no availability guarantee. Website playback is not shared.
 
-## Viewing and build notes
+## Validation
 
-This build is unsigned. Windows may show an unknown-publisher or reputation prompt. Verify the SHA-256 values below before running downloaded files.
-
-Service pages open inside the player. Provider account, location, TV Licence, subscription and supported-browser requirements apply. Public BBC iPlayer, ITVX and STV pages loaded in testing; signed-in protected programme playback remains unverified. DMC Player does not include media or subscriptions. Website playback is not shared through watch together.
-
-Third-party license notices are included with the application.
+- 9/9 starter channels decoded real video through LibVLC using silent dummy outputs.
+- 8 parser/download/storage checks and 5 isolated UI/native playback checks passed.
+- Existing queue (6), help (8), provider catalog (8), visual/layout, installer (9) and release-package (3) checks passed.
+- Individual community streams are not playback-verified.
 
 ## SHA-256
 
 ```text
-6c39a9c60fd55164fd9c49be4b0ca6a93a61252683aad1cb72722131b401131f  DMC-Player-Setup-2.4.0.exe
-c9c4d09f238762c58fc07cf9d21a813f735c928c253520046cf0dd2db3ee8342  DMC-Player-2.4.0-win-x64.zip
+296687498de81c9e0cbee9418cc08ea21d535337dcfc6704e3a98a31898bab36  DMC-Player-Setup-2.5.0.exe
+85e9357ac6da64dd50ae5607db92cd726523a50b7a275084fcae30e876125060  DMC-Player-2.5.0-win-x64.zip
 ```
