@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "product": "DMC Player",
   "version": "2.5.0",
-  "preparedAtUtc": "2026-11-05T22:29:17.4529888Z",
-  "generatedAtUtc": "2026-11-05T22:29:19.260Z",
+  "preparedAtUtc": "2026-11-05T22:31:59.8091552Z",
+  "generatedAtUtc": "2026-11-05T22:32:01.650Z",
   "platform": {
     "operatingSystem": "Windows",
     "architecture": "x64",
@@ -13,8 +13,8 @@
     {
       "kind": "installer",
       "filename": "DMC-Player-Setup-2.5.0.exe",
-      "sizeBytes": 112988216,
-      "sha256": "296687498de81c9e0cbee9418cc08ea21d535337dcfc6704e3a98a31898bab36",
+      "sizeBytes": 112988263,
+      "sha256": "7a4b5ad971cc3c3e76a787e0912eedbee9ee1901b5e0448980c65191b29c4ebc",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
@@ -26,8 +26,8 @@
     {
       "kind": "portable",
       "filename": "DMC-Player-2.5.0-win-x64.zip",
-      "sizeBytes": 135627780,
-      "sha256": "85e9357ac6da64dd50ae5607db92cd726523a50b7a275084fcae30e876125060",
+      "sizeBytes": 135627816,
+      "sha256": "e73a90d999f5fe973e70ffc34b1f7692ed597b6069df9d94dd8a89561a7c30fa",
       "architecture": "x64",
       "installScope": "none",
       "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.5.0/DMC-Player-2.5.0-win-x64.zip",
@@ -39,8 +39,8 @@
     "installer": {
       "kind": "installer",
       "filename": "DMC-Player-Setup-2.5.0.exe",
-      "sizeBytes": 112988216,
-      "sha256": "296687498de81c9e0cbee9418cc08ea21d535337dcfc6704e3a98a31898bab36",
+      "sizeBytes": 112988263,
+      "sha256": "7a4b5ad971cc3c3e76a787e0912eedbee9ee1901b5e0448980c65191b29c4ebc",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
@@ -52,8 +52,8 @@
     "portable": {
       "kind": "portable",
       "filename": "DMC-Player-2.5.0-win-x64.zip",
-      "sizeBytes": 135627780,
-      "sha256": "85e9357ac6da64dd50ae5607db92cd726523a50b7a275084fcae30e876125060",
+      "sizeBytes": 135627816,
+      "sha256": "e73a90d999f5fe973e70ffc34b1f7692ed597b6069df9d94dd8a89561a7c30fa",
       "architecture": "x64",
       "installScope": "none",
       "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.5.0/DMC-Player-2.5.0-win-x64.zip",
@@ -212,7 +212,7 @@
     "portablePayloadVerified": true,
     "method": "Extraction and hashes; no application/runtime installation or system-default changes",
     "sourceFilesVerified": 9,
-    "releaseManifestSha256": "519699dfdda63210a3a91e441e809723499e5c0a9a4c79639640cd5e8cde97f5",
-    "checksumFileSha256": "bedcb3db95d067806642c2264d270a99770b3defa37d4d92b7fc606bd8b1028e"
+    "releaseManifestSha256": "c9a671b9f09d1d518d6313a6880e390fb81d9c3e7ee64b51058f27dc9fb385a4",
+    "checksumFileSha256": "79908b2f12d046a3beb39dccb3d3eedcc02f7c9ce9024d2211c57f7ccac382a1"
   }
 }
