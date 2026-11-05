@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { legalLinks, legalPages } from './legal-pages.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
@@ -16,8 +17,8 @@ function download(kind='installer', label='Download for Windows', classes='butto
 function header(page) {
   return `<a class="skip" href="#main">Skip to content</a><header class="site-header"><div class="shell header-inner"><a class="brand" href="./index.html" aria-label="DMC Player home"><img src="./assets/dmc-mark.svg" alt="" width="32" height="32"><span>DMC <b>PLAYER</b></span></a><span class="header-free">FREE FOR WINDOWS</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav"><span>Menu</span><i aria-hidden="true"></i></button><nav class="main-nav" id="main-nav" aria-label="Main navigation">${links.filter(([url])=>url!=='index.html').map(([url,label])=>`<a href="./${url}"${url===page?' aria-current="page"':''}${url==='download.html'?' class="nav-download"':''}>${label}${url==='download.html'?' '+arrow:''}</a>`).join('')}</nav></div></header>`;
 }
-function footer() {
-  return `<footer class="site-footer"><div class="shell footer-top"><div><a class="brand footer-brand" href="./index.html"><img src="./assets/dmc-mark.svg" alt="" width="35" height="35"><span>DMC <b>PLAYER</b></span></a><p class="footer-statement">Your game.<br>Your show.<br><span>Your player.</span></p></div><div class="footer-description"><p>A free Windows media player,<br>created for gamers by <strong>Darryl McComish.</strong></p><p>Bring your files, streams and service accounts. DMC Player supplies the player.</p><a class="text-link" href="./download.html">Get DMC Player ${arrow}</a></div><nav class="footer-nav" aria-label="Footer navigation">${links.map(([url,label])=>`<a href="./${url}">${label}</a>`).join('')}</nav></div><div class="shell footer-bottom"><span>Made by Darryl McComish · Free to download and use</span><a id="release-link" data-release-link href="https://github.com/mccomish/dmc-player-downloads/releases/tag/v${escape(release.version)}">Release files &amp; notes ${arrow}</a></div></footer><div class="toast" id="toast" role="status" aria-live="polite"></div>`;
+function footer(currentPage) {
+  return `<footer class="site-footer"><div class="shell footer-top"><div><a class="brand footer-brand" href="./index.html"><img src="./assets/dmc-mark.svg" alt="" width="35" height="35"><span>DMC <b>PLAYER</b></span></a><p class="footer-statement">Your game.<br>Your show.<br><span>Your player.</span></p></div><div class="footer-description"><p>A free Windows media player,<br>created for gamers by <strong>Darryl McComish.</strong></p><p>Bring your files, streams and service accounts. DMC Player supplies the player.</p><a class="text-link" href="./download.html">Get DMC Player ${arrow}</a></div><nav class="footer-nav" aria-label="Footer navigation">${links.map(([url,label])=>`<a href="./${url}">${label}</a>`).join('')}</nav></div><div class="shell footer-bottom"><span>Made by Darryl McComish · Free to download and use</span><nav class="footer-legal" aria-label="Legal">${legalLinks.map(([url,label])=>`<a href="./${url}"${url===currentPage?' aria-current="page"':''}>${label}</a>`).join('')}</nav><a id="release-link" data-release-link href="https://github.com/mccomish/dmc-player-downloads/releases/tag/v${escape(release.version)}">Release files &amp; notes ${arrow}</a></div></footer><div class="toast" id="toast" role="status" aria-live="polite"></div>`;
 }
 function banner(title='Make some room for your next episode.') {
   return `<section class="download-banner"><div class="shell"><div><p class="eyebrow">FREE. MADE FOR GAMERS.</p><h2>${title}</h2><p>Created by Darryl McComish. Available for Windows x64.</p></div><a class="button button-dark" href="./download.html">Get DMC Player ${arrow}</a></div></section>`;
@@ -30,7 +31,7 @@ function intro(kicker,title,description) {
 }
 function page(filename, title, description, body, theme='') {
   const html = `<!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${escape(description)}"><meta name="theme-color" content="#141513"><meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:type" content="website"><title>${escape(title)}</title><link rel="icon" type="image/png" href="./assets/dmc-icon.png"><link rel="stylesheet" href="./site.css"><script src="./app.js" defer></script></head><body class="${theme}">${header(filename)}<main id="main">${body}</main>${footer()}</body></html>\n`;
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${escape(description)}"><meta name="theme-color" content="#141513"><meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:type" content="website"><title>${escape(title)}</title><link rel="icon" type="image/png" href="./assets/dmc-icon.png"><link rel="stylesheet" href="./site.css"><script src="./app.js" defer></script></head><body class="${theme}">${header(filename)}<main id="main">${body}</main>${footer(filename)}</body></html>\n`;
   fs.writeFileSync(path.join(dist, filename), html);
 }
 
@@ -97,4 +98,6 @@ page('about.html','About Darryl McComish & DMC Player','DMC Player is a free Win
 <section class="shell about-credits"><div><p class="eyebrow">UNDER THE HOOD</p><h2>Built on good tools.</h2></div><div class="reading-column"><p>DMC Player uses the VLC engine and LibVLCSharp for media playback, Microsoft .NET for the Windows app and WebView2 for provider websites.</p><p>Third-party license notices are included in the application package. Public channel lists are maintained separately by their contributors; broadcaster and service names belong to their respective owners.</p><a class="text-link" href="./help.html">How the player works ${arrow}</a></div></section>
 ${banner('A player for your next session.')}`);
 
-console.log(`Built ${links.length} DMC Player pages for release ${release.version}.`);
+for (const legal of legalPages) page(legal.filename, legal.title, legal.description, legal.body);
+
+console.log(`Built ${links.length + legalPages.length} DMC Player pages for release ${release.version}.`);

@@ -11,7 +11,8 @@ const args = process.argv.slice(2);
 const allowUnpublished = args.includes('--allow-unpublished-downloads');
 const checkRemote = args.includes('--check-remote');
 const requireUpdateManifest = args.includes('--require-update-manifest');
-const requiredPages = ['index.html', 'features.html', 'live-tv.html', 'watch-together.html', 'download.html', 'help.html', 'about.html'];
+const requiredPages = ['index.html', 'features.html', 'live-tv.html', 'watch-together.html', 'download.html', 'help.html', 'about.html', 'privacy.html', 'terms.html'];
+const publicContact = 'mailto:d.mccomish@homehops.co.uk';
 const reportArgument = args.indexOf('--report');
 const reportPath = resolve(reportArgument < 0 ? resolve(siteRoot, 'reports/verification.json') : args[reportArgument + 1] || 'reports/verification.json');
 const checks = [];
@@ -162,6 +163,10 @@ await check('local_assets_and_fragment_links_exist', async () => {
       const attrs = attributes(tag);
       const url = attrs.src ?? attrs.href;
       if (!url || /^(?:https?:|data:)/i.test(url)) continue;
+      if (/^mailto:/i.test(url)) {
+        requireValue(decodeEntities(url) === publicContact, `${filename}: contact address was not supplied by the creator.`);
+        continue;
+      }
       const ref = reference(url, url.startsWith('#') ? pagePath : dirname(pagePath));
       const target = ref.target;
       if (allowUnpublished && /^(?:\.\/)?downloads\//.test(url) && !await exists(target)) continue;
@@ -283,7 +288,7 @@ await check('published_claims_preserve_known_limits', async () => {
   requireValue(/unsigned|not (?:code[- ]?)?signed/i.test(combinedContent), 'The user-facing content omits the unsigned build status.');
   requireValue(!/(?:works with|supports|plays) (?:absolutely )?(?:every|all) (?:streaming|paid|protected) (?:service|website)/i.test(combinedContent), 'The site overstates streaming website compatibility.');
   const publicHtml = [...pages.values()].map(page => page.document).join('\n');
-  requireValue(!/trusted by\s+[\d,]+|\b[45]\.\d\s*(?:\/\s*5|stars)|lorem ipsum|support@|mailto:/i.test(publicHtml), 'Unprovided social proof, support contact, or placeholder copy was found.');
+  requireValue(!/trusted by\s+[\d,]+|\b[45]\.\d\s*(?:\/\s*5|stars)|lorem ipsum|support@/i.test(publicHtml), 'Unprovided social proof, support contact, or placeholder copy was found.');
   return { protectedProgrammePlaybackVerified: false, freeRelayMinutes: 60, automaticWatchHistory: false, installerSigned: false, note: 'Structural/text checks; browser review is still required for layout and interaction.' };
 });
 
