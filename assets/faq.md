@@ -1,5 +1,9 @@
 # DMC Player FAQ
 
+## Why did a streamed movie say finished before its ending?
+
+From version 2.10.4, a remote video with a known duration can reconnect if the native player stops well before its remembered ending. DMC keeps the last playback position in memory and resumes it when the source supports seeking. A movie that actually reaches its ending still finishes normally and may advance an explicit queue. A clean ending with no known duration is ambiguous, so DMC does not assume it was a live channel; use Playback → Live stream mode only for continuous TV or radio. Repeated connection failures slow to a 30-second retry interval. Stop or Pause cancels reconnecting. A new source or watch-session change cannot be replaced by an older pending retry. Add-on and service websites retain their own playback paths; expired or inaccessible links may need replacement.
+
 ## Why did the player take a long time to open?
 
 Version 2.10.2 lets the window appear before loading the VLC playback engine on a background worker, and includes a prepared native plug-in cache. A file opened immediately waits for that same engine to finish preparing. Update checks begin after the window has opened. Service browsers, playlist imports and torrent engines still start only when needed. The first launch after extraction, a slow disk or security scanning can take longer; this does not change stream buffering or download speed.
@@ -18,7 +22,7 @@ Imported playlist collections and favourites are saved locally as playlist-libra
 
 ## Why does a live channel freeze, and what should I do?
 
-From version 2.9.1, channels opened through Live TV use a larger adaptive live-stream buffer, with a target delay of about 30 seconds. This gives the player more room to absorb brief network or broadcaster interruptions; it can put the picture further behind the live broadcast. Live HLS downloads have finite connection and idle-read deadlines so an interrupted video segment cannot keep the native player waiting indefinitely. Other files and ordinary on-demand links keep their normal playback settings. If the live picture and playback clock stop advancing, DMC can reopen the selected channel automatically. Recovery respects pause, Stop, source changes and closing the player. It uses up to three attempts in a five-minute window, resetting the budget after a minute of stable playback; if it still fails, press Play to retry. A broadcaster or network outage can still interrupt live TV. Update and reopen Sky News from File → Live TV to use the new settings.
+Version 2.10.4 reconnects live channels after an unexpected ending, error or sustained playback stall. It tries quickly at first, then retries every 30 seconds while the same channel is still selected. A minute of stable playback restores the quicker retries. Pause, Stop, changing source, entering browser mode and closing cancel pending recovery. Confirmed live HLS links opened through Open stream or a playlist use this behavior too; HLS masters are checked through one bounded media-playlist probe. For an opaque channel link that cannot be identified automatically, choose Playback → Live stream mode. Leave this off for movies. Live channels keep the existing roughly 30-second adaptive delay and finite network read deadlines. Reconnecting cannot renew an expired provider link, change access rules or make an unavailable broadcast respond.
 
 ## Does live TV stay in exact sync in Watch together?
 
