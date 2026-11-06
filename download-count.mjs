@@ -192,7 +192,6 @@ export function initDownloadCounter(element, options = {}) {
       time.setAttribute('datetime', snapshot.checkedAt);
       time.textContent = formatCheckedAt(snapshot.checkedAt);
       total.textContent = formatDownloadTotal(snapshot.total);
-      element.style?.setProperty('--download-digits', String(Math.max(2, total.textContent.length)));
       checked.replaceChildren('Checked ', time);
       status.textContent = 'Total reported by GitHub';
       return snapshot;

@@ -26,7 +26,7 @@
       if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { closeMenu(); toggle.focus(); }
     });
     document.addEventListener('click', event => { if (!event.target.closest('.site-header')) closeMenu(); });
-    window.addEventListener('resize', () => { if (window.innerWidth > 760) closeMenu(); });
+    window.addEventListener('resize', () => { if (window.innerWidth > 960) closeMenu(); });
   }
 
   async function loadRelease() {
