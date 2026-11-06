@@ -226,7 +226,7 @@ await check('platform_downloads_keep_windows_active_and_mac_availability_honest'
   const macSection = document.match(/<section\b[^>]*data-platform="macos"[^>]*>[\s\S]*?<\/section>/i)?.[0];
   requireValue(windows?.includes('data-available="true"') && windows.includes('data-download="installer"')
     && windows.includes('data-download="portable"'), 'Windows installer and portable downloads must remain active in their own labelled section.');
-  requireValue(macSection && /<h2\b[^>]*>Mac preview<\/h2>/.test(macSection), 'A clearly labelled Mac preview availability section is required.');
+  requireValue(macSection && /<h2\b[^>]*>Mac<\/h2>/.test(macSection), 'A clearly labelled Mac download section is required.');
   const manifestPath = resolve(dist, 'assets/mac-release.json');
   const macLinks = (macSection.match(/<a\b[^>]*>/gi) || []).map(attributes).filter(tag => tag['data-platform-download'] === 'macos');
   if (!await exists(manifestPath)) {

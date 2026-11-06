@@ -7,7 +7,7 @@ export function homePage({ download, downloadCounter, banner, frame, demo, arrow
     <p class="hero-subtitle">Watch TV and movies while you game.</p>
     <p class="hero-lead">Keep a film, a show or live TV in a small window over your game. Open your own files, stream links or streaming services, then move the picture where it suits you.</p>
     <div class="hero-actions">${download()}${downloadCounter()}</div>
-    <div class="hero-secondary"><a class="text-link hero-how" href="./features.html">How it works ${arrow}</a><a class="text-link hero-how" href="./download.html#macos">Mac preview ${arrow}</a></div>
+    <div class="hero-secondary"><a class="text-link hero-how" href="./features.html">How it works ${arrow}</a><a class="text-link hero-how" href="./download.html#macos">Download for Mac ${arrow}</a></div>
     <p class="hero-meta"><span data-version>Version ${releaseVersion}</span><span>Windows x64</span><span>Free to use</span></p>
   </div>
   ${demo}
