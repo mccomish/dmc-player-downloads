@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "product":  "DMC Player",
-    "version":  "2.11.0",
-    "preparedAtUtc":  "2026-11-06T19:14:30.3537766Z",
+    "version":  "2.12.0",
+    "preparedAtUtc":  "2026-11-06T20:07:45.8839447Z",
     "platform":  {
                      "operatingSystem":  "Windows",
                      "architecture":  "x64",
@@ -11,9 +11,9 @@
     "files":  [
                   {
                       "kind":  "installer",
-                      "filename":  "DMC-Player-Setup-2.11.0.exe",
-                      "sizeBytes":  113903476,
-                      "sha256":  "814540154561d259435fb025ba90b65d4f50fde85adf323b15afc7dbac535052",
+                      "filename":  "DMC-Player-Setup-2.12.0.exe",
+                      "sizeBytes":  113958567,
+                      "sha256":  "222495191ceda119eea39b4ee3702b363e521dfe64a667690f0a2ef3cec7f043",
                       "signed":  false,
                       "signatureStatus":  "NotSigned",
                       "architecture":  "x64",
@@ -21,9 +21,9 @@
                   },
                   {
                       "kind":  "portable",
-                      "filename":  "DMC-Player-2.11.0-win-x64.zip",
-                      "sizeBytes":  136739168,
-                      "sha256":  "503bc419d58c4df8a6be3848d1ab6c4961cae95c7fa1a644676269e1c8539d32",
+                      "filename":  "DMC-Player-2.12.0-win-x64.zip",
+                      "sizeBytes":  136812543,
+                      "sha256":  "45d11428c4e23b15818d345881019722dc4d8b940f3deb5965716a3889b1f493",
                       "architecture":  "x64",
                       "installScope":  "none"
                   }
@@ -52,8 +52,8 @@
                           {
                               "kind":  "faq",
                               "filename":  "docs/FAQ.md",
-                              "sizeBytes":  23868,
-                              "sha256":  "af8d50f88ae605b871018b46a0b16dc8e5bf24c07cef5ff731ecbc3ac612ac43"
+                              "sizeBytes":  26172,
+                              "sha256":  "580134cee1def4c0b2c10029de3f1145ce3d59a6c664c8e69496238115a4972e"
                           },
                           {
                               "kind":  "tvSources",
@@ -267,7 +267,28 @@
                                      "selectedSourceResolve":  true,
                                      "onlySelectedMagnetAdded":  true,
                                      "disconnectRemovesLocalKey":  true,
-                                     "remoteTransferDeleteOnCancel":  false
+                                     "remoteTransferDeleteOnCancel":  false,
+                                     "library":  {
+                                                     "minimumVersion":  "2.12.0",
+                                                     "posterCards":  true,
+                                                     "cleanedTitles":  true,
+                                                     "groupedVersions":  true,
+                                                     "seasonEpisodeNavigation":  true,
+                                                     "categoryFilters":  true,
+                                                     "search":  true,
+                                                     "paging":  true,
+                                                     "automaticArtwork":  true,
+                                                     "artworkProvider":  "Cinemeta",
+                                                     "memoryOnlyLibrary":  true,
+                                                     "maximumRenderedCards":  24,
+                                                     "posterByteCacheMiB":  16,
+                                                     "maximumDecodedPosters":  64,
+                                                     "decodedPosterWidth":  220,
+                                                     "decodedPosterHeight":  330,
+                                                     "maximumMetadataEntries":  256,
+                                                     "artworkPreferenceFile":  "library-view.json",
+                                                     "autoLoadsWhenOpened":  true
+                                                 }
                                  }
                },
     "updates":  {

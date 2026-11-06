@@ -4,13 +4,25 @@
 
 From Windows version 2.11, open File → Films & TV / add-ons and press Connect AllDebrid. Press Connect, then open the AllDebrid authorization page and approve the displayed code in your browser. DMC updates when approval finishes. You do not enter your AllDebrid password into DMC Player. A masked API-key option is available under Use an API key instead. AllDebrid account shows the account and membership status; Disconnect removes the encrypted connection saved on this Windows account. It does not revoke a key at AllDebrid or delete your remote transfers. AllDebrid is a separate service with its own account and access requirements.
 
+## How is My library organised?
+
+From Windows version 2.12, File → Films & TV / add-ons opens My library automatically when an AllDebrid connection is saved. It loads the ready videos in that account as film and TV cards, with clean titles and release years. Versions of the same film sit under one title; TV shows have seasons, episodes and versions. Use Films, TV shows or Other, title search and page controls to browse. Each page holds up to 24 cards. Choose a card, pick the exact episode or version and press Play. File details is collapsed until you want the original filename. Unknown files, samples, trailers and ambiguous episode packs remain available under Other rather than being guessed as a film or exact episode. Refresh reloads ready account videos; it does not add or delete remote transfers.
+
+## Does My library load posters and details automatically?
+
+Yes. Posters & details is on by default in My library; turn it off to stop artwork requests and use the local title cards. DMC searches Cinemeta using cleaned film/show titles and the media type, then checks the release year and identity before attaching a description or poster. A missing or ambiguous match leaves the local card available. The AllDebrid key, private stream addresses and full release filenames are not sent to Cinemeta or poster hosts. Opening the main player does not index the account or download a catalogue. Artwork loads only while using My library, with 24 cards on a page and bounded memory caches. This is a Windows feature; Mac preview 0.1.0 does not include it.
+
+## Does My library keep my filenames or watch history?
+
+Ready-file listings, cleaned titles, descriptions and poster caches stay in memory rather than a saved cloud library. Only the Posters & details on/off preference is saved in library-view.json. Your AllDebrid connection is still saved separately in encrypted alldebrid.dat. There is no Continue watching list, automatic queue or saved viewing history for these videos. My library's automatic account request is a read-only listing when you open Films & TV with a saved connection; Refresh requests the listing again. Pressing Play resolves only the file you selected.
+
 ## Does DMC have its own automatic source search?
 
 Windows version 2.11 includes DMC Sources. Browse films & TV loads the optional Cinemeta metadata catalogue. Choosing a film or episode searches the public Torrents CSV API using its title and year or episode, without sending an AllDebrid key. Results require matching release years and episodes; season packs, collections and ambiguous filenames are excluded. Index coverage and filenames can be incomplete and seeder counts can be stale. Matching a listing does not guarantee that it is available through AllDebrid. Only pressing Play adds the selected magnet to your AllDebrid account and resolves its selected video. Other compatible add-ons remain optional. Disable DMC Sources in Add-ons to stop its searches. The first Mac release has no DMC Sources or AllDebrid integration.
 
 ## Why is a source still opening?
 
-The opening message now shows whether DMC is finding torrent peers, waiting for AllDebrid to prepare a source, or starting video playback. Uncached torrents may still need to download on AllDebrid; raw torrent playback depends on peers. Cancel opening stops DMC waiting and leaves a remote AllDebrid transfer intact. Waiting is bounded so a stalled source returns a retryable message. Choose another source, or open AllDebrid files and press Refresh files to pick a ready video. Multi-video torrents require you to choose their exact file there; DMC does not guess an episode from incompatible file indices. The title list stays readable while controls are disabled. Selecting a source and seeing progress does not certify that the source will become available.
+The opening message now shows whether DMC is finding torrent peers, waiting for AllDebrid to prepare a source, or starting video playback. Uncached torrents may still need to download on AllDebrid; raw torrent playback depends on peers. Cancel opening stops DMC waiting and leaves a remote AllDebrid transfer intact. Waiting is bounded so a stalled source returns a retryable message. Choose another source, or open My library and press Refresh to pick a ready video. Multi-video torrents require you to choose their exact file there; DMC does not guess an episode from incompatible file indices. File details reveals the original filename if you need to check it. Selecting a source and seeing progress does not certify that the source will become available.
 
 ## Why did a streamed movie say finished before its ending?
 
@@ -42,7 +54,7 @@ Use version 2.9.1 or later on both players for the live-stream buffer and live-s
 
 ## How do films, TV and add-ons work?
 
-From version 2.9, choose File → Films & TV / add-ons. Browse DMC Open Films immediately, or use the Add-ons tab to install the optional Cinemeta metadata catalogue and your own compatible add-ons. Paste the provider's configured manifest.json or stremio:// link and inspect the preview before installing. Enable, disable, refresh or remove installed add-ons there. Browse a catalogue, search, choose a film or TV episode, find sources and press Play. Movies and episodes play on their own, without queue or history entries. Add-on sources are temporary and cannot be saved with Add current item; choose the title again to resolve a fresh source.
+Choose File → Films & TV / add-ons. In Windows 2.12, a saved AllDebrid connection opens My library first with your ready films and episodes. Use Browse for catalogue searches and new sources. DMC Open Films is included; Add-ons lets you install the optional Cinemeta catalogue and your own compatible providers. Paste the provider's configured manifest.json or stremio:// link and inspect the preview before installing. Enable, disable, refresh or remove installed add-ons there. Browse a catalogue, search, choose a film or TV episode, find sources and press Play. Movies and episodes play on their own, without queue or history entries. Add-on sources are temporary and cannot be saved with Add current item; choose the title again to resolve a fresh source.
 
 ## Is this Torrentio, and will every add-on work?
 
