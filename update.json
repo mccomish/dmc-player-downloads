@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "product": "DMC Player",
-  "version": "2.10.4",
-  "releaseUrl": "https://github.com/mccomish/dmc-player-downloads/releases/tag/v2.10.4",
+  "version": "2.11.0",
+  "releaseUrl": "https://github.com/mccomish/dmc-player-downloads/releases/tag/v2.11.0",
   "installer": {
-    "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.4/DMC-Player-Setup-2.10.4.exe",
-    "filename": "DMC-Player-Setup-2.10.4.exe",
-    "sizeBytes": 113856214,
-    "sha256": "094cc416036e7b9d098b64cb7a3f2b641932b3dfd504b09564e483244000e1b4"
+    "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.11.0/DMC-Player-Setup-2.11.0.exe",
+    "filename": "DMC-Player-Setup-2.11.0.exe",
+    "sizeBytes": 113903476,
+    "sha256": "814540154561d259435fb025ba90b65d4f50fde85adf323b15afc7dbac535052"
   }
 }

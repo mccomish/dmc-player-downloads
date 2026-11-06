@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "product": "DMC Player",
-  "version": "2.10.4",
-  "preparedAtUtc": "2026-11-06T11:57:31.3165651Z",
-  "generatedAtUtc": "2026-11-06T11:57:33.483Z",
+  "version": "2.11.0",
+  "preparedAtUtc": "2026-11-06T19:14:30.3537766Z",
+  "generatedAtUtc": "2026-11-06T19:15:06.034Z",
   "platform": {
     "operatingSystem": "Windows",
     "architecture": "x64",
@@ -12,52 +12,52 @@
   "files": [
     {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.10.4.exe",
-      "sizeBytes": 113856214,
-      "sha256": "094cc416036e7b9d098b64cb7a3f2b641932b3dfd504b09564e483244000e1b4",
+      "filename": "DMC-Player-Setup-2.11.0.exe",
+      "sizeBytes": 113903476,
+      "sha256": "814540154561d259435fb025ba90b65d4f50fde85adf323b15afc7dbac535052",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.4/DMC-Player-Setup-2.10.4.exe",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.11.0/DMC-Player-Setup-2.11.0.exe",
       "sizeMiB": 108.6,
       "sizeLabel": "113.9 MB"
     },
     {
       "kind": "portable",
-      "filename": "DMC-Player-2.10.4-win-x64.zip",
-      "sizeBytes": 136679914,
-      "sha256": "6105118dd86edde3c21715ad7511274aad56b9a2eb32a1ac399f447711af6f7f",
+      "filename": "DMC-Player-2.11.0-win-x64.zip",
+      "sizeBytes": 136739168,
+      "sha256": "503bc419d58c4df8a6be3848d1ab6c4961cae95c7fa1a644676269e1c8539d32",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.4/DMC-Player-2.10.4-win-x64.zip",
-      "sizeMiB": 130.3,
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.11.0/DMC-Player-2.11.0-win-x64.zip",
+      "sizeMiB": 130.4,
       "sizeLabel": "136.7 MB"
     }
   ],
   "downloads": {
     "installer": {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.10.4.exe",
-      "sizeBytes": 113856214,
-      "sha256": "094cc416036e7b9d098b64cb7a3f2b641932b3dfd504b09564e483244000e1b4",
+      "filename": "DMC-Player-Setup-2.11.0.exe",
+      "sizeBytes": 113903476,
+      "sha256": "814540154561d259435fb025ba90b65d4f50fde85adf323b15afc7dbac535052",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.4/DMC-Player-Setup-2.10.4.exe",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.11.0/DMC-Player-Setup-2.11.0.exe",
       "sizeMiB": 108.6,
       "sizeLabel": "113.9 MB"
     },
     "portable": {
       "kind": "portable",
-      "filename": "DMC-Player-2.10.4-win-x64.zip",
-      "sizeBytes": 136679914,
-      "sha256": "6105118dd86edde3c21715ad7511274aad56b9a2eb32a1ac399f447711af6f7f",
+      "filename": "DMC-Player-2.11.0-win-x64.zip",
+      "sizeBytes": 136739168,
+      "sha256": "503bc419d58c4df8a6be3848d1ab6c4961cae95c7fa1a644676269e1c8539d32",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.4/DMC-Player-2.10.4-win-x64.zip",
-      "sizeMiB": 130.3,
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.11.0/DMC-Player-2.11.0-win-x64.zip",
+      "sizeMiB": 130.4,
       "sizeLabel": "136.7 MB"
     }
   },
@@ -294,7 +294,27 @@
     "customRequestHeaders": false,
     "drmBypass": false,
     "watchTogetherVideoProxy": true,
-    "watchTogetherPlaylists": false
+    "watchTogetherPlaylists": false,
+    "dmcSources": {
+      "minimumVersion": "2.11.0",
+      "automaticTitleSearch": true,
+      "index": "Torrents CSV public API",
+      "selectedEpisodeMatching": true,
+      "releaseYearMatching": true,
+      "requiresAllDebrid": true,
+      "serviceAvailabilityGuaranteed": false
+    },
+    "allDebrid": {
+      "minimumVersion": "2.11.0",
+      "pinSignIn": true,
+      "apiKeySignIn": true,
+      "encryptedCredentials": true,
+      "accountFiles": true,
+      "selectedSourceResolve": true,
+      "onlySelectedMagnetAdded": true,
+      "disconnectRemovesLocalKey": true,
+      "remoteTransferDeleteOnCancel": false
+    }
   },
   "updates": {
     "automaticCheckOnStartup": true,
@@ -345,7 +365,7 @@
     "portablePayloadVerified": true,
     "method": "Extraction and hashes; no application/runtime installation or system-default changes",
     "sourceFilesVerified": 9,
-    "releaseManifestSha256": "ad960812e0372cd5a3211f7496c9a382f0494dd28948336671375f1e27886945",
-    "checksumFileSha256": "908c7a48a936ae974ccc494c419ff9f2b23363248f5419aeaf5a9bf5078399d8"
+    "releaseManifestSha256": "84c7b3f10d5cdcbae11919cdff91f5d898a0d26f741aedfb494ac6f4f2bdb049",
+    "checksumFileSha256": "d0f5c38e3bdd0d7564b47d153025ac9c9ca86a0994555708e44744fad611d0d8"
   }
 }
