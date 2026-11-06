@@ -2,19 +2,19 @@ export function homePage({ download, downloadCounter, banner, frame, demo, arrow
   return `
 <section class="home-hero shell">
   <div class="hero-copy">
-    <p class="eyebrow">Free Windows media player</p>
+    <p class="eyebrow">Free media player for gaming</p>
     <h1>DMC Player</h1>
     <p class="hero-subtitle">Watch TV and movies while you game.</p>
     <p class="hero-lead">Keep a film, a show or live TV in a small window over your game. Open your own files, stream links or streaming services, then move the picture where it suits you.</p>
     <div class="hero-actions">${download()}${downloadCounter()}</div>
-    <a class="text-link hero-how" href="./features.html">How it works ${arrow}</a>
+    <div class="hero-secondary"><a class="text-link hero-how" href="./features.html">How it works ${arrow}</a><a class="text-link hero-how" href="./download.html#macos">Mac preview ${arrow}</a></div>
     <p class="hero-meta"><span data-version>Version ${releaseVersion}</span><span>Windows x64</span><span>Free to use</span></p>
   </div>
   ${demo}
 </section>
 
 <section class="shell home-overview">
-  <div class="section-title"><h2>A media player built for gaming</h2></div>
+  <div class="section-title"><p class="eyebrow">The Windows player</p><h2>A media player built for gaming</h2></div>
   <div class="overview-columns">
     <div class="editorial-list">
       <article><div><h3>Resizable mini player</h3><p>Drag it to a corner and resize it to fit. Hover over the picture for playback and volume controls.</p></div></article>
@@ -27,7 +27,7 @@ export function homePage({ download, downloadCounter, banner, frame, demo, arrow
 
 <section class="explore-section">
   <div class="shell">
-    <div class="section-title"><h2>More ways to watch</h2></div>
+    <div class="section-title"><p class="eyebrow">More in the Windows version</p><h2>More ways to watch</h2></div>
     <div class="explore-links">
       <a href="./add-ons.html"><h3>Films &amp; TV</h3><p>Browse titles and episodes, install compatible add-ons and choose a source.</p><span class="explore-more">Browse films and TV ${arrow}</span></a>
       <a href="./live-tv.html"><h3>Live TV</h3><p>Choose a direct channel stream, save favourites or import your own channel list.</p><span class="explore-more">Find channels ${arrow}</span></a>

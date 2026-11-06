@@ -26,18 +26,34 @@ const fixture = () => {
 const checks = [];
 async function check(name, run) { await run(); checks.push(name); }
 
-await check('Only named installers and portable packages with semantic versions qualify', () => {
+await check('Only named Windows and universal Mac packages with semantic versions qualify', () => {
   for (const name of [
     'DMC-Player-Setup-2.8.0.exe', 'DMC-Player-2.8.0-win-x64.zip',
     'DMC-Player-2.8.0-beta.1-win-arm64.zip', 'DMC-Player-Setup-2.8.0+build.12.exe',
-    'DMC-Player-2.8.0-win-x86.zip', 'Sidecar-1.0.0-win-x64.zip'
+    'DMC-Player-2.8.0-win-x86.zip', 'Sidecar-1.0.0-win-x64.zip',
+    'DMC-Player-0.1.0-macos-universal.zip', 'DMC-Player-0.2.0-beta.1-macos-universal.zip'
   ]) assert.equal(isDownloadPackage(name), true, name);
   for (const name of [
     'source.zip', 'sha256SUMS.txt', 'release.json', 'DMC-Player-2.8.0.zip',
     'DMC-Player-2.8.0-linux-x64.zip', 'DMC-Player-Setup-2.8.exe',
     'DMC-Player-Setup-02.8.0.exe', 'DMC-Player-Setup-2.8.0-01.exe',
-    'DMC-Player-Setup-2.8.0.exe.bak', 'DMC-Player-Setup-2.8.0.exe\n', null
+    'DMC-Player-Setup-2.8.0.exe.bak', 'DMC-Player-Setup-2.8.0.exe\n',
+    'DMC-Player-0.1.0-macos.zip', 'DMC-Player-0.1.0-macos-universal.zip.sha256',
+    'Sidecar-0.1.0-macos-universal.zip', 'DMC-Player-0.1-macos-universal.zip', null
   ]) assert.equal(isDownloadPackage(name), false, String(name));
+});
+
+await check('Mac preview downloads share the small aggregate total while draft Mac assets remain excluded', () => {
+  const result = aggregateReleasePages([[
+    release(1, [packageAsset(1, 8), packageAsset(2, 3, 'DMC-Player-2.10.4-win-x64.zip')]),
+    release(2, [packageAsset(3, 4, 'DMC-Player-0.1.0-macos-universal.zip'), packageAsset(4, 900, 'mac-release.json')], { tag_name: 'v0.1.0', prerelease: true }),
+    release(3, [packageAsset(5, 1000, 'DMC-Player-0.2.0-macos-universal.zip')], { draft: true })
+  ]]);
+  assert.equal(result.total, 15);
+  assert.equal(result.packageCount, 3);
+  assert.equal(result.breakdown[1].total, 4);
+  const snapshot = { schemaVersion: 1, repo: DOWNLOAD_REPO, checkedAt, ...result };
+  assert.deepEqual(validateSnapshot(snapshot), snapshot);
 });
 
 await check('Totals use actual repeat downloads, include prereleases, and exclude drafts and metadata', () => {

@@ -225,7 +225,7 @@ kbd{display:inline-block;padding:3px 6px;border:1px solid #cccfc3;border-radius:
 .package-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:23px;color:var(--muted);font-size:12px}
 .small-tag{padding:4px 7px;border:1px solid #cfd4c5;border-radius:5px;font-size:10px;line-height:1.3;font-weight:500}
 .recommended .small-tag{color:#a84d24;border-color:#e3b89f}
-.package h2{margin-bottom:15px;font-size:26px}
+.package h2,.package h3{margin-bottom:15px;font-size:26px}
 .package>p:not(.package-meta){min-height:50px;max-width:460px;color:var(--muted);font-size:14px;line-height:1.8}
 .package .button{width:100%;margin-top:23px}
 .package .package-meta{margin-top:12px;color:var(--soft);font-size:11px}
@@ -239,6 +239,36 @@ kbd{display:inline-block;padding:3px 6px;border:1px solid #cccfc3;border-radius:
 .release-status{margin-top:17px;color:var(--soft);font-size:12px}
 .download-notice{display:grid;grid-template-columns:1fr 2.4fr;gap:32px;margin-top:28px;padding-top:21px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 .download-notice strong{color:var(--ink);font-size:14px}
+.platform-heading{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+.platform-heading h2{font-size:26px;line-height:1.25}
+.platform-status{padding:5px 9px;border:1px solid #e1dcd2;border-radius:999px;background:#f5f2eb;color:var(--muted);font-size:11px;line-height:1.4}
+.platform-status.available{background:#edf3e9;border-color:#d8e1d2;color:#42523c}
+.mac-download-section{padding-bottom:54px}
+.mac-availability-card{padding:26px 28px;border:1px solid #dedbd2;border-radius:12px;background:#fff}
+.mac-availability-card .platform-heading{margin-bottom:12px}
+.mac-availability-card p{max-width:690px;color:var(--muted);font-size:14px;line-height:1.8}
+.mac-availability-card .platform-note{margin-top:5px;color:var(--soft);font-size:12px}
+.mac-release-notes{margin-top:18px}
+.mac-links{display:flex;flex-wrap:wrap;gap:12px 26px;margin-top:22px}
+.hero-secondary{display:flex;flex-wrap:wrap;gap:10px 24px}
+.platform-scope{margin-top:-12px;margin-bottom:32px}
+.platform-scope p{padding:13px 17px;border-left:3px solid #dcc7ad;border-radius:0 8px 8px 0;background:#eee9df;color:var(--muted);font-size:12px;line-height:1.7}
+.platform-scope strong{color:var(--ink)}
+.platform-scope a{text-underline-offset:3px}
+.platform-comparison{padding-bottom:58px}
+.platform-comparison .section-title>p:last-child{max-width:620px;margin-top:12px;color:var(--muted);font-size:14px;line-height:1.8}
+.comparison-scroll{overflow-x:auto;border:1px solid #dedbd2;border-radius:12px;background:#fff}
+.comparison-table{width:100%;min-width:600px;border-collapse:collapse;text-align:left;font-size:13px;line-height:1.7}
+.comparison-table caption{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.comparison-table th,.comparison-table td{width:34%;padding:17px 20px;vertical-align:top;border-bottom:1px solid #eeeae2}
+.comparison-table th:first-child{width:32%}
+.comparison-table thead th{background:#f0ece3;font-size:12px;font-weight:700}
+.comparison-table tbody th{font-weight:600}
+.comparison-table td{color:var(--muted)}
+.comparison-table tr:last-child>*{border-bottom:0}
+.platform-comparison>.small-note{margin-top:15px}
+.mac-guide-opening{padding-bottom:12px}
+.mac-guide-opening .mac-availability-card{max-width:850px}
 .requirement-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:56px}
 .requirement-grid dl{border-top:1px solid var(--line)}
 .requirement-grid dl>div{display:grid;grid-template-columns:1fr 2fr;gap:24px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.7}
@@ -434,6 +464,8 @@ h2{font-size:28px}
 .packages-section{padding-bottom:42px}
 .download-packages{grid-template-columns:1fr;gap:20px}
 .package{padding:23px}
+.mac-download-section{padding-bottom:42px}
+.mac-availability-card{padding:23px}
 .package>p:not(.package-meta){min-height:0}
 .package-top{margin-bottom:21px}
 .download-notice{grid-template-columns:1fr;gap:10px;padding-top:19px}

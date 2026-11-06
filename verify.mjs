@@ -12,7 +12,7 @@ const args = process.argv.slice(2);
 const allowUnpublished = args.includes('--allow-unpublished-downloads');
 const checkRemote = args.includes('--check-remote');
 const requireUpdateManifest = args.includes('--require-update-manifest');
-const requiredPages = ['index.html', 'features.html', 'add-ons.html', 'live-tv.html', 'watch-together.html', 'download.html', 'help.html', 'about.html', 'privacy.html', 'terms.html'];
+const requiredPages = ['index.html', 'features.html', 'add-ons.html', 'live-tv.html', 'watch-together.html', 'download.html', 'help.html', 'about.html', 'mac.html', 'privacy.html', 'terms.html'];
 const publicContact = 'mailto:d.mccomish@homehops.co.uk';
 const reportArgument = args.indexOf('--report');
 const reportPath = resolve(reportArgument < 0 ? resolve(siteRoot, 'reports/verification.json') : args[reportArgument + 1] || 'reports/verification.json');
@@ -217,6 +217,104 @@ await check('download_pages_have_working_static_fallbacks', async () => {
     result.push({ filename, verifiedLinks: anchors.length });
   }
   return result;
+});
+
+await check('platform_downloads_keep_windows_active_and_mac_availability_honest', async () => {
+  const document = pages.get(resolve(dist, 'download.html'))?.document;
+  requireValue(document, 'The download page is missing.');
+  const windows = document.match(/<section\b[^>]*data-platform="windows"[^>]*>[\s\S]*?<\/section>/i)?.[0];
+  const macSection = document.match(/<section\b[^>]*data-platform="macos"[^>]*>[\s\S]*?<\/section>/i)?.[0];
+  requireValue(windows?.includes('data-available="true"') && windows.includes('data-download="installer"')
+    && windows.includes('data-download="portable"'), 'Windows installer and portable downloads must remain active in their own labelled section.');
+  requireValue(macSection && /<h2\b[^>]*>Mac preview<\/h2>/.test(macSection), 'A clearly labelled Mac preview availability section is required.');
+  const manifestPath = resolve(dist, 'assets/mac-release.json');
+  const macLinks = (macSection.match(/<a\b[^>]*>/gi) || []).map(attributes).filter(tag => tag['data-platform-download'] === 'macos');
+  if (!await exists(manifestPath)) {
+    requireValue(macSection.includes('data-available="false"') && /Release testing in progress/.test(macSection)
+      && /isn’t a Mac version to download yet/.test(visibleText(macSection)), 'Without a Mac release, the section must plainly say no Mac download is available.');
+    requireValue(macLinks.length === 0 && !/<button\b|data-download=|class="button/i.test(macSection), 'An unavailable Mac build must not have a pretend or Windows download button.');
+    requireValue(macSection.includes('href="./mac.html"'), 'Mac preview guidance should be available while the package is being tested.');
+    return { windowsPackages: 2, macAvailable: false, macDownloadLinks: 0 };
+  }
+  const mac = await json(manifestPath);
+  requireValue(mac.product === 'DMC Player' && /^\d+\.\d+\.\d+$/.test(mac.version)
+    && mac.platform?.operatingSystem === 'macOS' && mac.platform?.minimumVersion === '13.0'
+    && mac.releaseTag === `v${mac.version}` && mac.isPreview === true
+    && mac.signing?.identity === 'ad-hoc' && mac.signing?.notarized === false
+    && mac.verification?.macOSLaunchPassed === true && mac.verification?.nativeTestsPassed === true,
+  'Mac availability requires its own verified macOS manifest.');
+  requireValue(Array.isArray(mac.files) && mac.files.length === 1
+    && macSection.includes('data-available="true"') && macLinks.length === mac.files.length, 'Mac download links do not match the verified package list.');
+  requireValue(!/data-version(?:\s|>)/.test(macSection) && !/data-release-link|data-download=/.test(macSection), 'Windows release JavaScript must not rewrite Mac version or package links.');
+  requireValue(/ad-hoc signed/i.test(macSection) && /not notarized/i.test(macSection) && /macOS 13 or later/.test(macSection), 'Mac requirements and signing status must be clear beside its download.');
+  for (const file of mac.files) {
+    requireValue(file.architecture === 'universal' && file.filename === `DMC-Player-${mac.version}-macos-universal.zip`
+      && /^DMC-Player-[\w.-]+\.(?:dmg|pkg|zip)$/.test(file.filename)
+      && /-(?:mac|macos|osx)(?:-|\.)/i.test(file.filename) && !/-win(?:dows)?-/i.test(file.filename)
+      && Number.isSafeInteger(file.sizeBytes) && file.sizeBytes > 0 && /^[a-f\d]{64}$/i.test(file.sha256), 'Mac download metadata identifies an unsupported or Windows package.');
+    const expected = `https://github.com/mccomish/dmc-player-downloads/releases/download/v${mac.version}/${file.filename}`;
+    requireValue(file.url === expected && macLinks.some(link => decodeEntities(link.href || '') === expected), 'Mac download must point to its own pinned Mac release asset.');
+    const artifact = resolve(siteRoot, `../Distribution/macOS/${mac.version}/${file.filename}`);
+    requireValue(await exists(artifact) && (await stat(artifact)).size === file.sizeBytes
+      && await hash(artifact) === file.sha256.toLowerCase(), 'A Mac artifact is absent or does not match the verified manifest.');
+    if (checkRemote) {
+      const response = await fetch(expected, { method: 'HEAD', redirect: 'follow', signal: AbortSignal.timeout(15_000) });
+      requireValue(response.ok, `Mac download returned HTTP ${response.status}.`);
+      const size = response.headers.get('content-length');
+      if (size !== null) requireValue(Number(size) === file.sizeBytes, 'Remote Mac package size differs.');
+    }
+  }
+  return { windowsPackages: 2, macAvailable: true, macPackages: mac.files.length, actualMacArtifactsVerified: true };
+});
+
+await check('mac_preview_guide_and_platform_limits_match_the_actual_app', async () => {
+  const guide = pages.get(resolve(dist, 'mac.html'))?.document;
+  const copy = visibleText(guide ?? '');
+  requireValue(guide && /macOS 13/.test(copy) && /Apple silicon and Intel/.test(copy), 'The Mac guide must identify its system and universal architectures.');
+  for (const fact of ['MP4', 'MOV', 'HTTP/HLS', 'current session', 'WKWebView', 'not notarized', 'ad-hoc signed', 'no automatic updater', 'MKV', 'AVI'])
+    requireValue(copy.includes(fact), `Mac preview guidance omits ${fact}.`);
+  requireValue(/protected.*has not been verified/i.test(copy) && /experimental/i.test(copy), 'Mac website compatibility must remain experimental and protected video unverified.');
+  requireValue(guide.includes('href="https://support.apple.com/en-us/102445"') && /Privacy & Security → Open Anyway/.test(copy), 'Mac first-launch guidance must link to Apple’s documented app exception.');
+  requireValue(guide.includes('href="./download.html#macos"') && guide.includes('href="./privacy.html#mac-preview"'), 'Mac guide download and privacy links are missing.');
+  const sourcePath = resolve(siteRoot, '../MacPlayer/Sources/PlayerWindow.swift');
+  const source = await exists(sourcePath) ? await readFile(sourcePath, 'utf8') : null;
+  const shortcuts = [
+    ['⌥⌘M', /#selector\(toggleMini\), "m", \[\.command, \.option\]/],
+    ['⌥⌘L', /#selector\(toggleLock\), "l", \[\.command, \.option\]/],
+    ['⌃⌘O', /#selector\(openFile\), "o", \[\.command, \.control\]/],
+    ['⌃⌘L', /#selector\(openStream\), "l", \[\.command, \.control\]/],
+    ['⌃⌘F', /#selector\(toggleFullScreen\), "f", \[\.command, \.control\]/]
+  ];
+  for (const [label, pattern] of shortcuts) requireValue(copy.includes(label) && (!source || pattern.test(source)), `The documented Mac shortcut does not match its menu: ${label}`);
+  requireValue(copy.includes('Esc') && (!source || /case 53:/.test(source)), 'Escape guidance must correspond to the Mac input handler.');
+  if (source) requireValue(/RegisterEventHotKey\(37, modifiers/.test(source) && /RegisterEventHotKey\(46, modifiers/.test(source) && /cmdKey \| optionKey/.test(source), 'Mini and lock global shortcuts differ from the guide.');
+  const downloadPage = pages.get(resolve(dist, 'download.html'))?.document ?? '';
+  for (const document of [guide, downloadPage]) {
+    const table = document.match(/<table\b[^>]*class="comparison-table"[\s\S]*?<\/table>/i)?.[0];
+    requireValue(table && /Windows/.test(table) && /Mac preview 0.1.0/.test(table), 'Both the download page and Mac guide need a platform comparison.');
+    for (const feature of ['Watch together and chat', 'add-ons and torrent sources', 'saved library', 'Automatic update notice', 'Not included', 'VLC'])
+      requireValue(visibleText(table).includes(feature), `The platform comparison omits ${feature}.`);
+  }
+  for (const filename of ['features.html', 'add-ons.html', 'live-tv.html', 'watch-together.html', 'help.html', 'about.html']) {
+    const document = pages.get(resolve(dist, filename))?.document ?? '';
+    requireValue(/class="shell platform-scope"/.test(document) && document.includes('Windows guide.') && document.includes('href="./mac.html"'), `${filename}: Windows instructions must link to separate Mac guidance.`);
+  }
+  const home = pages.get(resolve(dist, 'index.html'))?.document ?? '';
+  requireValue(home.includes('data-download="installer"') && home.includes('href="./download.html#macos"'), 'Homepage needs its Windows download action and a separate Mac preview link.');
+  return { version: '0.1.0', minimumMacOS: '13.0', universal: true, shortcutsVerifiedAgainstSource: source ? shortcuts.length + 1 : 'private_source_not_in_checkout', windowsGuidancePages: 6, protectedProgrammePlaybackVerified: false };
+});
+
+await check('mac_privacy_and_terms_describe_only_the_preview_scope', async () => {
+  const privacy = pages.get(resolve(dist, 'privacy.html'))?.document ?? '';
+  const section = privacy.match(/<section\b[^>]*id="mac-preview"[\s\S]*?<\/section>/i)?.[0] ?? '';
+  const copy = visibleText(section);
+  for (const fact of ['memory', 'current session', 'does not save', 'automatic watch history', 'Keychain', 'WKWebsiteDataStore', 'cookies', 'after the app closes', 'does not extract'])
+    requireValue(copy.includes(fact), `Mac privacy scope omits ${fact}.`);
+  const sourcePath = resolve(siteRoot, '../MacPlayer/Sources/PlayerWindow.swift');
+  if (await exists(sourcePath)) requireValue(/configuration.websiteDataStore = \.default\(\)/.test(await readFile(sourcePath, 'utf8')), 'Documented Mac website storage differs from the app configuration.');
+  const terms = visibleText(pages.get(resolve(dist, 'terms.html'))?.document ?? '');
+  requireValue(/Windows application, Mac preview and download website/.test(terms) && terms.includes('Mac preview 0.1.0') && /not notarized/.test(terms), 'Terms must cover the actual Mac preview and signing status.');
+  return { sessionLibrary: true, automaticHistory: false, keychainLibraryKey: false, providerWebsiteDataMayPersist: true, legalRightsUnchanged: true };
 });
 
 await check('free_product_and_gaming_focus_are_visible', async () => {

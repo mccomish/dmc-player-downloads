@@ -6,7 +6,7 @@ export const RELEASES_API_URL = `https://api.github.com/repos/${DOWNLOAD_REPO}/r
 const integer = '(?:0|[1-9]\\d*)';
 const prereleaseIdentifier = '(?:0|[1-9]\\d*|\\d*[A-Za-z-][0-9A-Za-z-]*)';
 const semver = `${integer}\\.${integer}\\.${integer}(?:-${prereleaseIdentifier}(?:\\.${prereleaseIdentifier})*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?`;
-const packageName = new RegExp(`^(?:DMC-Player-Setup-${semver}\\.exe|(?:DMC-Player|Sidecar)-${semver}-win-(?:x64|x86|arm64)\\.zip)$`, 'i');
+const packageName = new RegExp(`^(?:DMC-Player-Setup-${semver}\\.exe|(?:DMC-Player|Sidecar)-${semver}-win-(?:x64|x86|arm64)\\.zip|DMC-Player-${semver}-macos-universal\\.zip)$`, 'i');
 // GitHub's Link header can use this repository's immutable numeric API route.
 // Only these two verified routes are allowed; a Link cannot select another repo.
 const apiPaths = new Set([`/repos/${DOWNLOAD_REPO}/releases`, '/repositories/1447566970/releases']);
