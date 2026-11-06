@@ -38,7 +38,7 @@ jobs:
           import base64, hashlib, io, os, pathlib, re, stat, zipfile
           expected = os.environ['DMC_EXPECTED_SHA']
           assert re.fullmatch('[0-9a-fA-F]{64}', expected), 'Invalid source hash'
-          encoded = ''.join(os.environ.get('DMC_SOURCE_'+str(i), '') for i in range(1,5) if os.environ.get('DMC_SOURCE_'+str(i), '') not in ('', '.'))
+          encoded = ''.join(os.environ.get('DMC_SOURCE_'+str(i), '') for i in range(1,5) if os.environ.get('DMC_SOURCE_'+str(i), '') not in ('', '.', 'DMC_MAC_SOURCE_UNUSED'))
           data = base64.b64decode(encoded, validate=True)
           assert len(data) <= 512*1024 and hashlib.sha256(data).hexdigest() == expected.lower(), 'Private source hash mismatch'
           root = pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-mac-source'
@@ -114,7 +114,7 @@ jobs:
           import base64, hashlib, io, os, pathlib, re, stat, zipfile
           expected=os.environ['DMC_EXPECTED_SHA']
           assert re.fullmatch('[0-9a-fA-F]{64}',expected), 'Invalid source hash'
-          encoded=''.join(os.environ.get('DMC_SOURCE_'+str(i),'') for i in range(1,5) if os.environ.get('DMC_SOURCE_'+str(i),'') not in ('','.'))
+          encoded=''.join(os.environ.get('DMC_SOURCE_'+str(i),'') for i in range(1,5) if os.environ.get('DMC_SOURCE_'+str(i),'') not in ('','.','DMC_MAC_SOURCE_UNUSED'))
           data=base64.b64decode(encoded,validate=True)
           assert len(data)<=512*1024 and hashlib.sha256(data).hexdigest()==expected.lower(), 'Private source hash mismatch'
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-mac-source';root.mkdir()
