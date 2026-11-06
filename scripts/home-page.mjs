@@ -4,7 +4,7 @@ export function homePage({ download, downloadCounter, banner, frame, demo, arrow
   <div class="hero-copy">
     <p class="eyebrow">Free Windows media player</p>
     <h1>DMC Player</h1>
-    <p class="hero-subtitle">Watch while you play.</p>
+    <p class="hero-subtitle">Watch TV and movies while you game.</p>
     <p class="hero-lead">Keep a film, a show or live TV in a small window over your game. Open your own files, stream links or streaming services, then move the picture where it suits you.</p>
     <div class="hero-actions">${download()}<a class="text-link" href="./features.html">How it works ${arrow}</a></div>
     ${downloadCounter()}
