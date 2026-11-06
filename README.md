@@ -27,6 +27,8 @@ The second command checks the gameplay carousel's navigation, active-video playb
 
 Watch-together copy describes three source types: local files, direct streams and YouTube video co-watching from DMC Player 2.7. Both players need 2.7 or later for YouTube; every participant loads YouTube independently. The session shares a canonical public video URL, title and playback state, without account sessions or YouTube media bytes. Subscription websites remain unsupported by Watch together. Keep the documented ad/loading/autoplay limits and possible manual Play action when changing this copy.
 
+Watch-session chat requires 2.8 or later on both players. The Watch together page includes a labelled sample-text illustration using `watch-chat-section`, `watch-chat-layout` and `watch-chat-preview` classes. Keep the 280-character limit, three-message/six-second overlay, Chat / Ctrl+Alt+C controls, local hide choice and no automatic saved transcript or late-join replay clear. Privacy describes chat text, sender display name and message time going to the host and connected participants. Disney copy describes the checked UK sign-in page only; it does not certify sign-in or protected playback.
+
 ## Update a release
 
 1. Build and verify the new application release in the original player workspace.

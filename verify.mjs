@@ -290,6 +290,10 @@ await check('published_claims_preserve_known_limits', async () => {
   requireValue(release.watchTogether.youtubePlaybackSynchronized === true && release.watchTogether.youtubeMinimumVersion === '2.7.0'
     && release.watchTogether.embeddedWebsiteMediaRelayed === false && release.watchTogether.subscriptionWebsitePlaybackSynchronized === false,
     'Release metadata must describe YouTube synchronization and retain website media-sharing limits.');
+  requireValue(release.watchTogether.chat?.minimumVersion === '2.8.0' && release.watchTogether.chat?.maximumCharacters === 280
+    && release.watchTogether.chat?.maximumVisibleMessages === 3 && release.watchTogether.chat?.displaySeconds === 6
+    && release.watchTogether.chat?.incomingMessagesActivateWindow === false && release.watchTogether.chat?.automaticallySaved === false
+    && release.watchTogether.chat?.historyReplayedToLateJoiners === false, 'Release metadata must describe temporary, nonactivating room chat.');
   requireValue(release.queue?.normalOpensAddItems === false && release.queue?.automaticWatchHistory === false && release.queue?.explicitAddRequired === true, 'Manual queue/no-history semantics are missing.');
   requireValue(release.files.find(file => file.kind === 'installer')?.signed === false, 'Installer signature status is incorrect.');
   requireValue(/60(?:[\s-]+minute|\s*minutes|\s*min)/i.test(combinedContent), 'The user-facing content omits the free relay session limit.');
@@ -299,6 +303,10 @@ await check('published_claims_preserve_known_limits', async () => {
   requireValue(/YouTube/i.test(watchCopy) && /2\.7 or later/i.test(watchCopy) && /each person loads YouTube independently/i.test(watchCopy), 'YouTube co-watching must explain the required version and independent playback.');
   requireValue(/subscription websites are not relayed or synchroni[sz]ed/i.test(watchCopy), 'The site must retain subscription-website watch-session limits.');
   requireValue(/ads, loading, autoplay/i.test(watchCopy) && /press Play in YouTube/i.test(watchCopy), 'YouTube playback delays and the possible manual Play action are missing.');
+  requireValue(/2\.8 or later for chat/i.test(watchCopy) && /280 characters/i.test(watchCopy) && /three messages/i.test(watchCopy)
+    && /six seconds/i.test(watchCopy) && /Show messages over video/i.test(watchCopy), 'Watch chat must explain version, message and local-display limits.');
+  requireValue(/sample chat over an illustrated video/i.test(watchCopy) && /no automatic saved transcript or earlier-chat replay/i.test(watchCopy),
+    'The chat illustration must be labelled and transcript limits must stay clear.');
   const publicHtml = [...pages.values()].map(page => page.document).join('\n');
   requireValue(!/trusted by\s+[\d,]+|\b[45]\.\d\s*(?:\/\s*5|stars)|lorem ipsum|support@/i.test(publicHtml), 'Unprovided social proof, support contact, or placeholder copy was found.');
   return { protectedProgrammePlaybackVerified: false, freeRelayMinutes: 60, automaticWatchHistory: false, installerSigned: false, note: 'Structural/text checks; browser review is still required for layout and interaction.' };
