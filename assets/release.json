@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "product":  "DMC Player",
-    "version":  "2.8.0",
-    "preparedAtUtc":  "2026-11-06T00:30:59.5158017Z",
+    "version":  "2.9.0",
+    "preparedAtUtc":  "2026-11-06T01:12:35.9726120Z",
     "platform":  {
                      "operatingSystem":  "Windows",
                      "architecture":  "x64",
@@ -11,9 +11,9 @@
     "files":  [
                   {
                       "kind":  "installer",
-                      "filename":  "DMC-Player-Setup-2.8.0.exe",
-                      "sizeBytes":  113024202,
-                      "sha256":  "a500be6809ce64e23b54c8245cb5d144e11ff98fd31d0124d159684725486314",
+                      "filename":  "DMC-Player-Setup-2.9.0.exe",
+                      "sizeBytes":  113708403,
+                      "sha256":  "533a2a456e2fd171d704755b97260a354082390cade8f58d1182b87f17965430",
                       "signed":  false,
                       "signatureStatus":  "NotSigned",
                       "architecture":  "x64",
@@ -21,9 +21,9 @@
                   },
                   {
                       "kind":  "portable",
-                      "filename":  "DMC-Player-2.8.0-win-x64.zip",
-                      "sizeBytes":  135677411,
-                      "sha256":  "8f759ce05e358e7fa87307cead6bce5709ae20080034b2cd5b759210d093ba2d",
+                      "filename":  "DMC-Player-2.9.0-win-x64.zip",
+                      "sizeBytes":  136487086,
+                      "sha256":  "d02690696caec1a94328e11d69d7eea14c88eea619eec9d353731467d52aeb95",
                       "architecture":  "x64",
                       "installScope":  "none"
                   }
@@ -52,8 +52,8 @@
                           {
                               "kind":  "faq",
                               "filename":  "docs/FAQ.md",
-                              "sizeBytes":  12814,
-                              "sha256":  "a11488528be5e5523cb99c1f11b2a96807b2a182744afeb7dd0ef8d672b142c7"
+                              "sizeBytes":  15684,
+                              "sha256":  "734098fb0f79ff34b8552cf38a600723948bd10d6d99a6142b010d174386bb8e"
                           },
                           {
                               "kind":  "tvSources",
@@ -155,6 +155,29 @@
                    "allListedChannelsGuaranteed":  false,
                    "freeviewRequiresTunerForAerialChannels":  true
                },
+    "addons":  {
+                   "minimumVersion":  "2.9.0",
+                   "nativeBrowser":  true,
+                   "protocol":  "Stremio manifest/catalog/meta/stream",
+                   "filmAndSeriesCatalogues":  true,
+                   "episodeSelection":  true,
+                   "configuredManifestInstall":  true,
+                   "settingsEncryptedForWindowsUser":  true,
+                   "builtInOpenFilms":  true,
+                   "cinemetaOptional":  true,
+                   "bundledTorrentIndex":  false,
+                   "nativeTorrentPlayback":  true,
+                   "bitTorrentV1":  true,
+                   "maximumVideoGiB":  32,
+                   "maximumTorrentGiB":  64,
+                   "peerIpVisible":  true,
+                   "temporaryCache":  true,
+                   "automaticQueueOrHistory":  false,
+                   "customRequestHeaders":  false,
+                   "drmBypass":  false,
+                   "watchTogetherVideoProxy":  true,
+                   "watchTogetherPlaylists":  false
+               },
     "updates":  {
                     "automaticCheckOnStartup":  true,
                     "periodicCheckHours":  6,
@@ -200,7 +223,7 @@
                       },
     "verification":  {
                          "installerChecksPassed":  true,
-                         "installerPayloadFiles":  983,
+                         "installerPayloadFiles":  999,
                          "portablePayloadVerified":  true,
                          "method":  "Extraction and hashes; no application/runtime installation or system-default changes"
                      }
