@@ -159,22 +159,23 @@ await check('local_assets_and_fragment_links_exist', async () => {
   let fragments = 0;
   for (const [pagePath, { filename, document }] of pages) {
     const linkedPages = new Set();
-    for (const tag of document.match(/<(?:a|link|script|img|source)\b[^>]*>/gi) || []) {
+    for (const tag of document.match(/<(?:a|link|script|img|source|video)\b[^>]*>/gi) || []) {
       const attrs = attributes(tag);
-      const url = attrs.src ?? attrs.href;
-      if (!url || /^(?:https?:|data:)/i.test(url)) continue;
-      if (/^mailto:/i.test(url)) {
-        requireValue(decodeEntities(url) === publicContact, `${filename}: contact address was not supplied by the creator.`);
-        continue;
-      }
-      const ref = reference(url, url.startsWith('#') ? pagePath : dirname(pagePath));
-      const target = ref.target;
-      if (allowUnpublished && /^(?:\.\/)?downloads\//.test(url) && !await exists(target)) continue;
-      requireValue(await exists(target) && (await stat(target)).isFile(), `${filename}: missing local asset or page: ${url}`);
-      visited.add(target);
-      if (extname(target) === '.html') linkedPages.add(relative(dist, target).replaceAll(sep, '/'));
-      if (ref.fragment !== undefined) {
-        requireValue(ref.fragment.length > 0 && pages.get(target)?.ids.has(ref.fragment), `${filename}: broken fragment link: ${url}`); fragments++;
+      for (const url of [attrs.src, attrs.href, attrs['data-src'], attrs.poster].filter(Boolean)) {
+        if (/^(?:https?:|data:)/i.test(url)) continue;
+        if (/^mailto:/i.test(url)) {
+          requireValue(decodeEntities(url) === publicContact, `${filename}: contact address was not supplied by the creator.`);
+          continue;
+        }
+        const ref = reference(url, url.startsWith('#') ? pagePath : dirname(pagePath));
+        const target = ref.target;
+        if (allowUnpublished && /^(?:\.\/)?downloads\//.test(url) && !await exists(target)) continue;
+        requireValue(await exists(target) && (await stat(target)).isFile(), `${filename}: missing local asset or page: ${url}`);
+        visited.add(target);
+        if (extname(target) === '.html') linkedPages.add(relative(dist, target).replaceAll(sep, '/'));
+        if (ref.fragment !== undefined) {
+          requireValue(ref.fragment.length > 0 && pages.get(target)?.ids.has(ref.fragment), `${filename}: broken fragment link: ${url}`); fragments++;
+        }
       }
     }
     for (const expected of requiredPages) requireValue(linkedPages.has(expected), `${filename}: shared navigation/footer does not link to ${expected}.`);

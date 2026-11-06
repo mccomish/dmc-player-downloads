@@ -105,107 +105,164 @@
     const name = carousel.querySelector('#demo-game-name');
     const count = carousel.querySelector('#demo-scene-count');
     const source = carousel.querySelector('#demo-game-source');
+    const status = carousel.querySelector('#demo-playback-status');
     if (!slides.length || !previous || !next || !cycle || !name || !count || !source) return;
 
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const failed = new Set();
+    const loaded = new Set();
+    const playback = new Map();
     let current = Math.max(0, slides.findIndex(slide => slide.classList.contains('is-active')));
     let paused = motion.matches;
+    let blocked = false;
     let hovered = false;
     let focused = carousel.contains(document.activeElement);
     let visible = !('IntersectionObserver' in window);
     let stopped = false;
     let timer;
     const available = () => slides.filter(slide => !failed.has(slide));
-    const ready = () => available().filter(slide => slide.complete && slide.naturalWidth > 0);
+    const mayPlay = () => !stopped && !paused && !document.hidden && visible;
+    const wanted = slide => mayPlay() && slide === slides[current] && !failed.has(slide);
 
+    function pauseSlide(slide) {
+      const requested = playback.delete(slide);
+      if (requested || !slide.paused) slide.pause();
+    }
     function schedule() {
       clearTimeout(timer);
       timer = undefined;
-      if (stopped || paused || hovered || focused || document.hidden || !visible || ready().length < 2) return;
-      timer = setTimeout(() => { move(1); }, 6000);
+      const active = slides[current];
+      if (!wanted(active) || hovered || focused || available().length < 2 || active.paused || active.readyState < 2
+          || !playback.get(active)?.started) return;
+      timer = setTimeout(() => move(1), 12000);
+    }
+    function unavailable(slide) {
+      failed.add(slide);
+      pauseSlide(slide);
+      if (slides[current] === slide && available().length) current = slides.indexOf(available()[0]);
+      render();
+    }
+    function playSlide(slide) {
+      if (playback.has(slide)) return;
+      slide.muted = true;
+      slide.defaultMuted = true;
+      slide.loop = true;
+      slide.playsInline = true;
+      if (!loaded.has(slide)) {
+        loaded.add(slide);
+        if (!slide.getAttribute('src') && slide.dataset.src) slide.src = slide.dataset.src;
+        if (!slide.getAttribute('src')) { unavailable(slide); return; }
+        slide.preload = 'auto';
+        slide.load();
+      }
+      if (!wanted(slide) || playback.has(slide)) return;
+      const attempt = {};
+      playback.set(slide, attempt);
+      let promise;
+      try { promise = slide.play(); }
+      catch (error) { promise = Promise.reject(error); }
+      Promise.resolve(promise).then(() => {
+        if (playback.get(slide) !== attempt) {
+          if (!wanted(slide)) slide.pause();
+          return;
+        }
+        if (!wanted(slide)) { pauseSlide(slide); return; }
+        attempt.started = true;
+        schedule();
+      }, error => {
+        if (playback.get(slide) !== attempt) return;
+        playback.delete(slide);
+        if (!wanted(slide)) return;
+        if (error?.name === 'NotSupportedError') { unavailable(slide); return; }
+        paused = true;
+        blocked = true;
+        slide.pause();
+        // Reset a denied start to the video's bundled static poster.
+        slide.load();
+        render();
+      });
+    }
+    function syncPlayback() {
+      slides.forEach(slide => { if (!wanted(slide)) pauseSlide(slide); });
+      if (wanted(slides[current])) playSlide(slides[current]);
+      schedule();
     }
     function render() {
       const usable = available();
       const active = slides[current];
       slides.forEach(slide => {
-        const selected = usable.length > 0 && slide === active;
+        const selected = slide === active;
         slide.classList.toggle('is-active', selected);
         slide.setAttribute('aria-hidden', String(!selected));
       });
       if (usable.length) {
         name.textContent = active.dataset.gameTitle;
-        count.textContent = `${usable.indexOf(active) + 1} / ${usable.length}`;
+        count.textContent = (usable.indexOf(active) + 1) + ' / ' + usable.length;
         source.href = active.dataset.sourceUrl;
         source.title = active.dataset.gameCredit;
-        source.setAttribute('aria-label', `${active.dataset.gameTitle} screenshot source: ${active.dataset.gameCredit}`);
+        source.removeAttribute('aria-disabled');
+        source.setAttribute('aria-label', active.dataset.gameTitle + ' gameplay source: ' + active.dataset.gameCredit);
       } else {
-        name.textContent = 'Game screenshots unavailable';
+        name.textContent = 'Gameplay clips unavailable';
         count.textContent = '0 / 0';
+        source.removeAttribute('href');
+        source.setAttribute('aria-disabled', 'true');
+        source.setAttribute('aria-label', 'Gameplay clips unavailable');
       }
-      source.hidden = !usable.length;
-      previous.disabled = next.disabled = cycle.disabled = ready().length < 2;
+      previous.disabled = next.disabled = usable.length < 2;
+      cycle.disabled = !usable.length;
       cycle.setAttribute('aria-pressed', String(paused));
-      cycle.setAttribute('aria-label', paused ? 'Play game backgrounds' : 'Pause game backgrounds');
-      cycle.title = paused ? 'Play game backgrounds' : 'Pause game backgrounds';
-      cycle.textContent = paused ? '▶' : 'Ⅱ';
-      carousel.classList.toggle('screenshots-unavailable', !usable.length);
-      schedule();
+      cycle.setAttribute('aria-label', paused ? 'Play gameplay backgrounds' : 'Pause gameplay backgrounds');
+      cycle.title = paused ? 'Play gameplay backgrounds' : 'Pause gameplay backgrounds';
+      cycle.textContent = paused ? '\u25b6' : '\u2161';
+      if (status) status.textContent = blocked && usable.length ? 'Press play to start the clip.' : '';
+      carousel.classList.toggle('gameplay-unavailable', !usable.length);
+      syncPlayback();
     }
     function move(direction) {
-      const loaded = ready();
-      if (loaded.length > 1) {
-        const position = loaded.indexOf(slides[current]);
-        const index = position < 0 ? (direction > 0 ? 0 : loaded.length - 1) : (position + direction + loaded.length) % loaded.length;
-        current = slides.indexOf(loaded[index]);
+      const usable = available();
+      if (usable.length > 1) {
+        const position = usable.indexOf(slides[current]);
+        const index = position < 0 ? 0 : (position + direction + usable.length) % usable.length;
+        current = slides.indexOf(usable[index]);
+        blocked = false;
       }
       render();
     }
     previous.addEventListener('click', () => move(-1));
     next.addEventListener('click', () => move(1));
-    cycle.addEventListener('click', () => { paused = !paused; render(); });
+    cycle.addEventListener('click', () => { paused = !paused; blocked = false; render(); });
     carousel.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') { hovered = true; schedule(); } });
     carousel.addEventListener('pointerleave', () => { hovered = false; schedule(); });
     carousel.addEventListener('focusin', () => { focused = true; schedule(); });
     carousel.addEventListener('focusout', event => { focused = carousel.contains(event.relatedTarget); schedule(); });
-    document.addEventListener('visibilitychange', schedule);
-    motion.addEventListener('change', event => { if (event.matches) { paused = true; render(); } });
-
+    document.addEventListener('visibilitychange', syncPlayback);
+    motion.addEventListener('change', event => { if (event.matches) { paused = true; blocked = false; render(); } });
     slides.forEach(slide => {
-      function unavailable() {
-        failed.add(slide);
-        if (slides[current] === slide) {
-          const replacement = ready()[0] || available()[0];
-          if (replacement) current = slides.indexOf(replacement);
-        }
-        render();
-      }
-      slide.addEventListener('error', unavailable);
-      slide.addEventListener('load', () => {
+      slide.addEventListener('error', () => unavailable(slide));
+      for (const event of ['loadeddata', 'canplay']) slide.addEventListener(event, () => {
+        if (slide.error) return;
         failed.delete(slide);
-        if (!slides[current].complete || !slides[current].naturalWidth || failed.has(slides[current])) current = slides.indexOf(slide);
+        if (failed.has(slides[current])) current = slides.indexOf(slide);
         render();
       });
-      if (slide.complete && !slide.naturalWidth) failed.add(slide);
+      if (slide.error) failed.add(slide);
     });
-    if (failed.has(slides[current])) {
-      const replacement = ready()[0] || available()[0];
-      if (replacement) current = slides.indexOf(replacement);
-    }
+    if (failed.has(slides[current]) && available().length) current = slides.indexOf(available()[0]);
     let observer;
     if ('IntersectionObserver' in window) {
       observer = new window.IntersectionObserver(entries => {
         visible = entries.some(entry => entry.isIntersecting);
-        schedule();
+        syncPlayback();
       }, { threshold: 0.1 });
       observer.observe(carousel);
     }
-    window.addEventListener('pagehide', () => { stopped = true; clearTimeout(timer); observer?.disconnect(); });
+    window.addEventListener('pagehide', () => { stopped = true; observer?.disconnect(); syncPlayback(); });
     window.addEventListener('pageshow', () => {
       if (!stopped) return;
       stopped = false;
       if (observer) { visible = false; observer.observe(carousel); }
-      schedule();
+      syncPlayback();
     });
     render();
   });

@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { legalLinks, legalPages } from './legal-pages.mjs';
@@ -8,6 +9,9 @@ import { playerDemo } from './demo-gallery.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 const release = JSON.parse(fs.readFileSync(path.join(dist, 'assets/release-data.json'), 'utf8'));
+const assetVersion = filename => createHash('sha256').update(fs.readFileSync(path.join(dist, filename))).digest('hex').slice(0, 12);
+const styleUrl = './site.css?v=' + assetVersion('site.css');
+const scriptUrl = './app.js?v=' + assetVersion('app.js');
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const arrow = '<span aria-hidden="true">↗</span>';
 const down = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>';
@@ -33,11 +37,11 @@ function intro(kicker,title,description) {
 }
 function page(filename, title, description, body, theme='') {
   const html = `<!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${escape(description)}"><meta name="theme-color" content="#141513"><meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:type" content="website"><title>${escape(title)}</title><link rel="icon" type="image/png" href="./assets/dmc-icon.png"><link rel="stylesheet" href="./site.css"><script src="./app.js" defer></script></head><body class="${theme}">${header(filename)}<main id="main">${body}</main>${footer(filename)}</body></html>\n`;
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${escape(description)}"><meta name="theme-color" content="#141513"><meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:type" content="website"><title>${escape(title)}</title><link rel="icon" type="image/png" href="./assets/dmc-icon.png"><link rel="stylesheet" href="${styleUrl}"><script src="${scriptUrl}" defer></script></head><body class="${theme}">${header(filename)}<main id="main">${body}</main>${footer(filename)}</body></html>\n`;
   fs.writeFileSync(path.join(dist, filename), html);
 }
 
-const demo = playerDemo(JSON.parse(fs.readFileSync(path.join(root, 'scripts/game-screenshots.json'), 'utf8')));
+const demo = playerDemo(JSON.parse(fs.readFileSync(path.join(root, 'scripts/gameplay-clips.json'), 'utf8')));
 
 page('index.html','DMC Player — Free media player for gamers','DMC Player is a free Windows media player built for gaming sessions. Watch your files, streams and live TV in a small window over your game.',`
 <section class="home-hero shell"><div class="hero-copy"><p class="eyebrow"><span class="tiny-dot"></span> A FREE WINDOWS MEDIA PLAYER</p><h1>Stay in the game.<br><em>Keep the show on.</em></h1><p class="hero-lead">A film in the corner. Live TV while you farm. DMC Player keeps something good on screen while you play.</p><div class="hero-actions">${download()}<a class="text-link" href="./features.html">See the player ${arrow}</a></div><p class="hero-meta"><span data-version>Version ${escape(release.version)}</span><span>Windows x64</span><span>No DMC subscription</span></p><p class="product-note">Your files. Your streams. Your corner of the screen.</p></div>${demo}</section>
