@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "product": "DMC Player",
-  "version": "2.11.0",
-  "preparedAtUtc": "2026-11-06T19:14:30.3537766Z",
-  "generatedAtUtc": "2026-11-06T19:15:06.034Z",
+  "version": "2.12.0",
+  "preparedAtUtc": "2026-11-06T20:07:45.8839447Z",
+  "generatedAtUtc": "2026-11-06T20:07:49.262Z",
   "platform": {
     "operatingSystem": "Windows",
     "architecture": "x64",
@@ -12,53 +12,53 @@
   "files": [
     {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.11.0.exe",
-      "sizeBytes": 113903476,
-      "sha256": "814540154561d259435fb025ba90b65d4f50fde85adf323b15afc7dbac535052",
+      "filename": "DMC-Player-Setup-2.12.0.exe",
+      "sizeBytes": 113958567,
+      "sha256": "222495191ceda119eea39b4ee3702b363e521dfe64a667690f0a2ef3cec7f043",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.11.0/DMC-Player-Setup-2.11.0.exe",
-      "sizeMiB": 108.6,
-      "sizeLabel": "113.9 MB"
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.12.0/DMC-Player-Setup-2.12.0.exe",
+      "sizeMiB": 108.7,
+      "sizeLabel": "114.0 MB"
     },
     {
       "kind": "portable",
-      "filename": "DMC-Player-2.11.0-win-x64.zip",
-      "sizeBytes": 136739168,
-      "sha256": "503bc419d58c4df8a6be3848d1ab6c4961cae95c7fa1a644676269e1c8539d32",
+      "filename": "DMC-Player-2.12.0-win-x64.zip",
+      "sizeBytes": 136812543,
+      "sha256": "45d11428c4e23b15818d345881019722dc4d8b940f3deb5965716a3889b1f493",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.11.0/DMC-Player-2.11.0-win-x64.zip",
-      "sizeMiB": 130.4,
-      "sizeLabel": "136.7 MB"
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.12.0/DMC-Player-2.12.0-win-x64.zip",
+      "sizeMiB": 130.5,
+      "sizeLabel": "136.8 MB"
     }
   ],
   "downloads": {
     "installer": {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.11.0.exe",
-      "sizeBytes": 113903476,
-      "sha256": "814540154561d259435fb025ba90b65d4f50fde85adf323b15afc7dbac535052",
+      "filename": "DMC-Player-Setup-2.12.0.exe",
+      "sizeBytes": 113958567,
+      "sha256": "222495191ceda119eea39b4ee3702b363e521dfe64a667690f0a2ef3cec7f043",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.11.0/DMC-Player-Setup-2.11.0.exe",
-      "sizeMiB": 108.6,
-      "sizeLabel": "113.9 MB"
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.12.0/DMC-Player-Setup-2.12.0.exe",
+      "sizeMiB": 108.7,
+      "sizeLabel": "114.0 MB"
     },
     "portable": {
       "kind": "portable",
-      "filename": "DMC-Player-2.11.0-win-x64.zip",
-      "sizeBytes": 136739168,
-      "sha256": "503bc419d58c4df8a6be3848d1ab6c4961cae95c7fa1a644676269e1c8539d32",
+      "filename": "DMC-Player-2.12.0-win-x64.zip",
+      "sizeBytes": 136812543,
+      "sha256": "45d11428c4e23b15818d345881019722dc4d8b940f3deb5965716a3889b1f493",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.11.0/DMC-Player-2.11.0-win-x64.zip",
-      "sizeMiB": 130.4,
-      "sizeLabel": "136.7 MB"
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.12.0/DMC-Player-2.12.0-win-x64.zip",
+      "sizeMiB": 130.5,
+      "sizeLabel": "136.8 MB"
     }
   },
   "downloadsIncluded": false,
@@ -313,7 +313,28 @@
       "selectedSourceResolve": true,
       "onlySelectedMagnetAdded": true,
       "disconnectRemovesLocalKey": true,
-      "remoteTransferDeleteOnCancel": false
+      "remoteTransferDeleteOnCancel": false,
+      "library": {
+        "minimumVersion": "2.12.0",
+        "posterCards": true,
+        "cleanedTitles": true,
+        "groupedVersions": true,
+        "seasonEpisodeNavigation": true,
+        "categoryFilters": true,
+        "search": true,
+        "paging": true,
+        "automaticArtwork": true,
+        "artworkProvider": "Cinemeta",
+        "memoryOnlyLibrary": true,
+        "maximumRenderedCards": 24,
+        "posterByteCacheMiB": 16,
+        "maximumDecodedPosters": 64,
+        "decodedPosterWidth": 220,
+        "decodedPosterHeight": 330,
+        "maximumMetadataEntries": 256,
+        "artworkPreferenceFile": "library-view.json",
+        "autoLoadsWhenOpened": true
+      }
     }
   },
   "updates": {
@@ -365,7 +386,7 @@
     "portablePayloadVerified": true,
     "method": "Extraction and hashes; no application/runtime installation or system-default changes",
     "sourceFilesVerified": 9,
-    "releaseManifestSha256": "84c7b3f10d5cdcbae11919cdff91f5d898a0d26f741aedfb494ac6f4f2bdb049",
-    "checksumFileSha256": "d0f5c38e3bdd0d7564b47d153025ac9c9ca86a0994555708e44744fad611d0d8"
+    "releaseManifestSha256": "031feb68de5d88b6174e3600aeb4f059bff26960a9235f79b8d2926eb9e6403d",
+    "checksumFileSha256": "4a114c53e4dbd9052f385fee971becd80d219a8d940bb3d5b304031c0986ef2f"
   }
 }

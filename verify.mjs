@@ -292,7 +292,7 @@ await check('mac_preview_guide_and_platform_limits_match_the_actual_app', async 
   for (const document of [guide, downloadPage]) {
     const table = document.match(/<table\b[^>]*class="comparison-table"[\s\S]*?<\/table>/i)?.[0];
     requireValue(table && /Windows/.test(table) && /Mac preview 0.1.0/.test(table), 'Both the download page and Mac guide need a platform comparison.');
-    for (const feature of ['Watch together and chat', 'add-ons and torrent sources', 'DMC Sources and AllDebrid', 'saved library', 'Automatic update notice', 'Not included', 'VLC'])
+    for (const feature of ['Watch together and chat', 'add-ons and torrent sources', 'DMC Sources and AllDebrid', 'AllDebrid My library', 'saved library', 'Automatic update notice', 'Not included', 'VLC'])
       requireValue(visibleText(table).includes(feature), `The platform comparison omits ${feature}.`);
   }
   for (const filename of ['features.html', 'add-ons.html', 'live-tv.html', 'watch-together.html', 'help.html', 'about.html']) {
@@ -445,7 +445,7 @@ await check('addon_feature_page_matches_shipped_capabilities', async () => {
   const copy = visibleText(pages.get(resolve(dist, 'add-ons.html')).document);
   for (const fact of ['Cinemeta', 'manifest.json', 'Stremio', '32 GiB', '64 GiB', 'IP address', 'temporary', 'HLS/DASH', 'not the Torrentio service'])
     requireValue(copy.includes(fact), `Add-on instructions omit ${fact}.`);
-  requireValue(copy.includes('Actual DMC Player 2.9 native interface'), 'Native screenshot is not accurately captioned.');
+  requireValue(/Actual DMC Player (?:2\.9|2\.12)(?: native interface| My library)/.test(copy), 'Native screenshot needs an accurate interface/version caption.');
   await access(resolve(dist, 'assets/dmc-addons.png'));
   return { nativeBrowser: true, torrentPlayback: true, bundledTorrentIndex: false, sourceAvailabilityGuaranteed: false };
 });
@@ -464,7 +464,7 @@ await check('dmc_sources_and_alldebrid_are_documented_with_their_actual_limits',
   requireValue(release.addons.bundledTorrentIndex === false, 'The remote source index must not be described as a bundled database or server.');
   const feature = visibleText(pages.get(resolve(dist, 'add-ons.html')).document);
   for (const fact of ['Windows', '2.11', 'Connect AllDebrid', 'Browse films & TV', 'Play in DMC Player', 'Torrents CSV',
-    'release year', 'season and episode', 'Disable DMC Sources', 'AllDebrid files', 'Refresh files', 'Play selected file',
+    'release year', 'season and episode', 'Disable DMC Sources', 'My library', 'Refresh', 'File details',
     'Cancel opening', 'does not delete a transfer', 'Disconnect', 'locally saved key'])
     requireValue(feature.includes(fact), `The DMC Sources walkthrough omits ${fact}.`);
   requireValue(feature.includes('Only the selected source can add a magnet') && feature.includes('not a promise that AllDebrid has a ready copy')
@@ -473,7 +473,7 @@ await check('dmc_sources_and_alldebrid_are_documented_with_their_actual_limits',
   const dataFlow = visibleText(privacy.match(/<section\b[^>]*id="dmc-sources"[\s\S]*?<\/section>/i)?.[0] ?? '');
   for (const fact of ['Torrents CSV', 'title', 'release year', 'episode tag', 'DPAPI', 'alldebrid.dat',
     'only to AllDebrid', 'not passed to the public search index', 'not keep a search or viewing history',
-    'Refresh files', 'loaded list in memory', 'does not delete a transfer', 'does not revoke the key'])
+    'My library', 'Refresh', 'loaded list in memory', 'does not delete a transfer', 'does not revoke the key'])
     requireValue(dataFlow.includes(fact), `The new Windows privacy dataflow omits ${fact}.`);
   const terms = visibleText(pages.get(resolve(dist, 'terms.html')).document);
   requireValue(terms.includes('independent client for a public source-search index') && terms.includes('Only choosing Play can add the selected magnet')
@@ -482,6 +482,57 @@ await check('dmc_sources_and_alldebrid_are_documented_with_their_actual_limits',
   requireValue(mac.includes('DMC Sources and AllDebrid') && mac.includes('DMC Sources, AllDebrid, add-ons and torrents are not part of this Mac preview'),
     'Windows account/source features must not be implied for the unchanged Mac preview.');
   return { introducedIn: '2.11.0', index: sources.index, onlySelectedMagnetAdded: true, remoteTransferDeleteOnCancel: false, nativeKeyStoredEncrypted: true, macSupported: false };
+});
+
+await check('alldebrid_library_navigation_matches_the_windows_release_contract', async () => {
+  const library = release.addons?.allDebrid?.library;
+  const expected = {
+    minimumVersion: '2.12.0', posterCards: true, cleanedTitles: true, groupedVersions: true,
+    seasonEpisodeNavigation: true, categoryFilters: true, search: true, paging: true,
+    automaticArtwork: true, artworkProvider: 'Cinemeta', memoryOnlyLibrary: true,
+    maximumRenderedCards: 24, posterByteCacheMiB: 16, maximumDecodedPosters: 64,
+    decodedPosterWidth: 220, decodedPosterHeight: 330, maximumMetadataEntries: 256,
+    artworkPreferenceFile: 'library-view.json', autoLoadsWhenOpened: true
+  };
+  for (const [key, value] of Object.entries(expected))
+    requireValue(library?.[key] === value, `My library release metadata differs for ${key}.`);
+  requireValue(JSON.stringify(releaseData.addons?.allDebrid?.library) === JSON.stringify(library), 'Derived My library metadata differs from the canonical release.');
+  const feature = visibleText(pages.get(resolve(dist, 'add-ons.html'))?.document ?? '');
+  for (const fact of ['My library', '2.12', 'poster cards', 'clean titles', 'Films', 'TV shows', 'Other', 'search by title',
+    'same film', 'seasons and episodes', 'File details', 'Refresh', 'Posters & details', '24 cards', 'in memory',
+    'player startup', 'bulk catalogue download', 'Continue watching', 'Unknown videos, samples, trailers and ambiguous packs'])
+    requireValue(feature.includes(fact), `My library walkthrough omits ${fact}.`);
+  requireValue(feature.includes('opens and loads your ready videos automatically')
+    && feature.includes('pick a version and press Play') && feature.includes('without adding or deleting transfers'),
+  'My library must explain automatic ready-file loading, explicit file playback and read-only refresh.');
+  for (const obsolete of ['AllDebrid files', 'Refresh files', 'Play selected file'])
+    requireValue(!feature.includes(obsolete), `The feature page still sends users to the retired ${obsolete} control.`);
+  for (const filename of ['download.html', 'mac.html']) {
+    const document = pages.get(resolve(dist, filename))?.document ?? '';
+    const row = (document.match(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi) ?? []).find(value => /AllDebrid My library/.test(visibleText(value)));
+    requireValue(row && /Windows 2\.12/.test(visibleText(row)) && /<td>Not included<\/td>/.test(row), `${filename}: the comparison must keep My library exclusive to Windows 2.12.`);
+  }
+  return { minimumVersion: library.minimumVersion, maximumRenderedCards: library.maximumRenderedCards,
+    groupedVersions: true, seasonsAndEpisodes: true, readyFileListingOnOpen: true, automaticQueue: false, macSupported: false };
+});
+
+await check('library_artwork_privacy_matches_the_actual_request_and_storage_flow', async () => {
+  const privacy = pages.get(resolve(dist, 'privacy.html'))?.document ?? '';
+  const flow = visibleText(privacy.match(/<section\b[^>]*id="cloud-library"[\s\S]*?<\/section>/i)?.[0] ?? '');
+  for (const fact of ['Windows version 2.12', 'Cinemeta', 'cleaned film/show title and media type', 'release year locally',
+    'matched public IMDb identifier', 'public poster host', 'IP address', 'AllDebrid key', 'private stream addresses',
+    'full release filenames', 'in memory', 'library-view.json', 'on/off preference', '24 cards', '256 metadata entries',
+    '16 MiB/64 raw poster images', '64 decoded posters', '220 × 330', 'no bulk dataset download',
+    'Turn off Posters & details', 'cancel artwork requests and clear its caches'])
+    requireValue(flow.includes(fact), `Library artwork privacy omits ${fact}.`);
+  requireValue(flow.includes('Posters & details is on by default')
+    && flow.includes('do not contain the AllDebrid key, private stream addresses or full release filenames')
+    && flow.includes('does not save a cloud library, Continue watching list or viewing history')
+    && flow.includes('The separate Mac preview does not include this library or its artwork requests'),
+  'Library privacy must distinguish automatic optional metadata, private sources, session-only storage and Mac scope.');
+  requireValue(!privacy.includes('does not run add-on JavaScript or automatically fetch film artwork'), 'Privacy retains the obsolete claim that film artwork is never fetched automatically.');
+  return { artworkDefaultsOn: true, artworkCanBeDisabled: true, metadataProvider: 'Cinemeta', yearMatchedLocally: true,
+    accountKeyOrPrivateUrlSentToArtworkServices: false, memoryOnlyCaches: true, persistedSetting: 'library-view.json', legalRightsUnchanged: true };
 });
 
 const passed = checks.every(item => item.pass);
