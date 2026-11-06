@@ -86,7 +86,7 @@ Use FiveM in borderless windowed mode, then press Ctrl+Alt+O. Drag the mini pict
 
 ## How do I use fullscreen and the right-click menu?
 
-Right-click the player and choose Fullscreen, use View → Fullscreen, or press F11. The player fills the display and hides its window controls. Press F11 again or Escape to restore the previous normal or maximized window. Choosing mini mode leaves fullscreen, and choosing fullscreen leaves mini mode. For a website, its own video fullscreen button selects the video view; F11 controls DMC Player's window.
+From version 2.10.3, double-click the video or use the fullscreen button over the picture or on the bottom toolbar. Right-click the player and choose Full screen, use View → Fullscreen, or press F11. The player fills the display and hides its window controls. Moving the mouse reveals play/pause, skip, sound, exit and a timeline with elapsed time and duration. Click or drag the timeline to seek in a movie; the controls hide after about 2.5 seconds without movement, and stay visible during interaction. Live or unseekable sources do not offer arbitrary seeking. Embedded websites expose a DMC timeline only when their media timing and seekable ranges are accessible; use the provider's own controls otherwise. Press F11 again, double-click, click the exit button or press Escape to restore the previous normal or maximized window. Choosing mini mode leaves fullscreen, and choosing fullscreen leaves mini mode. In mini mode, double-click restores the normal player.
 
 ## How do I stop accidental clicks while gaming?
 
