@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "product": "DMC Player",
-  "version": "2.10.1",
-  "preparedAtUtc": "2026-11-06T03:44:53.2020338Z",
-  "generatedAtUtc": "2026-11-06T03:45:19.443Z",
+  "version": "2.10.2",
+  "preparedAtUtc": "2026-11-06T10:41:52.5074370Z",
+  "generatedAtUtc": "2026-11-06T10:41:54.638Z",
   "platform": {
     "operatingSystem": "Windows",
     "architecture": "x64",
@@ -12,53 +12,53 @@
   "files": [
     {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.10.1.exe",
-      "sizeBytes": 113759969,
-      "sha256": "e12d00b4595bcb80b5f58add338c9817b0d2ebc2a90e1277e434eab41d742c2c",
+      "filename": "DMC-Player-Setup-2.10.2.exe",
+      "sizeBytes": 113834820,
+      "sha256": "f08b3f138aa3a95bf24a0093c6d9e43bde4a592ead12ca8004580aeee5ae0e6f",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.1/DMC-Player-Setup-2.10.1.exe",
-      "sizeMiB": 108.5,
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.2/DMC-Player-Setup-2.10.2.exe",
+      "sizeMiB": 108.6,
       "sizeLabel": "113.8 MB"
     },
     {
       "kind": "portable",
-      "filename": "DMC-Player-2.10.1-win-x64.zip",
-      "sizeBytes": 136557272,
-      "sha256": "9f0ca01c806e8c75e40cecac88190589352d9083a8432b11ac7dc2458198213f",
+      "filename": "DMC-Player-2.10.2-win-x64.zip",
+      "sizeBytes": 136652103,
+      "sha256": "4ca4011cace9ac92000d30702f32af4663cbf6a0a90fb1b8b94eb109ebc32530",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.1/DMC-Player-2.10.1-win-x64.zip",
-      "sizeMiB": 130.2,
-      "sizeLabel": "136.6 MB"
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.2/DMC-Player-2.10.2-win-x64.zip",
+      "sizeMiB": 130.3,
+      "sizeLabel": "136.7 MB"
     }
   ],
   "downloads": {
     "installer": {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.10.1.exe",
-      "sizeBytes": 113759969,
-      "sha256": "e12d00b4595bcb80b5f58add338c9817b0d2ebc2a90e1277e434eab41d742c2c",
+      "filename": "DMC-Player-Setup-2.10.2.exe",
+      "sizeBytes": 113834820,
+      "sha256": "f08b3f138aa3a95bf24a0093c6d9e43bde4a592ead12ca8004580aeee5ae0e6f",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.1/DMC-Player-Setup-2.10.1.exe",
-      "sizeMiB": 108.5,
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.2/DMC-Player-Setup-2.10.2.exe",
+      "sizeMiB": 108.6,
       "sizeLabel": "113.8 MB"
     },
     "portable": {
       "kind": "portable",
-      "filename": "DMC-Player-2.10.1-win-x64.zip",
-      "sizeBytes": 136557272,
-      "sha256": "9f0ca01c806e8c75e40cecac88190589352d9083a8432b11ac7dc2458198213f",
+      "filename": "DMC-Player-2.10.2-win-x64.zip",
+      "sizeBytes": 136652103,
+      "sha256": "4ca4011cace9ac92000d30702f32af4663cbf6a0a90fb1b8b94eb109ebc32530",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.1/DMC-Player-2.10.1-win-x64.zip",
-      "sizeMiB": 130.2,
-      "sizeLabel": "136.6 MB"
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.2/DMC-Player-2.10.2-win-x64.zip",
+      "sizeMiB": 130.3,
+      "sizeLabel": "136.7 MB"
     }
   },
   "downloadsIncluded": false,
@@ -164,6 +164,19 @@
     "registrationScope": "currentUser",
     "defaultSelection": "Windows Settings",
     "setsUserDefaultsAutomatically": false
+  },
+  "startup": {
+    "minimumVersion": "2.10.2",
+    "windowPaintsBeforePlaybackEngine": true,
+    "backgroundPlaybackInitialization": true,
+    "sharedInitializationForImmediateOpen": true,
+    "preparedVlcPluginCache": true,
+    "stalePluginCacheRefresh": true,
+    "contextMenuCreatedOnDemand": true,
+    "automaticUpdateCheckDelaySeconds": 3,
+    "mediaFolderScanOnLaunch": false,
+    "browserStartsOnDemand": true,
+    "torrentEngineStartsOnDemand": true
   },
   "viewModes": {
     "contextMenu": true,
@@ -314,11 +327,11 @@
   },
   "verification": {
     "installerChecksPassed": true,
-    "installerPayloadFiles": 999,
+    "installerPayloadFiles": 1001,
     "portablePayloadVerified": true,
     "method": "Extraction and hashes; no application/runtime installation or system-default changes",
     "sourceFilesVerified": 9,
-    "releaseManifestSha256": "6e303049fb11c06b550d072ec1ec000aeeb77177fa22c1efa12503d25d0f8a22",
-    "checksumFileSha256": "1b51c18fa289d6b219eba8d715834074a601937815298558471fd2ca03ac1ab8"
+    "releaseManifestSha256": "6063c9a8caedec22ca71188d8b165c1d8fc0a161c27568d5295a28f6a9f86ba6",
+    "checksumFileSha256": "153a4694be73864438725ddf08f3118ff2d4812285c2630bd1f05dc0cdaf8fba"
   }
 }

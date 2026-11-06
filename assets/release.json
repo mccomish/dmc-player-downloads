@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "product":  "DMC Player",
-    "version":  "2.10.1",
-    "preparedAtUtc":  "2026-11-06T03:44:53.2020338Z",
+    "version":  "2.10.2",
+    "preparedAtUtc":  "2026-11-06T10:41:52.5074370Z",
     "platform":  {
                      "operatingSystem":  "Windows",
                      "architecture":  "x64",
@@ -11,9 +11,9 @@
     "files":  [
                   {
                       "kind":  "installer",
-                      "filename":  "DMC-Player-Setup-2.10.1.exe",
-                      "sizeBytes":  113759969,
-                      "sha256":  "e12d00b4595bcb80b5f58add338c9817b0d2ebc2a90e1277e434eab41d742c2c",
+                      "filename":  "DMC-Player-Setup-2.10.2.exe",
+                      "sizeBytes":  113834820,
+                      "sha256":  "f08b3f138aa3a95bf24a0093c6d9e43bde4a592ead12ca8004580aeee5ae0e6f",
                       "signed":  false,
                       "signatureStatus":  "NotSigned",
                       "architecture":  "x64",
@@ -21,9 +21,9 @@
                   },
                   {
                       "kind":  "portable",
-                      "filename":  "DMC-Player-2.10.1-win-x64.zip",
-                      "sizeBytes":  136557272,
-                      "sha256":  "9f0ca01c806e8c75e40cecac88190589352d9083a8432b11ac7dc2458198213f",
+                      "filename":  "DMC-Player-2.10.2-win-x64.zip",
+                      "sizeBytes":  136652103,
+                      "sha256":  "4ca4011cace9ac92000d30702f32af4663cbf6a0a90fb1b8b94eb109ebc32530",
                       "architecture":  "x64",
                       "installScope":  "none"
                   }
@@ -52,8 +52,8 @@
                           {
                               "kind":  "faq",
                               "filename":  "docs/FAQ.md",
-                              "sizeBytes":  19616,
-                              "sha256":  "6a84e4eacf88dc399c6a0662a127324dfe141ca70f01e61275983c612238f92f"
+                              "sizeBytes":  20163,
+                              "sha256":  "bb8d953bde3c8a6e4330188ba71ee07cc9cd785048cba78db1797a17e6a966a0"
                           },
                           {
                               "kind":  "tvSources",
@@ -130,6 +130,19 @@
                       "miniPlayer":  true,
                       "restoresWindowState":  true
                   },
+    "startup":  {
+                    "minimumVersion":  "2.10.2",
+                    "windowPaintsBeforePlaybackEngine":  true,
+                    "backgroundPlaybackInitialization":  true,
+                    "sharedInitializationForImmediateOpen":  true,
+                    "preparedVlcPluginCache":  true,
+                    "stalePluginCacheRefresh":  true,
+                    "contextMenuCreatedOnDemand":  true,
+                    "automaticUpdateCheckDelaySeconds":  3,
+                    "mediaFolderScanOnLaunch":  false,
+                    "browserStartsOnDemand":  true,
+                    "torrentEngineStartsOnDemand":  true
+                },
     "queue":  {
                   "explicitAddRequired":  true,
                   "normalOpensAddItems":  false,
@@ -268,7 +281,7 @@
                       },
     "verification":  {
                          "installerChecksPassed":  true,
-                         "installerPayloadFiles":  999,
+                         "installerPayloadFiles":  1001,
                          "portablePayloadVerified":  true,
                          "method":  "Extraction and hashes; no application/runtime installation or system-default changes"
                      }
