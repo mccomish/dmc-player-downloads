@@ -272,6 +272,88 @@
   const lock = one('#demo-lock');
   const play = one('#demo-play');
   if (stage && mini && lock && play) {
+    const preview = one('#mini-preview');
+    const timeline = mini.querySelector('.mini-timeline i');
+    const previewMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let previewPaused = previewMotion.matches;
+    let previewVisible = !('IntersectionObserver' in window);
+    let previewStopped = false;
+    let previewFailed = false;
+    let previewLoaded = false;
+    let previewAttempt = null;
+    const previewWanted = () => preview && !previewPaused && previewVisible && !previewStopped && !document.hidden && !previewFailed;
+    function renderPreviewButton() {
+      mini.classList.toggle('paused', previewPaused);
+      play.textContent = previewPaused ? '\u25b6' : '\u2161';
+      play.setAttribute('aria-label', previewFailed ? 'Retry film preview' : previewPaused ? 'Play film preview' : 'Pause film preview');
+    }
+    function syncPreview() {
+      if (!preview) return;
+      if (!previewWanted()) {
+        previewAttempt = null;
+        preview.pause();
+        return;
+      }
+      preview.muted = preview.defaultMuted = true;
+      preview.loop = preview.playsInline = true;
+      if (!previewLoaded) {
+        previewLoaded = true;
+        if (!preview.getAttribute('src') && preview.dataset.src) preview.src = preview.dataset.src;
+        preview.preload = 'auto';
+        preview.load();
+      }
+      if (previewAttempt || !preview.paused) return;
+      const attempt = {};
+      previewAttempt = attempt;
+      let promise;
+      try { promise = preview.play(); } catch (error) { promise = Promise.reject(error); }
+      Promise.resolve(promise).then(() => {
+        if (previewAttempt !== attempt) { if (!previewWanted()) preview.pause(); return; }
+        previewAttempt = null;
+        if (!previewWanted()) preview.pause();
+      }, () => {
+        if (previewAttempt !== attempt) return;
+        previewAttempt = null;
+        if (!previewWanted()) return;
+        previewPaused = true;
+        preview.pause();
+        preview.load();
+        renderPreviewButton();
+      });
+    }
+    if (preview) {
+      preview.addEventListener('timeupdate', () => {
+        if (timeline && Number.isFinite(preview.duration) && preview.duration > 0)
+          timeline.style.width = `${Math.max(0, Math.min(100, preview.currentTime / preview.duration * 100))}%`;
+      });
+      preview.addEventListener('error', () => {
+        previewFailed = previewPaused = true;
+        previewAttempt = null;
+        preview.pause();
+        renderPreviewButton();
+      });
+      document.addEventListener('visibilitychange', syncPreview);
+      previewMotion.addEventListener('change', event => {
+        if (event.matches) { previewPaused = true; renderPreviewButton(); syncPreview(); }
+      });
+      let previewObserver;
+      if ('IntersectionObserver' in window) {
+        previewObserver = new window.IntersectionObserver(entries => {
+          previewVisible = entries.some(entry => entry.isIntersecting);
+          syncPreview();
+        }, { threshold: 0.1 });
+        previewObserver.observe(mini);
+      }
+      window.addEventListener('pagehide', () => { previewStopped = true; previewObserver?.disconnect(); syncPreview(); });
+      window.addEventListener('pageshow', () => {
+        if (!previewStopped) return;
+        previewStopped = false;
+        if (previewObserver) { previewVisible = false; previewObserver.observe(mini); }
+        syncPreview();
+      });
+      renderPreviewButton();
+      syncPreview();
+    }
     let locked = false;
     let moving = null;
     function clamp(x, y) {
@@ -287,9 +369,10 @@
     }
     lock.addEventListener('click', toggleLock);
     play.addEventListener('click', () => {
-      const paused = mini.classList.toggle('paused');
-      play.textContent = paused ? '▶' : 'Ⅱ';
-      play.setAttribute('aria-label', paused ? 'Play demo animation' : 'Pause demo animation');
+      if (previewFailed) { previewFailed = false; previewLoaded = false; }
+      previewPaused = !previewPaused;
+      renderPreviewButton();
+      syncPreview();
     });
     mini.addEventListener('pointerdown', event => {
       if (locked || event.target.closest('button') || event.button !== 0) return;
@@ -300,7 +383,7 @@
     mini.addEventListener('pointermove', event => {
       if (!moving) return;
       if (moving.resize) {
-        const ratio = 260 / 157;
+        const ratio = 216 / 145;
         const maximum = Math.min(stage.clientWidth - moving.left, (stage.clientHeight - moving.top) * ratio);
         const width = Math.min(Math.max(180, moving.width + event.clientX - moving.x), maximum);
         mini.style.width = `${width}px`; mini.style.height = `${width / ratio}px`;
@@ -315,7 +398,7 @@
       if (movement) { event.preventDefault(); clamp(mini.offsetLeft + movement[0], mini.offsetTop + movement[1]); }
     });
     window.addEventListener('resize', () => {
-      if (mini.offsetWidth > stage.clientWidth - 12) { const width = stage.clientWidth - 12; mini.style.width = `${width}px`; mini.style.height = `${width / (260 / 157)}px`; }
+      if (mini.offsetWidth > stage.clientWidth - 12) { const width = stage.clientWidth - 12; mini.style.width = `${width}px`; mini.style.height = `${width / (216 / 145)}px`; }
       clamp(mini.offsetLeft, mini.offsetTop);
     });
   }
