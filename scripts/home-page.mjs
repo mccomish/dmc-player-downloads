@@ -6,8 +6,8 @@ export function homePage({ download, downloadCounter, banner, frame, demo, arrow
     <h1>DMC Player</h1>
     <p class="hero-subtitle">Watch TV and movies while you game.</p>
     <p class="hero-lead">Keep a film, a show or live TV in a small window over your game. Open your own files, stream links or streaming services, then move the picture where it suits you.</p>
-    <div class="hero-actions">${download()}<a class="text-link" href="./features.html">How it works ${arrow}</a></div>
-    ${downloadCounter()}
+    <div class="hero-actions">${download()}${downloadCounter()}</div>
+    <a class="text-link hero-how" href="./features.html">How it works ${arrow}</a>
     <p class="hero-meta"><span data-version>Version ${releaseVersion}</span><span>Windows x64</span><span>Free to use</span></p>
   </div>
   ${demo}
