@@ -31,7 +31,7 @@
 
   async function loadRelease() {
     try {
-      const response = await fetch('./assets/release-data.json');
+      const response = await fetch('./assets/release-data.json', { cache: 'no-cache' });
       if (!response.ok) throw new Error('Release information unavailable');
       const data = await response.json();
       if (!/^\d+\.\d+\.\d+$/.test(data.version) || !data.downloads) throw new Error('Invalid release information');
@@ -88,7 +88,7 @@
     faqSearch.addEventListener('input', renderFaq);
     (async () => {
       try {
-        const response = await fetch('./assets/faq.json');
+        const response = await fetch('./assets/faq.json', { cache: 'no-cache' });
         if (!response.ok) throw new Error('FAQ unavailable');
         const data = await response.json();
         if (!Array.isArray(data.entries) || !data.entries.every(entry => typeof entry.question === 'string' && typeof entry.answer === 'string')) throw new Error('Invalid FAQ');
