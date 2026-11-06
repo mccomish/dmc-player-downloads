@@ -64,7 +64,7 @@ The following separate directory contains official viewing destinations rather t
 | YouTube | [Official website](https://www.youtube.com/). |
 | Netflix | [Official website](https://www.netflix.com/). Subscription and provider playback requirements apply. |
 | Prime Video | [Official website](https://www.primevideo.com/). Membership, rentals and add-on subscriptions vary. |
-| Disney+ | [Official website](https://www.disneyplus.com/). Subscription and provider playback requirements apply. |
+| Disney+ | [Official UK sign-in page](https://www.disneyplus.com/en-gb/identity/login). The public sign-in page was checked in WebView2; account sign-in and protected programme playback were not tested. Subscription and provider playback requirements apply. |
 
 WebView2 uses its normal native rendering; [Microsoft documents the protected-video limitation of the separate composition control](https://learn.microsoft.com/en-us/dotnet/api/microsoft.web.webview2.wpf.webview2compositioncontrol), which DMC Player does not use.
 

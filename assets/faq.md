@@ -24,6 +24,10 @@ Update both players to DMC Player 2.7 or later. Start an actual YouTube video, t
 
 Services opens the provider's site inside the player using standard WebView2. Sign in with your own account. Playback depends on the provider's embedded-browser, DRM, account, device and output rules; listing a service does not guarantee every title will play. DMC Player does not bypass these rules or supply subscriptions. The WebView2 sign-in profile is separate from your normal browser.
 
+## Where does the Disney+ button open?
+
+From version 2.8, Disney+ opens its official UK sign-in page directly. Pasting a bare Disney+ homepage address uses that entry point too; specific title links and login steps are preserved. Public sign-in-page navigation was checked without entering an account. That check does not verify signing in or protected programme playback. Complete sign-in yourself; Disney+'s browser, account and playback rules still apply.
+
 ## How do I find live TV and free channels?
 
 Choose File → Live TV, search or filter the channel list and press Watch channel. Direct channels play in the VLC engine, with DMC's normal volume and mini controls. Open More channels / import a playlist for the optional UK and English community lists from IPTV-org, an M3U file or a playlist URL. Community entries are public submitted links, not broadcaster-verified listings; availability, adverts and location restrictions vary. Add to favourites saves a channel separately from the play queue. File → Streaming services opens official provider websites when a service requires its own web player.
@@ -59,6 +63,10 @@ Exclusive fullscreen games can cover ordinary always-on-top desktop windows; swi
 ## How can friends watch with me over the internet?
 
 Open a file or direct stream, or start a YouTube video, then choose Tools → Watch together and press Host. Choose Copy link when the invitation is ready and send it to friends. Use DMC Player 2.7 or later on both players for YouTube synchronization. An installed copy opens invite links; otherwise, select Join and paste the link. A host can have up to eight guests. Keep the host player open while watching. Stopping hosting expires the link. Free test links last up to 60 minutes; start a new room to keep watching.
+
+## How do I chat while watching with friends?
+
+Use DMC Player 2.8 or later on both players. While connected, choose Chat in Watch together, or press Ctrl+Alt+C if Windows could reserve the shortcut. Type up to 280 characters and press Enter to send. The composer closes after a successful send; Escape closes it without sending. Up to three plain-text messages appear over the video and fade after about six seconds. Incoming messages do not take keyboard focus or intercept clicks. Turn off Show messages over video to hide the overlay on your own player; this does not stop the room receiving messages. The app does not automatically save a transcript or replay earlier messages to late joiners. Other participants can still copy or record what they receive.
 
 ## Is the automatic relay always available?
 

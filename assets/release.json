@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "product":  "DMC Player",
-    "version":  "2.7.0",
-    "preparedAtUtc":  "2026-11-05T23:57:15.1300921Z",
+    "version":  "2.8.0",
+    "preparedAtUtc":  "2026-11-06T00:30:59.5158017Z",
     "platform":  {
                      "operatingSystem":  "Windows",
                      "architecture":  "x64",
@@ -11,9 +11,9 @@
     "files":  [
                   {
                       "kind":  "installer",
-                      "filename":  "DMC-Player-Setup-2.7.0.exe",
-                      "sizeBytes":  113011394,
-                      "sha256":  "02f70e9e2ed11dd899667314247f5bc1b02149355af6f64c15ec1f5051e32505",
+                      "filename":  "DMC-Player-Setup-2.8.0.exe",
+                      "sizeBytes":  113024202,
+                      "sha256":  "a500be6809ce64e23b54c8245cb5d144e11ff98fd31d0124d159684725486314",
                       "signed":  false,
                       "signatureStatus":  "NotSigned",
                       "architecture":  "x64",
@@ -21,9 +21,9 @@
                   },
                   {
                       "kind":  "portable",
-                      "filename":  "DMC-Player-2.7.0-win-x64.zip",
-                      "sizeBytes":  135660127,
-                      "sha256":  "194a61e3cb6f31d3d377d7db4d6bfc083d1f43a2dae2c396b49b357d7906aa01",
+                      "filename":  "DMC-Player-2.8.0-win-x64.zip",
+                      "sizeBytes":  135677411,
+                      "sha256":  "8f759ce05e358e7fa87307cead6bce5709ae20080034b2cd5b759210d093ba2d",
                       "architecture":  "x64",
                       "installScope":  "none"
                   }
@@ -52,14 +52,14 @@
                           {
                               "kind":  "faq",
                               "filename":  "docs/FAQ.md",
-                              "sizeBytes":  11592,
-                              "sha256":  "1b38cb0234a25ee5fe6da3ee74ffff585c508fb809e3363f4f1ca1f8defb715b"
+                              "sizeBytes":  12814,
+                              "sha256":  "a11488528be5e5523cb99c1f11b2a96807b2a182744afeb7dd0ef8d672b142c7"
                           },
                           {
                               "kind":  "tvSources",
                               "filename":  "docs/TV-sources.md",
-                              "sizeBytes":  11253,
-                              "sha256":  "51376f5338a6768f7d7f5b26a4cb6e7cf25bb86ea07548cfd0173127c60f3fcc"
+                              "sizeBytes":  11396,
+                              "sha256":  "14ddb81d8313f083080a6c417706ca3057502508de02594fd5f85373fd602fee"
                           }
                       ],
     "runtimes":  {
@@ -183,7 +183,20 @@
                           "youtubeRequiresEachParticipantsOwnAccess":  true,
                           "youtubeMinimumVersion":  "2.7.0",
                           "embeddedWebsiteMediaRelayed":  false,
-                          "subscriptionWebsitePlaybackSynchronized":  false
+                          "subscriptionWebsitePlaybackSynchronized":  false,
+                          "chat":  {
+                                       "minimumVersion":  "2.8.0",
+                                       "maximumCharacters":  280,
+                                       "maximumVisibleMessages":  3,
+                                       "displaySeconds":  6,
+                                       "shortcut":  "Ctrl+Alt+C",
+                                       "plainText":  true,
+                                       "clickThrough":  true,
+                                       "incomingMessagesActivateWindow":  false,
+                                       "automaticallySaved":  false,
+                                       "historyReplayedToLateJoiners":  false,
+                                       "localHideOption":  true
+                                   }
                       },
     "verification":  {
                          "installerChecksPassed":  true,
