@@ -1,5 +1,17 @@
 # DMC Player FAQ
 
+## Why did my M3U file open a blank screen?
+
+Before version 2.10, normal file opening handed an M3U container directly to the native player, which could immediately finish without playing its entries. Update to DMC Player 2.10 or later and open the M3U again. A one-video playlist starts its video automatically. A larger playlist opens the saved playlist library so you can select an entry. The original links must still be accessible; DMC cannot renew expired provider links or bypass sign-in requirements.
+
+## How do I build a library from my playlists?
+
+Choose File → Playlist library and import an M3U file or HTTP/HTTPS playlist URL. DMC indexes every supported entry actually listed in that playlist, using its titles and groups, and offers search, source, type and group filters, favourites and double-click playback. Import multiple lists, refresh a source when its entries change, or remove a list without deleting any local media files. The library holds up to 64 lists, 100,000 entries per list and 250,000 entries overall; each imported playlist can be up to 50 MiB. Opening a one-video M3U also saves that entry. A single-video playlist does not describe the provider's wider catalogue; import a complete channel or video list to browse those other items. M3U8 HLS manifests play as one stream and are not indexed into segments. No media files are downloaded into the library and watching does not add anything to your queue.
+
+## Are playlist links and credentials saved?
+
+Imported playlist collections and favourites are saved locally as playlist-library.dat and playlist-favorites.dat in the player data folder, compressed and protected for your Windows user. This includes full source addresses and provider tokens needed to refresh or play your lists. These files are separate from library.json, the optional queue, and the older Live TV channel lists. Opening the library does not refresh remote lists or fetch logo images automatically. Remove a source from the library to remove its saved entries. A disk-full or read-only error leaves the previous saved library intact and makes the new import available for the current session. If you explicitly add an entry to the optional queue, that queue's normal full-address storage applies. Watch together for an ordinary direct stream shares its full address with guests; only share it when you intend friends to receive that address.
+
 ## Why does a live channel freeze, and what should I do?
 
 From version 2.9.1, channels opened through Live TV use a larger adaptive live-stream buffer, with a target delay of about 30 seconds. This gives the player more room to absorb brief network or broadcaster interruptions; it can put the picture further behind the live broadcast. Live HLS downloads have finite connection and idle-read deadlines so an interrupted video segment cannot keep the native player waiting indefinitely. Other files and ordinary on-demand links keep their normal playback settings. If the live picture and playback clock stop advancing, DMC can reopen the selected channel automatically. Recovery respects pause, Stop, source changes and closing the player. It uses up to three attempts in a five-minute window, resetting the budget after a minute of stable playback; if it still fails, press Play to retry. A broadcaster or network outage can still interrupt live TV. Update and reopen Sky News from File → Live TV to use the new settings.

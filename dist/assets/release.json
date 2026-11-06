@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "product":  "DMC Player",
-    "version":  "2.9.1",
-    "preparedAtUtc":  "2026-11-06T02:31:24.6510400Z",
+    "version":  "2.10.0",
+    "preparedAtUtc":  "2026-11-06T02:55:25.5263693Z",
     "platform":  {
                      "operatingSystem":  "Windows",
                      "architecture":  "x64",
@@ -11,9 +11,9 @@
     "files":  [
                   {
                       "kind":  "installer",
-                      "filename":  "DMC-Player-Setup-2.9.1.exe",
-                      "sizeBytes":  113725858,
-                      "sha256":  "b0b2ad6e8920dda619bf6dd2bad5eea01cb4019965582090667c55c0e73f033f",
+                      "filename":  "DMC-Player-Setup-2.10.0.exe",
+                      "sizeBytes":  113757111,
+                      "sha256":  "ccd8caebf06bac2aea5e54d222191e0492561da828754e08af96ade1c4ef01c5",
                       "signed":  false,
                       "signatureStatus":  "NotSigned",
                       "architecture":  "x64",
@@ -21,9 +21,9 @@
                   },
                   {
                       "kind":  "portable",
-                      "filename":  "DMC-Player-2.9.1-win-x64.zip",
-                      "sizeBytes":  136508717,
-                      "sha256":  "6a39abfdcc6bf46b97cc6e018012a2204415655d4eec3befa6a9540e032af850",
+                      "filename":  "DMC-Player-2.10.0-win-x64.zip",
+                      "sizeBytes":  136553265,
+                      "sha256":  "194b6554975aa8540c3ebd55ce865e95d4781d8f3d7c6588acfa3cac7f2e2781",
                       "architecture":  "x64",
                       "installScope":  "none"
                   }
@@ -52,8 +52,8 @@
                           {
                               "kind":  "faq",
                               "filename":  "docs/FAQ.md",
-                              "sizeBytes":  17213,
-                              "sha256":  "30da94c02d8ba8d5b2c5846e98f535076f0f8dac9996a58b9d34db7ae092f5be"
+                              "sizeBytes":  19616,
+                              "sha256":  "6a84e4eacf88dc399c6a0662a127324dfe141ca70f01e61275983c612238f92f"
                           },
                           {
                               "kind":  "tvSources",
@@ -134,6 +134,29 @@
                   "manualQueuesPersist":  true,
                   "legacyAutomaticQueuesRestored":  false
               },
+    "playlistLibrary":  {
+                            "minimumVersion":  "2.10.0",
+                            "m3u":  true,
+                            "m3u8":  true,
+                            "fileAndUrlImport":  true,
+                            "normalFileActivation":  true,
+                            "singleVideoAutoplay":  true,
+                            "hlsManifestsRemainSingleStreams":  true,
+                            "multipleSources":  true,
+                            "groups":  true,
+                            "search":  true,
+                            "typeFilters":  true,
+                            "favourites":  true,
+                            "manualRefresh":  true,
+                            "separateFromPlayQueue":  true,
+                            "automaticMediaDownloads":  false,
+                            "automaticLogoRequests":  false,
+                            "protectedForWindowsUser":  true,
+                            "maximumPlaylistMiB":  50,
+                            "maximumEntriesPerPlaylist":  100000,
+                            "maximumCollections":  64,
+                            "maximumTotalEntries":  250000
+                        },
     "streamingCatalogue":  {
                                "entries":  18,
                                "officialWebsites":  true,

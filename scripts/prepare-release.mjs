@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const websiteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repositoryRoot = path.resolve(websiteRoot, '..');
-const options = { version: '2.9.1', includeDownloads: false, downloadBase: './downloads' };
+const options = { version: '2.10.0', includeDownloads: false, downloadBase: './downloads' };
 for (let index = 2; index < process.argv.length; index++) {
   const argument = process.argv[index];
   if (argument === '--include-downloads') options.includeDownloads = true;
@@ -16,7 +16,7 @@ for (let index = 2; index < process.argv.length; index++) {
     if (!value || value.startsWith('--')) throw new Error(`Missing value for ${argument}.`);
     options[argument === '--version' ? 'version' : 'downloadBase'] = value;
   } else if (argument === '--help') {
-    console.log('Usage: node website/scripts/prepare-release.mjs [--version 2.9.1] [--include-downloads] [--download-base ./downloads|https://host/path]');
+    console.log('Usage: node website/scripts/prepare-release.mjs [--version 2.10.0] [--include-downloads] [--download-base ./downloads|https://host/path]');
     process.exit(0);
   } else throw new Error(`Unknown argument: ${argument}`);
 }
@@ -76,6 +76,7 @@ for (const [filename, alt] of [
   ['dmc-player.png', 'DMC Player main window with file and stream playback controls.'],
   ['dmc-live-tv.png', 'DMC Player direct live TV channels with search, favourites and optional playlist import.'],
   ['dmc-player-queue.png', 'DMC Player with an explicitly chosen play queue.'],
+  ['dmc-playlist-library.png', 'DMC Player playlist library with saved sources, search, groups, favourites and playback controls, using sample entries.'],
 ]) {
   const bytes = await readFile(path.join(repositoryRoot, 'artifacts', filename));
   const dimensions = pngDimensions(bytes);
@@ -128,6 +129,7 @@ const data = {
   fileAssociations: release.fileAssociations,
   viewModes: release.viewModes,
   queue: release.queue,
+  playlistLibrary: release.playlistLibrary,
   streamingCatalogue: release.streamingCatalogue,
   liveTv: release.liveTv,
   addons: release.addons,

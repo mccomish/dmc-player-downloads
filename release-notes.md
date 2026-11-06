@@ -1,40 +1,43 @@
-# DMC Player 2.9.1
+# DMC Player 2.10.0
 
-This update addresses intermittent picture and sound freezes on live TV, including the built-in Sky News channel.
+M3U files now open their actual videos or channels, with a saved playlist library for browsing larger lists. This fixes normal file opening finishing on a blank video surface after handing an M3U container directly to the native engine.
 
-## Live TV playback
+## Open and browse your playlists
 
-- Live channels use a 30-second adaptive buffer target and 3-second network cache to give segment downloads more breathing room. This means the picture can run a little further behind the broadcast.
-- A managed local HLS transport bounds stalled downloads and releases them before the native player stops or reconnects. The original broadcaster address, query parameters, advertising, encryption and adaptive quality selection are retained.
-- If a live channel stops making progress, DMC can reopen the same source. Retries are limited to three within five minutes, with a backoff; a continuing outage asks you to press Play. Pause, Stop, changing source, closing the player or changing rooms cancels a pending retry.
-- Live channels no longer resume at an old DVR position. Explicitly adding a channel to your queue still preserves its live status; watching alone does not automatically add anything to your queue.
-- Watch together passes the live-channel marker to guests and avoids repeatedly seeking their independent live streams. File and on-demand synchronization remains available as before. Update both players to 2.9.1 for this behavior.
+- Open an M3U file, drop it onto DMC or open it from Windows. A one-video list starts its video automatically. A larger list opens the library so you can choose an entry.
+- Choose File > Playlist library to import M3U/M3U8 files or HTTP/HTTPS playlist URLs. Browse saved sources, search the complete imported list, filter by group or media type, save favourites and double-click or press Play.
+- Refresh a source manually when its list changes, or remove it without deleting any media files. Watching remains separate from the optional play queue. Existing queued playlist containers also use the new import route.
+- Names, groups, durations and supported relative paths are read from the list. Films, series, videos, audio and live channels are classified from available metadata. An on-demand MKV with EXTINF:-1 is treated as video, rather than assumed to be live TV.
+- HLS master and segment manifests remain single streams. Their media segments are never turned into library entries. Nested playlist catalogues open in the library; choosing an actual video starts playback.
 
-The managed transport applies to live HTTP/HTTPS links whose path ends in .m3u8, including the current built-in Sky News source. Ordinary files and on-demand streams keep their existing buffering behavior.
+The library contains the entries actually supplied by your playlist. A single-video M3U does not describe a provider's full catalogue; import its complete channel or video list to browse those other items. Source availability, account access and expired links still depend on the provider.
+
+## Storage and limits
+
+Collections and favourites are compressed and protected for the current Windows user in playlist-library.dat and playlist-favorites.dat. These files contain full refresh/playback addresses and any provider tokens. Network errors displayed by the importer omit private addresses. Opening the library does not fetch logos, refresh remote sources or download the media files automatically.
+
+Imports support up to 50 MiB and 100,000 entries per list, with 64 saved lists and 250,000 entries overall. The list is virtualized and searches run off the UI thread. A failed save preserves the previous stored library and offers the new import for the session. An explicit Add current item still uses the queue's normal storage; ordinary direct-stream Watch together still sends the full selected media address to guests.
 
 ## Updating
 
-Use Help > Check for updates or download the installer. Install when ready to close playback, then reopen Sky News from Live TV. Your manual queue, channels, favourites and service sign-ins are retained. Portable users should extract the complete new folder. DMC Player is free to download and use; this installer remains unsigned.
+Use Help > Check for updates or download the installer. Close the older running copy when ready to install, then reopen your M3U. Your existing settings, manual queue, Live TV channels, favourites and service sign-ins are retained. Portable users should extract the complete new folder. DMC Player is free to download and use; this installer remains unsigned.
 
 ## Verification
 
-The existing Sky configuration reproduced a 37.8-second picture freeze and 42.4-second playback-clock freeze during a 210-second native playback test. A 210-second test with the new buffer profile, followed by another 210-second test with the final managed transport, showed no measured picture or clock gap of two seconds or more after startup. The managed run averaged 24.976 displayed frames per second with no lost pictures or audio buffers.
+The reported container failure was reproduced with zero decoded frames and an immediate Ended state. The extracted entry played in a separate 15-second native CPU-decoding probe, presenting 321 pictures with no lost pictures or audio buffers. This was a finite playback check; one native error counter was recorded without capturing private log messages. It does not certify every source, a full film, a particular game or GPU composition.
 
-A controlled interrupted-download test also passed: while the original remote response remained held open, DMC released it, stopped the native player and reopened the same source. Playback time and presented frames resumed. Disposal plus native Stop took 54 ms in that fixture. The old native-only held-response paths remain documented as failing diagnostic baselines.
+- Parser, encrypted store, bounds, source handling and failure preservation: 12/12.
+- Native playlist browser, search, filters, favourites and visible-window lifecycle: 11/11. Normal and minimum layouts were rendered and inspected.
+- Native MainWindow integration: 12/12, including real entry playback, saved reload, HLS separation, nested catalogues, old queue entries and Stop/source-change cancellation.
+- Existing queue: 6/6; view modes: 6/6; Help: 9/9.
+- Live playback integration: 15/15; add-on playback/private sharing: 11/11; YouTube watch sessions: 10/10.
+- Installer extraction/payload: 9/9; release packages: 3/3; website: 12/12.
 
-- Live recovery, buffering and store policy: 22/22.
-- Native MainWindow playback and recovery integration: 15/15.
-- Managed HLS HTTP, cancellation, bounds and request guards: 12/12.
-- Queue: 6/6; add-on playback/private sharing: 11/11.
-- View modes: 6/6; opacity and lock: 8/8.
-- YouTube watch sessions: 10/10; watch/chat protocol: 38/38; Help: 9/9.
-- Installer extraction and payload checks: 9/9; release package checks: 3/3.
-
-Native tests used isolated stores and unshown windows or timed dummy video/audio outputs. They do not certify GPU composition over a particular game, another household's connection, every channel or future broadcaster availability. Internet and broadcaster outages can still interrupt playback.
+Fixtures used isolated stores, loopback media/rooms, dummy video/audio and normally unshown native windows, with one controlled offscreen browser lifecycle fixture. Tests did not install a runtime, change Windows defaults, access a user account or interrupt the user's player. The website retains its existing design and small download counter, with new library instructions, a native screenshot and updated FAQ/privacy information.
 
 ## SHA-256
 
 ```text
-b0b2ad6e8920dda619bf6dd2bad5eea01cb4019965582090667c55c0e73f033f  DMC-Player-Setup-2.9.1.exe
-6a39abfdcc6bf46b97cc6e018012a2204415655d4eec3befa6a9540e032af850  DMC-Player-2.9.1-win-x64.zip
+ccd8caebf06bac2aea5e54d222191e0492561da828754e08af96ade1c4ef01c5  DMC-Player-Setup-2.10.0.exe
+194b6554975aa8540c3ebd55ce865e95d4781d8f3d7c6588acfa3cac7f2e2781  DMC-Player-2.10.0-win-x64.zip
 ```

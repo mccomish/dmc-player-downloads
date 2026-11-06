@@ -313,6 +313,13 @@ await check('published_claims_preserve_known_limits', async () => {
     && release.watchTogether.chat?.incomingMessagesActivateWindow === false && release.watchTogether.chat?.automaticallySaved === false
     && release.watchTogether.chat?.historyReplayedToLateJoiners === false, 'Release metadata must describe temporary, nonactivating room chat.');
   requireValue(release.queue?.normalOpensAddItems === false && release.queue?.automaticWatchHistory === false && release.queue?.explicitAddRequired === true, 'Manual queue/no-history semantics are missing.');
+  requireValue(release.playlistLibrary?.minimumVersion === '2.10.0' && release.playlistLibrary?.singleVideoAutoplay === true
+    && release.playlistLibrary?.hlsManifestsRemainSingleStreams === true && release.playlistLibrary?.protectedForWindowsUser === true
+    && release.playlistLibrary?.automaticMediaDownloads === false && release.playlistLibrary?.separateFromPlayQueue === true,
+    'The playlist library metadata must describe the shipped 2.10 behavior.');
+  requireValue(JSON.stringify(releaseData.playlistLibrary) === JSON.stringify(release.playlistLibrary), 'Public playlist metadata differs from the canonical release.');
+  const playlistCopy = visibleText(pages.get(resolve(dist, 'live-tv.html')).document);
+  requireValue(playlistCopy.includes('File → Playlist library') && playlistCopy.includes('one-video playlist') && playlistCopy.includes('complete channel or film list'), 'Playlist instructions must distinguish single-video lists from a complete catalogue.');
   requireValue(release.files.find(file => file.kind === 'installer')?.signed === false, 'Installer signature status is incorrect.');
   requireValue(/60(?:[\s-]+minute|\s*minutes|\s*min)/i.test(combinedContent), 'The user-facing content omits the free relay session limit.');
   requireValue(/unsigned|not (?:code[- ]?)?signed/i.test(combinedContent), 'The user-facing content omits the unsigned build status.');
