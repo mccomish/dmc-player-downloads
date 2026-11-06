@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "product":  "DMC Player",
-    "version":  "2.10.3",
-    "preparedAtUtc":  "2026-11-06T11:08:44.3107938Z",
+    "version":  "2.10.4",
+    "preparedAtUtc":  "2026-11-06T11:57:31.3165651Z",
     "platform":  {
                      "operatingSystem":  "Windows",
                      "architecture":  "x64",
@@ -11,9 +11,9 @@
     "files":  [
                   {
                       "kind":  "installer",
-                      "filename":  "DMC-Player-Setup-2.10.3.exe",
-                      "sizeBytes":  113846762,
-                      "sha256":  "e5a5bcb95f3964fffaaf6a197e2383af1dd8480087d0b27cdacebb3788ec42d3",
+                      "filename":  "DMC-Player-Setup-2.10.4.exe",
+                      "sizeBytes":  113856214,
+                      "sha256":  "094cc416036e7b9d098b64cb7a3f2b641932b3dfd504b09564e483244000e1b4",
                       "signed":  false,
                       "signatureStatus":  "NotSigned",
                       "architecture":  "x64",
@@ -21,9 +21,9 @@
                   },
                   {
                       "kind":  "portable",
-                      "filename":  "DMC-Player-2.10.3-win-x64.zip",
-                      "sizeBytes":  136668902,
-                      "sha256":  "0cd5b3256547d02c0951c064af82e6fffd36f148c84ea679e1ca53cde3948858",
+                      "filename":  "DMC-Player-2.10.4-win-x64.zip",
+                      "sizeBytes":  136679914,
+                      "sha256":  "6105118dd86edde3c21715ad7511274aad56b9a2eb32a1ac399f447711af6f7f",
                       "architecture":  "x64",
                       "installScope":  "none"
                   }
@@ -52,8 +52,8 @@
                           {
                               "kind":  "faq",
                               "filename":  "docs/FAQ.md",
-                              "sizeBytes":  20726,
-                              "sha256":  "ad9ff37d3a866956a50c5b1d76e15b535bc4791d8ad1d4a0474eca0dde47f4c2"
+                              "sizeBytes":  21463,
+                              "sha256":  "cddc3ca981f3390073642c402088ee5df868beb14e448d1714dcbc539ec7ab70"
                           },
                           {
                               "kind":  "tvSources",
@@ -212,8 +212,15 @@
                                     "stalledPlaybackRecovery":  true,
                                     "startupGraceSeconds":  30,
                                     "stallThresholdSeconds":  12,
-                                    "maximumRecoveryAttempts":  3,
-                                    "retryWindowMinutes":  5,
+                                    "continuityMinimumVersion":  "2.10.4",
+                                    "rapidRecoveryAttempts":  3,
+                                    "cooldownRetrySeconds":  30,
+                                    "continuousReconnect":  true,
+                                    "liveHlsClassification":  true,
+                                    "finiteVideoPrematureEndRecovery":  true,
+                                    "seekableVideoPositionResume":  true,
+                                    "naturalVodEndFinishes":  true,
+                                    "opaqueStreamLiveModeMenu":  "Playback \u003e Live stream mode",
                                     "stablePlaybackResetsBudgetSeconds":  60,
                                     "pauseAndStopCancelRecovery":  true,
                                     "liveDvrResume":  false,

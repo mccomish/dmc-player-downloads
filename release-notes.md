@@ -1,13 +1,15 @@
-# DMC Player 2.10.3
+# DMC Player 2.10.4
 
-Double-click the video to enter fullscreen, then double-click again to return to the normal window. There is also a fullscreen button on the main toolbar and a small button that appears over the picture when you move the mouse.
+Dropped native streams now reconnect instead of being treated as finished playback. The empty native video surface also stays black while the decoder reconnects, removing the white screen and placeholder caption.
 
-- Fullscreen playback now has a timeline with elapsed time and total duration. Click or drag to choose the part of a seekable movie you want to watch.
-- The fullscreen dock includes play/pause, back/forward, volume and an exit button. It hides after about 2.5 seconds of inactivity and stays available while you use it or drag the timeline.
-- F11, Escape and the right-click fullscreen command remain available. Mini mode keeps double-click-to-restore, resizing and click-through locking.
-- Embedded browser fullscreen selects the video/player container where supported. YouTube uses its movie player rather than leaving the watch-page sidebars on screen.
-- Accessible website media can use the DMC timeline. For live, unseekable or inaccessible media, DMC leaves the provider's bottom controls clear and offers a small exit button instead.
-- Seeks respect Watch together permissions, and a drag from an older source cannot seek a newly opened movie. Opening the player retains the background playback initialization and prepared VLC cache introduced in 2.10.2.
+- Live channels reconnect after unexpected EOF, an error or a sustained playback stall. Initial quick retries change to a 30-second cooldown after repeated failures, and continue while the source is still selected. A minute of stable playback restores quick retries.
+- Direct live HLS and master links carry confirmed live metadata into native playback. One bounded variant probe distinguishes a master from its media playlist without changing the original playback URL or adaptive quality selection.
+- A finite remote movie that stops well before its known ending can reopen and resume its last confirmed position when seeking is supported. Natural movie endings still finish normally and advance only an explicit queue. A clean EOF with no known duration remains a normal ending rather than guessing that every source is live.
+- Playback > Live stream mode gives opaque TV/radio links an explicit continuous-playback mode. Leave it off for movies. Explicit film/episode intent is retained through HLS inspection, manual queue copies and saved settings.
+- Pause, Stop, source changes, browser mode, watch-session changes and closing invalidate pending retries. Pausing during native startup is honoured, and an unusable pending resume cannot disable recovery indefinitely.
+- A previous stream cannot cancel a newly chosen playlist while classification is pending. Timing samples continue during that wait so an ordinary movie's ending is still handled correctly.
+
+Add-on playback and service websites retain their existing paths. Reconnecting cannot renew an expired provider URL or make an unavailable source respond; those links may need replacing. No video quality is deliberately reduced.
 
 ## Updating
 
@@ -15,17 +17,15 @@ Use Help > Check for updates, or download the installer. Close the older player 
 
 ## Verification
 
-- Native video input: 17 checks, including renderer-child double-clicks, mini restore, click-through and stale-window guards.
-- Fullscreen dock: 10 checks, including timeline commits/cancellation, live states, DPI positioning and rendered layouts.
-- Fullscreen integration: 8 checks, including real native movie seeking, source-change cancellation, hover timing, button routing and window restoration.
-- Existing mini controls, view modes, right-click menus, Help, startup and YouTube Watch together: 78 regression checks.
-- Browser timeline/fullscreen: 15 checks using owned local/intercepted media, including actual content-player HTML fullscreen, seeking, ad guards and iframe fallback.
+Controlled native tests cut a finite HTTP movie before its ending, observed real VLC EndReached without a native error, reopened the same source and resumed the remembered position. Full finite and unknown-duration media were also played to natural EOF and verified not to reopen.
 
-These use isolated temporary profiles, hidden/offscreen owned windows and local or intercepted media. No protected-video capture, forged trusted browser input, user-profile changes or Windows-default changes were used. Provider support still depends on its page, accessible media and playback rules. Installer extraction, release hashes, the deployed download pages and update feed are verified separately.
+Other checks cover live cooldown retries, actual live HLS/master reconnection, persisted film/episode intent, queue preservation, deferred source choices, late Pause, unseekable reconnects and version/intent cancellation fences. Repeated real loopback HTTP failures were paired with a supplied monotonic scheduling clock to verify retries beyond the rapid stage; these are controlled fault tests, not a ten-minute real-broadcaster endurance claim. All fixtures use owned local/intercepted media, temporary stores/profiles and hidden/offscreen windows. No user source, credentials, Windows defaults or ongoing playback was changed during testing.
+
+The fullscreen controls and background playback initialization from the previous releases are retained. Installer extraction, every portable payload hash, the public downloads and the deployed update feed are verified separately.
 
 ## SHA-256
 
 ```text
-e5a5bcb95f3964fffaaf6a197e2383af1dd8480087d0b27cdacebb3788ec42d3  DMC-Player-Setup-2.10.3.exe
-0cd5b3256547d02c0951c064af82e6fffd36f148c84ea679e1ca53cde3948858  DMC-Player-2.10.3-win-x64.zip
+094cc416036e7b9d098b64cb7a3f2b641932b3dfd504b09564e483244000e1b4  DMC-Player-Setup-2.10.4.exe
+6105118dd86edde3c21715ad7511274aad56b9a2eb32a1ac399f447711af6f7f  DMC-Player-2.10.4-win-x64.zip
 ```
