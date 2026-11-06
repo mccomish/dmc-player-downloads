@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "product": "DMC Player",
-  "version": "2.10.0",
-  "preparedAtUtc": "2026-11-06T02:55:25.5263693Z",
-  "generatedAtUtc": "2026-11-06T02:55:45.505Z",
+  "version": "2.10.1",
+  "preparedAtUtc": "2026-11-06T03:44:53.2020338Z",
+  "generatedAtUtc": "2026-11-06T03:45:19.443Z",
   "platform": {
     "operatingSystem": "Windows",
     "architecture": "x64",
@@ -12,25 +12,25 @@
   "files": [
     {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.10.0.exe",
-      "sizeBytes": 113757111,
-      "sha256": "ccd8caebf06bac2aea5e54d222191e0492561da828754e08af96ade1c4ef01c5",
+      "filename": "DMC-Player-Setup-2.10.1.exe",
+      "sizeBytes": 113759969,
+      "sha256": "e12d00b4595bcb80b5f58add338c9817b0d2ebc2a90e1277e434eab41d742c2c",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.0/DMC-Player-Setup-2.10.0.exe",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.1/DMC-Player-Setup-2.10.1.exe",
       "sizeMiB": 108.5,
       "sizeLabel": "113.8 MB"
     },
     {
       "kind": "portable",
-      "filename": "DMC-Player-2.10.0-win-x64.zip",
-      "sizeBytes": 136553265,
-      "sha256": "194b6554975aa8540c3ebd55ce865e95d4781d8f3d7c6588acfa3cac7f2e2781",
+      "filename": "DMC-Player-2.10.1-win-x64.zip",
+      "sizeBytes": 136557272,
+      "sha256": "9f0ca01c806e8c75e40cecac88190589352d9083a8432b11ac7dc2458198213f",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.0/DMC-Player-2.10.0-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.1/DMC-Player-2.10.1-win-x64.zip",
       "sizeMiB": 130.2,
       "sizeLabel": "136.6 MB"
     }
@@ -38,25 +38,25 @@
   "downloads": {
     "installer": {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.10.0.exe",
-      "sizeBytes": 113757111,
-      "sha256": "ccd8caebf06bac2aea5e54d222191e0492561da828754e08af96ade1c4ef01c5",
+      "filename": "DMC-Player-Setup-2.10.1.exe",
+      "sizeBytes": 113759969,
+      "sha256": "e12d00b4595bcb80b5f58add338c9817b0d2ebc2a90e1277e434eab41d742c2c",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.0/DMC-Player-Setup-2.10.0.exe",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.1/DMC-Player-Setup-2.10.1.exe",
       "sizeMiB": 108.5,
       "sizeLabel": "113.8 MB"
     },
     "portable": {
       "kind": "portable",
-      "filename": "DMC-Player-2.10.0-win-x64.zip",
-      "sizeBytes": 136553265,
-      "sha256": "194b6554975aa8540c3ebd55ce865e95d4781d8f3d7c6588acfa3cac7f2e2781",
+      "filename": "DMC-Player-2.10.1-win-x64.zip",
+      "sizeBytes": 136557272,
+      "sha256": "9f0ca01c806e8c75e40cecac88190589352d9083a8432b11ac7dc2458198213f",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.0/DMC-Player-2.10.0-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.10.1/DMC-Player-2.10.1-win-x64.zip",
       "sizeMiB": 130.2,
       "sizeLabel": "136.6 MB"
     }
@@ -167,6 +167,9 @@
   },
   "viewModes": {
     "contextMenu": true,
+    "contextMenuVisualRefresh": "2.10.1",
+    "groupedContextCommands": true,
+    "customNativePopupFrame": true,
     "fullScreen": true,
     "fullScreenShortcut": "F11",
     "exitFullScreenShortcut": "Escape",
@@ -315,7 +318,7 @@
     "portablePayloadVerified": true,
     "method": "Extraction and hashes; no application/runtime installation or system-default changes",
     "sourceFilesVerified": 9,
-    "releaseManifestSha256": "5a6ef8753111104b2bb91925016800423c5ade55f41b4886121c4d4be9c8eaa3",
-    "checksumFileSha256": "73cb8f0d07332274af45a48ed2c25873a1cd774d0db18aa58ac2f1273222b03a"
+    "releaseManifestSha256": "6e303049fb11c06b550d072ec1ec000aeeb77177fa22c1efa12503d25d0f8a22",
+    "checksumFileSha256": "1b51c18fa289d6b219eba8d715834074a601937815298558471fd2ca03ac1ab8"
   }
 }
