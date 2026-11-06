@@ -19,7 +19,6 @@ const fixture = () => {
   };
   const element = {
     querySelector: selector => nodes[selector],
-    style: { setProperty(name, value) { this[name] = value; } },
     ownerDocument: { createElement(name) { return { name, attributes: {}, setAttribute(key, value) { this.attributes[key] = value; } }; } }
   };
   return { element, nodes, total: nodes['[data-download-total]'], checked: nodes['[data-download-checked]'], status: nodes['[data-download-status]'] };
@@ -132,7 +131,6 @@ await check('The visible total and UK checked time update once per page without 
   await first;
   assert.equal(calls, 1);
   assert.equal(dom.total.textContent, '12,345');
-  assert.equal(dom.element.style['--download-digits'], '6');
   assert.match(dom.checked.textContent, /^Checked 6 Nov 2026, 10:15 GMT$/);
   assert.equal(dom.checked.children[1].name, 'time');
   assert.equal(dom.checked.children[1].attributes.datetime, checkedAt);

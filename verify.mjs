@@ -290,6 +290,10 @@ await check('homepage_download_counter_matches_checked_snapshot', async () => {
   const home = pages.get(resolve(dist, 'index.html'))?.document ?? '';
   const output = home.match(/<output\b[^>]*data-download-total[^>]*>([^<]+)<\/output>/i);
   requireValue(output && decodeEntities(output[1]).trim() === formatDownloadTotal(snapshot.total), 'Homepage download fallback does not match its verified snapshot.');
+  const hero = home.match(/<section\b[^>]*class="home-hero shell"[\s\S]*?<\/section>/i)?.[0] ?? '';
+  requireValue(hero.includes('class="download-counter-inline"') && hero.includes('data-download-counter'), 'The compact download counter must appear near the download action in the homepage hero.');
+  requireValue(!/<section\b[^>]*data-download-counter/i.test(home) && !home.includes('--download-digits'), 'The old full-width download counter must not return.');
+  requireValue(/<details\b[^>]*class="download-counter-details"[\s\S]*?<summary>About the count<\/summary>/i.test(hero), 'The counter source and check time must be available in its compact details.');
   requireValue(home.includes(snapshot.checkedAt) && home.includes('data-download-checked'), 'Homepage download total must include its check time.');
   requireValue(/Repeat downloads are included/i.test(home) && /as reported by GitHub/i.test(home), 'The counter must explain its source and repeat-download semantics.');
   requireValue(/<script\b[^>]*type="module"[^>]*src="\.\/download-count\.mjs\?v=[a-f\d]+"/i.test(home), 'The homepage download counter module is missing.');
