@@ -1,45 +1,40 @@
-﻿# DMC Player 2.9.0
+# DMC Player 2.9.1
 
-Browse films and TV episodes, install compatible add-ons and play direct or torrent video sources inside DMC Player.
+This update addresses intermittent picture and sound freezes on live TV, including the built-in Sky News channel.
 
-## Films, TV and add-ons
+## Live TV playback
 
-- Open File > Films & TV / add-ons. Choose a catalogue, search, select a film or episode, choose a source and press Play.
-- DMC Open Films includes Sintel, Tears of Steel and a clearly labelled Big Buck Bunny trailer, with Blender credits.
-- Add film & TV catalogue installs optional Cinemeta metadata. Metadata alone does not supply streams; install your configured source add-ons separately.
-- Paste an HTTPS manifest.json or stremio:// link, check its preview and install. Enable, refresh or remove installed add-ons in the same window.
-- The native player supports direct HTTP/HTTPS video, YouTube video results and BitTorrent v1 info-hash/magnet sources with file selection. Existing mini, fullscreen, volume and click-through controls apply.
-- This is DMC's own browser and playback integration. It does not bundle the Torrentio service, a movie/TV torrent index, subscriptions or a resolver account. Custom-header sources, archives, DRM, external-player results and unsupported filters are not supported.
-- Add-on configuration is encrypted for the Windows user in addons.dat. Add-on selections are temporary and stay out of the queue/history; Add current item does not save them.
+- Live channels use a 30-second adaptive buffer target and 3-second network cache to give segment downloads more breathing room. This means the picture can run a little further behind the broadcast.
+- A managed local HLS transport bounds stalled downloads and releases them before the native player stops or reconnects. The original broadcaster address, query parameters, advertising, encryption and adaptive quality selection are retained.
+- If a live channel stops making progress, DMC can reopen the same source. Retries are limited to three within five minutes, with a backoff; a continuing outage asks you to press Play. Pause, Stop, changing source, closing the player or changing rooms cancels a pending retry.
+- Live channels no longer resume at an old DVR position. Explicitly adding a channel to your queue still preserves its live status; watching alone does not automatically add anything to your queue.
+- Watch together passes the live-channel marker to guests and avoids repeatedly seeking their independent live streams. File and on-demand synchronization remains available as before. Update both players to 2.9.1 for this behavior.
 
-## Torrent playback and sharing
-
-The selected video streams through a piece-aware local endpoint into VLC. Seeking waits for the required pieces. Sources need available peers and disk space; the current limits are 32 GiB for the selected video and 64 GiB for the torrent.
-
-BitTorrent uses peer-to-peer connections. Peers and trackers can see your IP address and torrent activity, and uploading can occur while the video is open, including while paused. Stop, source change, playback end, decode failure or app close stops the engine and removes its owned cache. Marked inactive cache folders left after a crash are cleaned on the next torrent start. DMC is not a VPN. Use content and sources you are entitled to access.
-
-Selected add-on video files can use Watch together. The host proxies video through the existing encrypted room without sending configured add-on addresses or signed media URLs to guests. HLS/DASH/PLS playlists are rejected for this sharing route. Ordinary direct links opened outside the add-on browser still share their full address. YouTube results retain independent YouTube playback synchronization.
+The managed transport applies to live HTTP/HTTPS links whose path ends in .m3u8, including the current built-in Sky News source. Ordinary files and on-demand streams keep their existing buffering behavior.
 
 ## Updating
 
-Download the installer or use Help > Check for updates from version 2.6 or later. Install when ready to close playback. Your manual queue, TV channels, favourites and service sign-ins are retained. The installer remains unsigned. DMC Player is free to download and use.
-
-The website now has a Films & TV guide, a native browser screenshot, updated FAQ/privacy information and the 2.9 update feed. The download counter and gameplay demo are retained.
+Use Help > Check for updates or download the installer. Install when ready to close playback, then reopen Sky News from Live TV. Your manual queue, channels, favourites and service sign-ins are retained. Portable users should extract the complete new folder. DMC Player is free to download and use; this installer remains unsigned.
 
 ## Verification
 
-- Add-on backend: 15/15; real Cinemeta manifest/catalogue/search/episode protocol: 17/17.
-- Native browser UI: 8/8; torrent streaming: 24/24, including actual VLC decoding and seeking from a locally seeded MP4.
-- Native playback/private sharing and playlist/error guards: 11/11.
-- Optional queue: 6/6; window modes: 6/6; native opacity/lock: 8/8.
-- YouTube watch sessions: 10/10; watch/chat protocol: 38/38; Help: 9/9.
-- Installer: 9/9; release packages: 3/3; website: 12/12; download counter: 11/11; gameplay controls: 13/13.
+The existing Sky configuration reproduced a 37.8-second picture freeze and 42.4-second playback-clock freeze during a 210-second native playback test. A 210-second test with the new buffer profile, followed by another 210-second test with the final managed transport, showed no measured picture or clock gap of two seconds or more after startup. The managed run averaged 24.976 displayed frames per second with no lost pictures or audio buffers.
 
-Tests used isolated local stores, loopback peers/rooms and unshown UI fixtures. They do not certify every third-party add-on, a public torrent swarm, another household, a specific game or DRM-protected playback. Native browser layout was rendered and inspected; website visual preview infrastructure was unavailable. Free test-relay sessions remain limited to up to 60 minutes with no availability guarantee.
+A controlled interrupted-download test also passed: while the original remote response remained held open, DMC released it, stopped the native player and reopened the same source. Playback time and presented frames resumed. Disposal plus native Stop took 54 ms in that fixture. The old native-only held-response paths remain documented as failing diagnostic baselines.
+
+- Live recovery, buffering and store policy: 22/22.
+- Native MainWindow playback and recovery integration: 15/15.
+- Managed HLS HTTP, cancellation, bounds and request guards: 12/12.
+- Queue: 6/6; add-on playback/private sharing: 11/11.
+- View modes: 6/6; opacity and lock: 8/8.
+- YouTube watch sessions: 10/10; watch/chat protocol: 38/38; Help: 9/9.
+- Installer extraction and payload checks: 9/9; release package checks: 3/3.
+
+Native tests used isolated stores and unshown windows or timed dummy video/audio outputs. They do not certify GPU composition over a particular game, another household's connection, every channel or future broadcaster availability. Internet and broadcaster outages can still interrupt playback.
 
 ## SHA-256
 
 ```text
-533a2a456e2fd171d704755b97260a354082390cade8f58d1182b87f17965430  DMC-Player-Setup-2.9.0.exe
-d02690696caec1a94328e11d69d7eea14c88eea619eec9d353731467d52aeb95  DMC-Player-2.9.0-win-x64.zip
+b0b2ad6e8920dda619bf6dd2bad5eea01cb4019965582090667c55c0e73f033f  DMC-Player-Setup-2.9.1.exe
+6a39abfdcc6bf46b97cc6e018012a2204415655d4eec3befa6a9540e032af850  DMC-Player-2.9.1-win-x64.zip
 ```

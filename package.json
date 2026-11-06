@@ -1,7 +1,7 @@
 {
   "name": "dmc-player-downloads",
   "private": true,
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "Static download website for DMC Player",
   "scripts": {
     "build": "node scripts/build-pages.mjs",
