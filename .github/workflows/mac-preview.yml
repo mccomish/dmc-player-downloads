@@ -67,6 +67,10 @@ jobs:
           lines = (pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-build-private.log').read_text(errors='replace').splitlines()
           messages = [line for line in lines if re.search(r'\.swift:\d+:\d+: (?:error|warning):', line) or re.match(r'(?:ERROR|Error|FAILED|FAIL|error:)',line)]
           print('\n'.join(messages[-60:]) if messages else 'Mac build or native verification failed; full compiler output was kept private.')
+          import json
+          for report in (pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-mac-output').glob('*.json'):
+            data=json.loads(report.read_text())
+            print(json.dumps({'report':report.name,'pass':data.get('pass'),'architecture':data.get('architecture'),'checks':[{'name':c.get('name'),'pass':c.get('pass')} for c in data.get('checks',[])]}))
           PY
             exit 1
           fi
@@ -154,6 +158,10 @@ jobs:
           lines=(pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-intel-private.log').read_text(errors='replace').splitlines()
           messages=[line for line in lines if re.search(r'\.swift:\d+:\d+: (?:error|warning):',line) or re.match(r'(?:ERROR|Error|FAILED|FAIL|error:)',line)]
           print('\n'.join(messages[-60:]) if messages else 'Intel native verification failed; full compiler output was kept private.')
+          import json
+          for report in (pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-mac-intel-output').glob('*.json'):
+            data=json.loads(report.read_text())
+            print(json.dumps({'report':report.name,'pass':data.get('pass'),'architecture':data.get('architecture'),'checks':[{'name':c.get('name'),'pass':c.get('pass')} for c in data.get('checks',[])]}))
           PY
             exit 1
           fi
