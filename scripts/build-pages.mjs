@@ -7,7 +7,7 @@ import { productAbout } from './product-about.mjs';
 import { playerDemo } from './demo-gallery.mjs';
 import { addonsPage } from './addons-page.mjs';
 import { homePage } from './home-page.mjs';
-import { validateSnapshot, formatDownloadTotal, formatCheckedAt, RELEASES_URL } from '../dist/download-count.mjs';
+import { validateSnapshot, formatDownloadTotal, formatCheckedAt } from '../dist/download-count.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
@@ -27,7 +27,7 @@ function download(kind='installer', label='Download for Windows', classes='butto
   return `<a class="${classes}" data-download="${kind}" href="${escape(release.downloads[kind].url)}">${down}<span>${label}</span></a>`;
 }
 function downloadCounter() {
-  return `<div class="download-counter-inline" id="download-count" data-download-counter role="group" aria-label="Download count"><span class="download-count-label"><output data-download-total aria-live="polite" aria-atomic="true" aria-label="Total package downloads">${escape(downloadTotal)}</output> downloads</span><details class="download-counter-details"><summary>About the count</summary><div class="download-counter-info"><p>Installer and portable downloads across all public releases, as reported by GitHub. Repeat downloads are included.</p><a data-download-source href="${RELEASES_URL}">GitHub releases ${arrow}</a><p data-download-status>Total reported by GitHub</p><p data-download-checked>Checked <time datetime="${escape(downloadStats.checkedAt)}">${escape(formatCheckedAt(downloadStats.checkedAt))}</time></p></div></details></div>`;
+  return `<p class="download-counter-inline" id="download-count" data-download-counter role="group" aria-label="Download count" title="Installer and portable downloads reported by GitHub, including repeat downloads."><output data-download-total aria-live="polite" aria-atomic="true" aria-label="Total package downloads">${escape(downloadTotal)}</output> downloads<span hidden data-download-status>Total reported by GitHub</span><span hidden data-download-checked>Checked <time datetime="${escape(downloadStats.checkedAt)}">${escape(formatCheckedAt(downloadStats.checkedAt))}</time></span></p>`;
 }
 function header(page) {
   return `<a class="skip" href="#main">Skip to content</a><header class="site-header"><div class="shell header-inner"><a class="brand" href="./index.html" aria-label="DMC Player home"><img src="./assets/dmc-mark.svg" alt="" width="32" height="32"><span>DMC <b>Player</b></span></a><span class="header-free">Free for Windows</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav"><span>Menu</span><i aria-hidden="true"></i></button><nav class="main-nav" id="main-nav" aria-label="Main navigation">${links.filter(([url])=>url!=='index.html').map(([url,label])=>`<a href="./${url}"${url===page?' aria-current="page"':''}${url==='download.html'?' class="nav-download"':''}>${label}${url==='download.html'?' '+arrow:''}</a>`).join('')}</nav></div></header>`;

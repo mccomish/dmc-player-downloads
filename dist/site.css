@@ -67,14 +67,9 @@ kbd{display:inline-block;padding:3px 6px;border:1px solid #52606b;border-radius:
 .hero-meta span+span:before{content:"·";margin-right:13px}
 .product-note{margin-top:16px;color:var(--soft);font-size:13px}
 .product-note a{text-decoration:underline;text-underline-offset:3px}
-.download-counter-inline{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 14px;margin-top:14px;color:var(--muted);font-size:13px;line-height:1.6}
+.download-counter-inline{display:block;width:fit-content;max-width:100%;margin:12px 0 0;padding:0;border:0;background:none;color:var(--muted);font-size:12px;line-height:18px}
 .download-counter-inline output{display:inline;margin:0;padding:0;font-family:inherit;font-size:inherit;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;line-height:inherit;letter-spacing:0;white-space:normal}
-.download-counter-inline a{color:var(--muted);text-decoration:underline;text-underline-offset:3px}
-.download-counter-inline details{color:var(--muted);font-size:12px}
-.download-counter-inline summary{cursor:pointer;color:var(--soft)}
-.download-counter-inline details[open]{flex-basis:100%;max-width:440px;padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:7px}
-.download-counter-inline details p{margin-top:7px}
-.download-counter-inline time{white-space:normal}
+.download-counter-inline [hidden]{display:none}
 .game-demo{min-width:0;overflow:hidden;background:#171d22;color:var(--ink);border:1px solid #39434b;border-radius:10px}
 .demo-caption{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 14px;font-size:12px;line-height:1.5;font-weight:500}
 .demo-caption>span:last-child{color:var(--soft);font-size:11px;font-weight:400}
@@ -390,7 +385,7 @@ h2{font-size:28px}
 .hero-actions{margin-top:21px}
 .hero-meta{gap:6px 11px;font-size:12px}
 .hero-meta span+span:before{margin-right:10px}
-.download-counter-inline{font-size:13px}
+.download-counter-inline{font-size:12px}
 .game-demo{max-width:640px;width:100%;justify-self:center}
 .demo-stage,.feature-demo-wrap .demo-stage{height:300px}
 .game-demo figcaption{display:block}

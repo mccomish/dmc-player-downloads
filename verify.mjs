@@ -293,9 +293,11 @@ await check('homepage_download_counter_matches_checked_snapshot', async () => {
   const hero = home.match(/<section\b[^>]*class="home-hero shell"[\s\S]*?<\/section>/i)?.[0] ?? '';
   requireValue(hero.includes('class="download-counter-inline"') && hero.includes('data-download-counter'), 'The compact download counter must appear near the download action in the homepage hero.');
   requireValue(!/<section\b[^>]*data-download-counter/i.test(home) && !home.includes('--download-digits'), 'The old full-width download counter must not return.');
-  requireValue(/<details\b[^>]*class="download-counter-details"[\s\S]*?<summary>About the count<\/summary>/i.test(hero), 'The counter source and check time must be available in its compact details.');
+  const counter = hero.match(/<p\b[^>]*class="download-counter-inline"[^>]*>[\s\S]*?<\/p>/i)?.[0] ?? '';
+  requireValue(counter && !counter.includes('<details') && /<span hidden data-download-status>/.test(counter)
+    && /<span hidden data-download-checked>/.test(counter), 'The download counter must remain one small line with its metadata hidden.');
   requireValue(home.includes(snapshot.checkedAt) && home.includes('data-download-checked'), 'Homepage download total must include its check time.');
-  requireValue(/Repeat downloads are included/i.test(home) && /as reported by GitHub/i.test(home), 'The counter must explain its source and repeat-download semantics.');
+  requireValue(/repeat downloads/i.test(counter) && /reported by GitHub/i.test(counter), 'The counter tooltip must explain its source and repeat-download semantics.');
   requireValue(/<script\b[^>]*type="module"[^>]*src="\.\/download-count\.mjs\?v=[a-f\d]+"/i.test(home), 'The homepage download counter module is missing.');
   for (const { filename, document } of pages.values())
     if (filename !== 'index.html') requireValue(!document.includes('data-download-counter'), `${filename}: the homepage-only counter was duplicated.`);

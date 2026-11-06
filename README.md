@@ -28,7 +28,7 @@ The second command checks the gameplay carousel's navigation, active-video playb
 
 ## Homepage download counter
 
-The large homepage total sums GitHub's `download_count` for installer and portable package assets across published releases, including prereleases. It includes repeat, update and automated verification downloads. It does not count page views, unique users, installed copies, checksum files, source archives, or downloads shared outside GitHub. Removing or replacing release assets can remove their counts from the current GitHub total.
+The small line beneath the homepage Download button sums GitHub's `download_count` for installer and portable package assets across published releases, including prereleases. It includes repeat, update and automated verification downloads. It does not count page views, unique users, installed copies, checksum files, source archives, or downloads shared outside GitHub. Removing or replacing release assets can remove their counts from the current GitHub total.
 
 `dist/download-count.mjs` requests the public GitHub API once per homepage view, follows pagination and updates the number only after the complete response has been validated. It sends no account credentials or referrer, stores nothing in the browser, and does not track download-button clicks. A dated number is built into the HTML as a fallback for API errors, rate limits, disabled JavaScript or unavailable live metadata. GitHub controls how quickly its source counts update.
 
