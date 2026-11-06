@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "total": 30,
-  "checkedAt": "2026-11-06T00:44:36.525Z",
+  "total": 31,
+  "checkedAt": "2026-11-06T01:12:53.737Z",
   "repo": "mccomish/dmc-player-downloads",
   "releaseCount": 6,
   "packageCount": 12,
@@ -9,7 +9,7 @@
     {
       "releaseId": 435934587,
       "tag": "v2.8.0",
-      "total": 4,
+      "total": 5,
       "packages": [
         {
           "id": 715351235,
@@ -19,7 +19,7 @@
         {
           "id": 715351226,
           "name": "DMC-Player-Setup-2.8.0.exe",
-          "downloads": 2
+          "downloads": 3
         }
       ]
     },

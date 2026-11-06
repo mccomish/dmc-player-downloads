@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const websiteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repositoryRoot = path.resolve(websiteRoot, '..');
-const options = { version: '2.8.0', includeDownloads: false, downloadBase: './downloads' };
+const options = { version: '2.9.0', includeDownloads: false, downloadBase: './downloads' };
 for (let index = 2; index < process.argv.length; index++) {
   const argument = process.argv[index];
   if (argument === '--include-downloads') options.includeDownloads = true;
@@ -130,6 +130,7 @@ const data = {
   queue: release.queue,
   streamingCatalogue: release.streamingCatalogue,
   liveTv: release.liveTv,
+  addons: release.addons,
   updates: release.updates,
   watchTogether: release.watchTogether,
   verification: {

@@ -12,7 +12,7 @@ const args = process.argv.slice(2);
 const allowUnpublished = args.includes('--allow-unpublished-downloads');
 const checkRemote = args.includes('--check-remote');
 const requireUpdateManifest = args.includes('--require-update-manifest');
-const requiredPages = ['index.html', 'features.html', 'live-tv.html', 'watch-together.html', 'download.html', 'help.html', 'about.html', 'privacy.html', 'terms.html'];
+const requiredPages = ['index.html', 'features.html', 'add-ons.html', 'live-tv.html', 'watch-together.html', 'download.html', 'help.html', 'about.html', 'privacy.html', 'terms.html'];
 const publicContact = 'mailto:d.mccomish@homehops.co.uk';
 const reportArgument = args.indexOf('--report');
 const reportPath = resolve(reportArgument < 0 ? resolve(siteRoot, 'reports/verification.json') : args[reportArgument + 1] || 'reports/verification.json');
@@ -324,6 +324,19 @@ await check('published_claims_preserve_known_limits', async () => {
   const publicHtml = [...pages.values()].map(page => page.document).join('\n');
   requireValue(!/trusted by\s+[\d,]+|\b[45]\.\d\s*(?:\/\s*5|stars)|lorem ipsum|support@/i.test(publicHtml), 'Unprovided social proof, support contact, or placeholder copy was found.');
   return { protectedProgrammePlaybackVerified: false, freeRelayMinutes: 60, automaticWatchHistory: false, installerSigned: false, note: 'Structural/text checks; browser review is still required for layout and interaction.' };
+});
+
+await check('addon_feature_page_matches_shipped_capabilities', async () => {
+  requireValue(release.addons?.minimumVersion === '2.9.0' && release.addons?.nativeTorrentPlayback === true
+    && release.addons?.bundledTorrentIndex === false && release.addons?.settingsEncryptedForWindowsUser === true,
+  'The add-on page requires the shipped 2.9 capabilities.');
+  requireValue(JSON.stringify(releaseData.addons) === JSON.stringify(release.addons), 'Public add-on metadata differs from the canonical release.');
+  const copy = visibleText(pages.get(resolve(dist, 'add-ons.html')).document);
+  for (const fact of ['Cinemeta', 'manifest.json', 'Stremio', '32 GiB', '64 GiB', 'IP address', 'temporary', 'HLS/DASH', 'not the Torrentio service'])
+    requireValue(copy.includes(fact), `Add-on instructions omit ${fact}.`);
+  requireValue(copy.includes('Actual DMC Player 2.9 native interface'), 'Native screenshot is not accurately captioned.');
+  await access(resolve(dist, 'assets/dmc-addons.png'));
+  return { nativeBrowser: true, torrentPlayback: true, bundledTorrentIndex: false, sourceAvailabilityGuaranteed: false };
 });
 
 const passed = checks.every(item => item.pass);

@@ -2,6 +2,22 @@
   "title": "DMC Player FAQ",
   "entries": [
     {
+      "question": "How do films, TV and add-ons work?",
+      "answer": "From version 2.9, choose File → Films & TV / add-ons. Browse DMC Open Films immediately, or use the Add-ons tab to install the optional Cinemeta metadata catalogue and your own compatible add-ons. Paste the provider's configured manifest.json or stremio:// link and inspect the preview before installing. Enable, disable, refresh or remove installed add-ons there. Browse a catalogue, search, choose a film or TV episode, find sources and press Play. Movies and episodes play on their own, without queue or history entries. Add-on sources are temporary and cannot be saved with Add current item; choose the title again to resolve a fresh source."
+    },
+    {
+      "question": "Is this Torrentio, and will every add-on work?",
+      "answer": "This is DMC Player's own add-on browser and playback integration, not the Torrentio service or its scraping database. It supports the Stremio manifest/catalog/meta/stream JSON protocol, direct HTTP/HTTPS media, YouTube video results and BitTorrent v1 info-hash or magnet results with optional file selection. You supply configured add-ons; DMC does not bundle a movie/TV torrent index or a paid resolver account. A catalogue entry is not a promise of a playable source. Add-ons requiring custom HTTP headers, DRM, external players, archives or unsupported filters are not playable here. Availability and access depend on the source and provider."
+    },
+    {
+      "question": "What happens when I play a torrent source?",
+      "answer": "Only the selected video is streamed through a temporary local endpoint into the VLC engine. DMC needs available peers, metadata and enough disk space; buffering and seeking can take time. BitTorrent uses peer-to-peer connections, so peers and trackers can see your IP address and torrent activity. Uploading can occur while the video is open, including while paused. Selected videos are limited to 32 GiB and total torrent size to 64 GiB. Stop/Close media, switching source, reaching the end or closing DMC stops the torrent engine and removes its owned temporary cache. After a crash, marked inactive cache folders are removed when the next torrent starts. DMC is not a VPN or anonymity service. Use sources you are entitled to access."
+    },
+    {
+      "question": "Can I watch an add-on source with friends?",
+      "answer": "From version 2.9, selected add-on video files, including torrent sources, can use Watch together. DMC proxies the selected video through the host's existing encrypted room, so guests receive a temporary room media ID rather than the add-on's configured address or signed media URL. The host needs upload bandwidth for each guest. A torrent still depends on peers, buffering and the host's disk space. Add-on HLS/DASH playlists are not shared; leave the room to watch those locally. Normal direct streams opened outside the add-on browser continue to share their full media address. YouTube sources use the existing independent-player synchronization."
+    },
+    {
       "question": "Which files and links can I play?",
       "answer": "The VLC engine handles many common video and audio formats, including MP4, MKV, AVI, MOV, MP3 and FLAC. Open stream accepts direct media links, including supported HTTP/HLS and RTSP streams. YouTube links open in the embedded browser; use Services for other supported website watch pages. A file still needs a supported codec and a usable source."
     },

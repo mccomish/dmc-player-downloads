@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { legalLinks, legalPages } from './legal-pages.mjs';
 import { productAbout } from './product-about.mjs';
 import { playerDemo } from './demo-gallery.mjs';
+import { addonsPage } from './addons-page.mjs';
 import { validateSnapshot, formatDownloadTotal, formatCheckedAt, RELEASES_URL } from '../dist/download-count.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -19,7 +20,7 @@ const downloadCounterUrl = './download-count.mjs?v=' + assetVersion('download-co
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const arrow = '<span aria-hidden="true">↗</span>';
 const down = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>';
-const links = [['index.html','Home'],['features.html','The player'],['live-tv.html','Live TV'],['watch-together.html','Watch together'],['help.html','Help'],['about.html','About'],['download.html','Download']];
+const links = [['index.html','Home'],['features.html','The player'],['add-ons.html','Films & TV'],['live-tv.html','Live TV'],['watch-together.html','Watch together'],['help.html','Help'],['about.html','About'],['download.html','Download']];
 
 function download(kind='installer', label='Download for Windows', classes='button button-orange') {
   return `<a class="${classes}" data-download="${kind}" href="${escape(release.downloads[kind].url)}">${down}<span>${label}</span></a>`;
@@ -56,6 +57,8 @@ page('index.html','DMC Player — Free media player for gamers','DMC Player is a
 <section class="explore-section"><div class="shell"><div class="section-title"><p class="eyebrow">FIND YOUR NEXT THING</p><h2>More ways to watch.</h2></div><div class="explore-links"><a href="./live-tv.html"><span class="explore-number">01 / LIVE TV</span><h3>Go straight<br>to the channel.</h3><p>Direct streams, favourites and optional channel lists.</p><span class="round-arrow" aria-hidden="true">↗</span></a><a href="./watch-together.html"><span class="explore-number">02 / WATCH TOGETHER</span><h3>Send a link.<br>Watch with friends.</h3><p>Share files, streams or YouTube videos, with quick chat over the picture.</p><span class="round-arrow" aria-hidden="true">↗</span></a></div></div></section>
 <section class="shell gameplay-strip"><p class="eyebrow">BUILT FOR YOUR DOWNTIME</p><h2>Keep the game moving.<br>Keep the show playing.</h2><div><p>Take a file, a direct stream or a TV channel, shrink it to a corner and carry on playing. Hover for controls, or lock the picture so your clicks go to the game.</p><a class="text-link" href="./about.html">See how it works ${arrow}</a></div></section>
 ${banner()}`);
+
+page('add-ons.html','Films, TV & add-ons — DMC Player','Browse films and TV episodes, install Stremio-compatible add-ons and play direct or torrent video sources inside DMC Player.', addonsPage({ intro, banner, frame }));
 
 page('features.html','The player — DMC Player','Explore DMC Player: a free Windows media player with a borderless mini window, click-through lock, native playback controls and an optional queue.',`
 ${intro('THE PLAYER','Built to fit<br>around your game.','A normal media player when you need one. A small, quiet window when you want to get on with playing.')}
