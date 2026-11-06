@@ -1,0 +1,177 @@
+name: Build and test Mac preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Mac preview version
+        required: true
+        default: '0.1.0'
+      source_sha256:
+        description: SHA-256 of the private source archive
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dmc-mac-preview
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build universal app and test Apple silicon
+    runs-on: macos-15
+    timeout-minutes: 35
+    permissions:
+      contents: write
+    steps:
+      - name: Open private build source
+        env:
+          DMC_SOURCE_1: ${{ secrets.DMC_MAC_SOURCE_1 }}
+          DMC_SOURCE_2: ${{ secrets.DMC_MAC_SOURCE_2 }}
+          DMC_SOURCE_3: ${{ secrets.DMC_MAC_SOURCE_3 }}
+          DMC_SOURCE_4: ${{ secrets.DMC_MAC_SOURCE_4 }}
+          DMC_EXPECTED_SHA: ${{ inputs.source_sha256 }}
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, io, os, pathlib, re, stat, zipfile
+          expected = os.environ['DMC_EXPECTED_SHA']
+          assert re.fullmatch('[0-9a-fA-F]{64}', expected), 'Invalid source hash'
+          encoded = ''.join(os.environ.get('DMC_SOURCE_'+str(i), '') for i in range(1,5) if os.environ.get('DMC_SOURCE_'+str(i), '') not in ('', '.'))
+          data = base64.b64decode(encoded, validate=True)
+          assert len(data) <= 512*1024 and hashlib.sha256(data).hexdigest() == expected.lower(), 'Private source hash mismatch'
+          root = pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-mac-source'
+          root.mkdir()
+          with zipfile.ZipFile(io.BytesIO(data)) as archive:
+            files = archive.infolist()
+            assert 1 <= len(files) <= 100 and sum(f.file_size for f in files) <= 2*1024*1024, 'Unexpected source archive size'
+            for item in files:
+              relative = pathlib.PurePosixPath(item.filename)
+              assert not relative.is_absolute() and all(p not in ('..', '.') for p in relative.parts), 'Unsafe source path'
+              assert item.filename.startswith('MacPlayer/') or item.filename == 'scripts/mac-build.sh', 'Unexpected source file'
+              assert not stat.S_ISLNK(item.external_attr >> 16), 'Source links are not permitted'
+            archive.extractall(root)
+          print('Private Mac source integrity verified; application source is not published.')
+          PY
+      - name: Compile and verify universal Mac app
+        env:
+          DMC_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          [[ "$DMC_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          cd "$RUNNER_TEMP/dmc-mac-source"
+          if ! bash scripts/mac-build.sh --version "$DMC_VERSION" --output "$RUNNER_TEMP/dmc-mac-output" >"$RUNNER_TEMP/dmc-build-private.log" 2>&1; then
+            python3 - <<'PY'
+          import os, pathlib, re
+          lines = (pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-build-private.log').read_text(errors='replace').splitlines()
+          messages = [line for line in lines if re.search(r'\.swift:\d+:\d+: (?:error|warning):', line) or re.match(r'(?:ERROR|Error|FAILED|FAIL|error:)',line)]
+          print('\n'.join(messages[-60:]) if messages else 'Mac build or native verification failed; full compiler output was kept private.')
+          PY
+            exit 1
+          fi
+          echo 'Universal Mac build and Apple-silicon native checks passed.'
+      - name: Attach verified candidate to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DMC_VERSION: ${{ inputs.version }}
+          DMC_EXPECTED_SHA: ${{ inputs.source_sha256 }}
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/dmc-mac-output"
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib
+          root = pathlib.Path('.')
+          package = root/('DMC-Player-'+os.environ['DMC_VERSION']+'-macos-universal.zip')
+          assert package.is_file(), 'Mac package missing'
+          reports = {}
+          for report in root.glob('*.json'):
+            data=json.loads(report.read_text())
+            if 'pass' in data or 'Pass' in data: assert data.get('pass',data.get('Pass')) is True, 'Native verification report failed'
+            reports[report.name]=data
+          assert reports, 'Native verification reports missing'
+          summary={'pass':True,'architecture':'arm64','sourceSha256':os.environ.get('DMC_EXPECTED_SHA',''),'package':package.name,'sizeBytes':package.stat().st_size,'sha256':hashlib.sha256(package.read_bytes()).hexdigest(),'runId':os.environ['GITHUB_RUN_ID'],'reports':reports}
+          (root/'mac-arm64-verification.json').write_text(json.dumps(summary,indent=2)+'\n')
+          PY
+          gh release upload "v$DMC_VERSION" "DMC-Player-$DMC_VERSION-macos-universal.zip" mac-arm64-verification.json --clobber --repo "$GITHUB_REPOSITORY"
+  intel:
+    name: Test the same universal app on Intel
+    needs: build
+    runs-on: macos-15-intel
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - name: Open private verification source
+        env:
+          DMC_SOURCE_1: ${{ secrets.DMC_MAC_SOURCE_1 }}
+          DMC_SOURCE_2: ${{ secrets.DMC_MAC_SOURCE_2 }}
+          DMC_SOURCE_3: ${{ secrets.DMC_MAC_SOURCE_3 }}
+          DMC_SOURCE_4: ${{ secrets.DMC_MAC_SOURCE_4 }}
+          DMC_EXPECTED_SHA: ${{ inputs.source_sha256 }}
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, io, os, pathlib, re, stat, zipfile
+          expected=os.environ['DMC_EXPECTED_SHA']
+          assert re.fullmatch('[0-9a-fA-F]{64}',expected), 'Invalid source hash'
+          encoded=''.join(os.environ.get('DMC_SOURCE_'+str(i),'') for i in range(1,5) if os.environ.get('DMC_SOURCE_'+str(i),'') not in ('','.'))
+          data=base64.b64decode(encoded,validate=True)
+          assert len(data)<=512*1024 and hashlib.sha256(data).hexdigest()==expected.lower(), 'Private source hash mismatch'
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-mac-source';root.mkdir()
+          with zipfile.ZipFile(io.BytesIO(data)) as archive:
+            files=archive.infolist()
+            assert 1<=len(files)<=100 and sum(f.file_size for f in files)<=2*1024*1024, 'Unexpected source archive size'
+            for item in files:
+              relative=pathlib.PurePosixPath(item.filename)
+              assert not relative.is_absolute() and all(p not in ('..','.') for p in relative.parts), 'Unsafe source path'
+              assert item.filename.startswith('MacPlayer/') or item.filename=='scripts/mac-build.sh', 'Unexpected source file'
+              assert not stat.S_ISLNK(item.external_attr>>16), 'Source links are not permitted'
+            archive.extractall(root)
+          print('Private verification source integrity verified.')
+          PY
+      - name: Download exact candidate and verify natively
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DMC_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          [[ "$DMC_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          mkdir -p "$RUNNER_TEMP/dmc-mac-candidate"
+          gh release download "v$DMC_VERSION" --pattern "DMC-Player-$DMC_VERSION-macos-universal.zip" --pattern mac-arm64-verification.json --dir "$RUNNER_TEMP/dmc-mac-candidate" --repo "$GITHUB_REPOSITORY"
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-mac-candidate'
+          expected=json.loads((root/'mac-arm64-verification.json').read_text())
+          package=root/expected['package']
+          assert package.stat().st_size==expected['sizeBytes'] and hashlib.sha256(package.read_bytes()).hexdigest()==expected['sha256'], 'Candidate size/hash mismatch'
+          PY
+          ditto -x -k "$RUNNER_TEMP/dmc-mac-candidate/DMC-Player-$DMC_VERSION-macos-universal.zip" "$RUNNER_TEMP/dmc-mac-candidate/extracted"
+          unset GH_TOKEN
+          cd "$RUNNER_TEMP/dmc-mac-source"
+          if ! bash scripts/mac-build.sh --version "$DMC_VERSION" --output "$RUNNER_TEMP/dmc-mac-intel-output" --verify-app "$RUNNER_TEMP/dmc-mac-candidate/extracted/DMC Player.app" >"$RUNNER_TEMP/dmc-intel-private.log" 2>&1; then
+            python3 - <<'PY'
+          import os,pathlib,re
+          lines=(pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-intel-private.log').read_text(errors='replace').splitlines()
+          messages=[line for line in lines if re.search(r'\.swift:\d+:\d+: (?:error|warning):',line) or re.match(r'(?:ERROR|Error|FAILED|FAIL|error:)',line)]
+          print('\n'.join(messages[-60:]) if messages else 'Intel native verification failed; full compiler output was kept private.')
+          PY
+            exit 1
+          fi
+          echo 'The delivered universal app passed Intel native checks.'
+      - name: Attach Intel verification
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DMC_VERSION: ${{ inputs.version }}
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-mac-intel-output'
+          reports={p.name:json.loads(p.read_text()) for p in root.glob('*.json')}
+          assert reports, 'Intel verification reports missing'
+          for data in reports.values():
+            if 'pass' in data or 'Pass' in data: assert data.get('pass',data.get('Pass')) is True, 'Intel verification report failed'
+          expected=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-mac-candidate/mac-arm64-verification.json').read_text())
+          summary={'pass':True,'architecture':'x64','package':expected['package'],'sizeBytes':expected['sizeBytes'],'sha256':expected['sha256'],'runId':os.environ['GITHUB_RUN_ID'],'reports':reports}
+          (root/'mac-intel-verification.json').write_text(json.dumps(summary,indent=2)+'\n')
+          PY
+          gh release upload "v$DMC_VERSION" "$RUNNER_TEMP/dmc-mac-intel-output/mac-intel-verification.json" --clobber --repo "$GITHUB_REPOSITORY"
