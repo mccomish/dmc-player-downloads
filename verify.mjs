@@ -4,6 +4,7 @@ import { access, mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promi
 import { execFileSync } from 'node:child_process';
 import { dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateSnapshot, formatDownloadTotal } from './dist/download-count.mjs';
 
 const siteRoot = dirname(fileURLToPath(import.meta.url));
 const dist = resolve(siteRoot, 'dist');
@@ -180,7 +181,7 @@ await check('local_assets_and_fragment_links_exist', async () => {
     }
     for (const expected of requiredPages) requireValue(linkedPages.has(expected), `${filename}: shared navigation/footer does not link to ${expected}.`);
   }
-  const textFiles = [...visited].filter(path => ['.js', '.css'].includes(extname(path)));
+  const textFiles = [...visited].filter(path => ['.js', '.mjs', '.css'].includes(extname(path)));
   combinedContent = [...pages.values()].map(page => page.document).join('\n') + '\n' + (await Promise.all(textFiles.map(path => readFile(path, 'utf8')))).join('\n');
   for (const css of textFiles.filter(path => extname(path) === '.css')) {
     const content = await readFile(css, 'utf8');
@@ -189,13 +190,13 @@ await check('local_assets_and_fragment_links_exist', async () => {
       requireValue(await exists(localPath(match[1], dirname(css))), `Missing CSS asset: ${match[1]}`);
     }
   }
-  for (const script of textFiles.filter(path => extname(path) === '.js')) {
+  for (const script of textFiles.filter(path => ['.js', '.mjs'].includes(extname(path)))) {
     execFileSync(process.execPath, ['--check', script], { encoding: 'utf8', stdio: 'pipe' });
     const source = await readFile(script, 'utf8');
     for (const match of source.matchAll(/["'](\.\/assets\/[^"'`\s]+)["']/g))
       requireValue(await exists(localPath(match[1], dirname(script))), `JavaScript references a missing asset: ${match[1]}`);
   }
-  return { pages: pages.size, localAssets: visited.size, checkedFragments: fragments, scriptSyntaxChecked: textFiles.filter(path => extname(path) === '.js').length };
+  return { pages: pages.size, localAssets: visited.size, checkedFragments: fragments, scriptSyntaxChecked: textFiles.filter(path => ['.js', '.mjs'].includes(extname(path))).length };
 });
 
 await check('download_pages_have_working_static_fallbacks', async () => {
@@ -282,6 +283,19 @@ await check('screenshots_match_prepared_asset_hashes', async () => {
     results.push({ filename: image.filename, width: image.width, height: image.height, sha256: image.sha256 });
   }
   return results;
+});
+
+await check('homepage_download_counter_matches_checked_snapshot', async () => {
+  const snapshot = validateSnapshot(await json(resolve(dist, 'assets/download-count.json')));
+  const home = pages.get(resolve(dist, 'index.html'))?.document ?? '';
+  const output = home.match(/<output\b[^>]*data-download-total[^>]*>([^<]+)<\/output>/i);
+  requireValue(output && decodeEntities(output[1]).trim() === formatDownloadTotal(snapshot.total), 'Homepage download fallback does not match its verified snapshot.');
+  requireValue(home.includes(snapshot.checkedAt) && home.includes('data-download-checked'), 'Homepage download total must include its check time.');
+  requireValue(/Repeat downloads are included/i.test(home) && /as reported by GitHub/i.test(home), 'The counter must explain its source and repeat-download semantics.');
+  requireValue(/<script\b[^>]*type="module"[^>]*src="\.\/download-count\.mjs\?v=[a-f\d]+"/i.test(home), 'The homepage download counter module is missing.');
+  for (const { filename, document } of pages.values())
+    if (filename !== 'index.html') requireValue(!document.includes('data-download-counter'), `${filename}: the homepage-only counter was duplicated.`);
+  return { total: snapshot.total, packages: snapshot.packageCount, releases: snapshot.releaseCount, checkedAt: snapshot.checkedAt, fallbackWithoutJavaScript: true };
 });
 
 await check('published_claims_preserve_known_limits', async () => {

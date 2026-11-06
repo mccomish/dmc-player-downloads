@@ -19,11 +19,27 @@ Open the printed localhost address. The server also supports the `/dmc-player-do
 ```sh
 node verify.mjs
 node scripts/verify-demo-carousel.mjs
+node scripts/verify-download-count.mjs
 ```
 
 This checks release sizes, checksums, bundled documentation, screenshot metadata, local links, and the download contract. With the original player workspace available it also compares the local release binaries. `--check-remote` checks external download response headers; it does not claim a full remote SHA-256 verification. Use `--allow-unpublished-downloads` only for an unfinished local preview.
 
 The second command checks the gameplay carousel's navigation, active-video playback, pause controls, reduced-motion preference, visibility and media failures without browser dependencies. Clip details and source credits live in `scripts/gameplay-clips.json`; muted MP4s and their poster images are served locally from `dist/assets/gameplay`. `scripts/demo-gallery.mjs` renders the shared Home and The player demo. Run the page builder after changing that list or template. Only the visible active clip loads and plays; hovering holds the current scene while its footage continues. Pause stops the clip and scene rotation together.
+
+## Homepage download counter
+
+The large homepage total sums GitHub's `download_count` for installer and portable package assets across published releases, including prereleases. It includes repeat, update and automated verification downloads. It does not count page views, unique users, installed copies, checksum files, source archives, or downloads shared outside GitHub. Removing or replacing release assets can remove their counts from the current GitHub total.
+
+`dist/download-count.mjs` requests the public GitHub API once per homepage view, follows pagination and updates the number only after the complete response has been validated. It sends no account credentials or referrer, stores nothing in the browser, and does not track download-button clicks. A dated number is built into the HTML as a fallback for API errors, rate limits, disabled JavaScript or unavailable live metadata. GitHub controls how quickly its source counts update.
+
+Refresh that fallback before publishing changes or a new release:
+
+```sh
+node scripts/update-download-count.mjs
+node scripts/build-pages.mjs
+```
+
+The updater writes `dist/assets/download-count.json` only after a successful complete metadata fetch; it never downloads app packages. The counter test command checks filtering, pagination, count validation, failure fallback and browser request privacy. The repository remains a static GitHub Pages site without a counter backend or account credentials in its source.
 
 Watch-together copy describes three source types: local files, direct streams and YouTube video co-watching from DMC Player 2.7. Both players need 2.7 or later for YouTube; every participant loads YouTube independently. The session shares a canonical public video URL, title and playback state, without account sessions or YouTube media bytes. Subscription websites remain unsupported by Watch together. Keep the documented ad/loading/autoplay limits and possible manual Play action when changing this copy.
 

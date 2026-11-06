@@ -5,13 +5,17 @@ import { fileURLToPath } from 'node:url';
 import { legalLinks, legalPages } from './legal-pages.mjs';
 import { productAbout } from './product-about.mjs';
 import { playerDemo } from './demo-gallery.mjs';
+import { validateSnapshot, formatDownloadTotal, formatCheckedAt, RELEASES_URL } from '../dist/download-count.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 const release = JSON.parse(fs.readFileSync(path.join(dist, 'assets/release-data.json'), 'utf8'));
+const downloadStats = validateSnapshot(JSON.parse(fs.readFileSync(path.join(dist, 'assets/download-count.json'), 'utf8')));
+const downloadTotal = formatDownloadTotal(downloadStats.total);
 const assetVersion = filename => createHash('sha256').update(fs.readFileSync(path.join(dist, filename))).digest('hex').slice(0, 12);
 const styleUrl = './site.css?v=' + assetVersion('site.css');
 const scriptUrl = './app.js?v=' + assetVersion('app.js');
+const downloadCounterUrl = './download-count.mjs?v=' + assetVersion('download-count.mjs');
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const arrow = '<span aria-hidden="true">↗</span>';
 const down = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>';
@@ -36,8 +40,9 @@ function intro(kicker,title,description) {
   return `<section class="page-intro shell"><p class="eyebrow">${kicker}</p><h1>${title}</h1><p class="page-lead">${description}</p></section>`;
 }
 function page(filename, title, description, body, theme='') {
+  const counterScript = filename === 'index.html' ? `<script type="module" src="${downloadCounterUrl}"></script>` : '';
   const html = `<!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${escape(description)}"><meta name="theme-color" content="#141513"><meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:type" content="website"><title>${escape(title)}</title><link rel="icon" type="image/png" href="./assets/dmc-icon.png"><link rel="stylesheet" href="${styleUrl}"><script src="${scriptUrl}" defer></script></head><body class="${theme}">${header(filename)}<main id="main">${body}</main>${footer(filename)}</body></html>\n`;
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${escape(description)}"><meta name="theme-color" content="#141513"><meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:type" content="website"><title>${escape(title)}</title><link rel="icon" type="image/png" href="./assets/dmc-icon.png"><link rel="stylesheet" href="${styleUrl}"><script src="${scriptUrl}" defer></script>${counterScript}</head><body class="${theme}">${header(filename)}<main id="main">${body}</main>${footer(filename)}</body></html>\n`;
   fs.writeFileSync(path.join(dist, filename), html);
 }
 
@@ -45,6 +50,7 @@ const demo = playerDemo(JSON.parse(fs.readFileSync(path.join(root, 'scripts/game
 
 page('index.html','DMC Player — Free media player for gamers','DMC Player is a free Windows media player built for gaming sessions. Watch your files, streams and live TV in a small window over your game.',`
 <section class="home-hero shell"><div class="hero-copy"><p class="eyebrow"><span class="tiny-dot"></span> A FREE WINDOWS MEDIA PLAYER</p><h1>Stay in the game.<br><em>Keep the show on.</em></h1><p class="hero-lead">A film in the corner. Live TV while you farm. DMC Player keeps something good on screen while you play.</p><div class="hero-actions">${download()}<a class="text-link" href="./features.html">See the player ${arrow}</a></div><p class="hero-meta"><span data-version>Version ${escape(release.version)}</span><span>Windows x64</span><span>No DMC subscription</span></p><p class="product-note">Your files. Your streams. Your corner of the screen.</p></div>${demo}</section>
+<section class="download-counter" id="download-count" data-download-counter aria-labelledby="download-counter-title" style="--download-digits:${Math.max(2, downloadTotal.length)}"><div class="shell download-counter-inner"><div class="download-counter-value"><h2 class="eyebrow" id="download-counter-title">TOTAL DOWNLOADS</h2><output class="download-counter-number" data-download-total aria-live="polite" aria-atomic="true">${escape(downloadTotal)}</output></div><div class="download-counter-copy"><p>Installer and portable downloads across all public releases, as reported by GitHub.</p><p class="download-counter-note">Repeat downloads are included.</p><a class="text-link" data-download-source href="${RELEASES_URL}">GitHub releases ${arrow}</a><p class="download-counter-status" data-download-status>Total reported by GitHub</p><p class="download-counter-checked" data-download-checked>Checked <time datetime="${escape(downloadStats.checkedAt)}">${escape(formatCheckedAt(downloadStats.checkedAt))}</time></p></div></div></section>
 <section class="dark-section intro-band"><div class="shell intro-band-inner"><p class="eyebrow">BUILT AROUND YOUR GAME</p><h2>One screen.<br>Room for both.</h2><p>You shouldn't have to stop playing to keep watching. Shrink the player, put it where it suits you and lock clicks through to the game.</p></div></section>
 <section class="shell home-overview"><div class="section-title"><p class="eyebrow">A PROPER PLAYER, TOO</p><h2>Your media.<br>Your controls.</h2><a class="text-link" href="./features.html">Explore the features ${arrow}</a></div><div class="overview-columns"><div class="editorial-list"><article><span>01</span><div><h3>Small window. Full control.</h3><p>Drag, stretch and pin it over a borderless-windowed game. Hover to reveal playback and volume controls.</p></div></article><article><span>02</span><div><h3>Pick something to watch.</h3><p>Open your own files, paste direct streams or choose a live channel. Signed-in streaming websites have their own view.</p></div></article><article><span>03</span><div><h3>Keep your queue yours.</h3><p>Watching a video doesn't add it to a list. Build a queue only when you choose to.</p></div></article></div>${frame('dmc-player.png','DMC Player desktop interface with classic file menus and playback controls.','DMC Player interface preview. Bring your own files and links.')}</div></section>
 <section class="explore-section"><div class="shell"><div class="section-title"><p class="eyebrow">FIND YOUR NEXT THING</p><h2>More ways to watch.</h2></div><div class="explore-links"><a href="./live-tv.html"><span class="explore-number">01 / LIVE TV</span><h3>Go straight<br>to the channel.</h3><p>Direct streams, favourites and optional channel lists.</p><span class="round-arrow" aria-hidden="true">↗</span></a><a href="./watch-together.html"><span class="explore-number">02 / WATCH TOGETHER</span><h3>Send a link.<br>Watch with friends.</h3><p>Share files, streams or YouTube videos, with quick chat over the picture.</p><span class="round-arrow" aria-hidden="true">↗</span></a></div></div></section>
