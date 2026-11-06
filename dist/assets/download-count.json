@@ -1,11 +1,28 @@
 {
   "schemaVersion": 1,
   "total": 41,
-  "checkedAt": "2026-11-06T02:55:45.943Z",
+  "checkedAt": "2026-11-06T02:57:59.050Z",
   "repo": "mccomish/dmc-player-downloads",
-  "releaseCount": 8,
-  "packageCount": 16,
+  "releaseCount": 9,
+  "packageCount": 18,
   "breakdown": [
+    {
+      "releaseId": 436048662,
+      "tag": "v2.10.0",
+      "total": 0,
+      "packages": [
+        {
+          "id": 715689774,
+          "name": "DMC-Player-2.10.0-win-x64.zip",
+          "downloads": 0
+        },
+        {
+          "id": 715689776,
+          "name": "DMC-Player-Setup-2.10.0.exe",
+          "downloads": 0
+        }
+      ]
+    },
     {
       "releaseId": 436036084,
       "tag": "v2.9.1",
