@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "total": 30,
+  "checkedAt": "2026-11-06T00:44:36.525Z",
+  "repo": "mccomish/dmc-player-downloads",
+  "releaseCount": 6,
+  "packageCount": 12,
+  "breakdown": [
+    {
+      "releaseId": 435934587,
+      "tag": "v2.8.0",
+      "total": 4,
+      "packages": [
+        {
+          "id": 715351235,
+          "name": "DMC-Player-2.8.0-win-x64.zip",
+          "downloads": 2
+        },
+        {
+          "id": 715351226,
+          "name": "DMC-Player-Setup-2.8.0.exe",
+          "downloads": 2
+        }
+      ]
+    },
+    {
+      "releaseId": 435913368,
+      "tag": "v2.7.0",
+      "total": 4,
+      "packages": [
+        {
+          "id": 715269554,
+          "name": "DMC-Player-2.7.0-win-x64.zip",
+          "downloads": 2
+        },
+        {
+          "id": 715269553,
+          "name": "DMC-Player-Setup-2.7.0.exe",
+          "downloads": 2
+        }
+      ]
+    },
+    {
+      "releaseId": 435862756,
+      "tag": "v2.6.1",
+      "total": 6,
+      "packages": [
+        {
+          "id": 715146006,
+          "name": "DMC-Player-2.6.1-win-x64.zip",
+          "downloads": 2
+        },
+        {
+          "id": 715145994,
+          "name": "DMC-Player-Setup-2.6.1.exe",
+          "downloads": 4
+        }
+      ]
+    },
+    {
+      "releaseId": 435849606,
+      "tag": "v2.6.0",
+      "total": 5,
+      "packages": [
+        {
+          "id": 715098093,
+          "name": "DMC-Player-2.6.0-win-x64.zip",
+          "downloads": 2
+        },
+        {
+          "id": 715098092,
+          "name": "DMC-Player-Setup-2.6.0.exe",
+          "downloads": 3
+        }
+      ]
+    },
+    {
+      "releaseId": 435835085,
+      "tag": "v2.5.0",
+      "total": 5,
+      "packages": [
+        {
+          "id": 715053761,
+          "name": "DMC-Player-2.5.0-win-x64.zip",
+          "downloads": 2
+        },
+        {
+          "id": 715053755,
+          "name": "DMC-Player-Setup-2.5.0.exe",
+          "downloads": 3
+        }
+      ]
+    },
+    {
+      "releaseId": 435804613,
+      "tag": "v2.4.0",
+      "total": 6,
+      "packages": [
+        {
+          "id": 715004762,
+          "name": "DMC-Player-2.4.0-win-x64.zip",
+          "downloads": 4
+        },
+        {
+          "id": 715004765,
+          "name": "DMC-Player-Setup-2.4.0.exe",
+          "downloads": 2
+        }
+      ]
+    }
+  ]
+}
