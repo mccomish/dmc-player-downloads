@@ -91,7 +91,7 @@ function page(filename, title, description, body, theme='') {
 const demo = playerDemo(JSON.parse(fs.readFileSync(path.join(root, 'scripts/gameplay-clips.json'), 'utf8')));
 
 page('index.html','DMC Player — Free media player for gamers','A free media player for gaming. Download the Windows player or explore the Mac preview for watching your own media in a small window.', homePage({ download, downloadCounter, banner, frame, demo, arrow, releaseVersion: escape(release.version) }));
-page('add-ons.html','Films, TV & add-ons — DMC Player','Browse films and TV episodes, install Stremio-compatible add-ons and play direct or torrent video sources inside DMC Player.', addonsPage({ intro, banner, frame }));
+page('add-ons.html','Films, TV & add-ons — DMC Player','Connect AllDebrid and find film or TV episode sources automatically with DMC Sources in Windows 2.11. Play ready account files or install compatible add-ons.', addonsPage({ intro, banner, frame }));
 
 page('features.html','The player — DMC Player','Explore DMC Player: a free Windows media player with a borderless mini window, click-through lock, native playback controls and an optional queue.',`
 ${intro('The player','Make a little room for what you watch.','Use the full player to find your media and set things up. Go small when you want to get back to your game.')}

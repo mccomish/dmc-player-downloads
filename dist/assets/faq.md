@@ -1,5 +1,17 @@
 # DMC Player FAQ
 
+## How do I connect AllDebrid?
+
+From Windows version 2.11, open File → Films & TV / add-ons and press Connect AllDebrid. Press Connect, then open the AllDebrid authorization page and approve the displayed code in your browser. DMC updates when approval finishes. You do not enter your AllDebrid password into DMC Player. A masked API-key option is available under Use an API key instead. AllDebrid account shows the account and membership status; Disconnect removes the encrypted connection saved on this Windows account. It does not revoke a key at AllDebrid or delete your remote transfers. AllDebrid is a separate service with its own account and access requirements.
+
+## Does DMC have its own automatic source search?
+
+Windows version 2.11 includes DMC Sources. Browse films & TV loads the optional Cinemeta metadata catalogue. Choosing a film or episode searches the public Torrents CSV API using its title and year or episode, without sending an AllDebrid key. Results require matching release years and episodes; season packs, collections and ambiguous filenames are excluded. Index coverage and filenames can be incomplete and seeder counts can be stale. Matching a listing does not guarantee that it is available through AllDebrid. Only pressing Play adds the selected magnet to your AllDebrid account and resolves its selected video. Other compatible add-ons remain optional. Disable DMC Sources in Add-ons to stop its searches. The first Mac release has no DMC Sources or AllDebrid integration.
+
+## Why is a source still opening?
+
+The opening message now shows whether DMC is finding torrent peers, waiting for AllDebrid to prepare a source, or starting video playback. Uncached torrents may still need to download on AllDebrid; raw torrent playback depends on peers. Cancel opening stops DMC waiting and leaves a remote AllDebrid transfer intact. Waiting is bounded so a stalled source returns a retryable message. Choose another source, or open AllDebrid files and press Refresh files to pick a ready video. Multi-video torrents require you to choose their exact file there; DMC does not guess an episode from incompatible file indices. The title list stays readable while controls are disabled. Selecting a source and seeing progress does not certify that the source will become available.
+
 ## Why did a streamed movie say finished before its ending?
 
 From version 2.10.4, a remote video with a known duration can reconnect if the native player stops well before its remembered ending. DMC keeps the last playback position in memory and resumes it when the source supports seeking. A movie that actually reaches its ending still finishes normally and may advance an explicit queue. A clean ending with no known duration is ambiguous, so DMC does not assume it was a live channel; use Playback → Live stream mode only for continuous TV or radio. Repeated connection failures slow to a 30-second retry interval. Stop or Pause cancels reconnecting. A new source or watch-session change cannot be replaced by an older pending retry. Add-on and service websites retain their own playback paths; expired or inaccessible links may need replacement.
@@ -34,7 +46,7 @@ From version 2.9, choose File → Films & TV / add-ons. Browse DMC Open Films im
 
 ## Is this Torrentio, and will every add-on work?
 
-This is DMC Player's own add-on browser and playback integration, not the Torrentio service or its scraping database. It supports the Stremio manifest/catalog/meta/stream JSON protocol, direct HTTP/HTTPS media, YouTube video results and BitTorrent v1 info-hash or magnet results with optional file selection. You supply configured add-ons; DMC does not bundle a movie/TV torrent index or a paid resolver account. A catalogue entry is not a promise of a playable source. Add-ons requiring custom HTTP headers, DRM, external players, archives or unsupported filters are not playable here. Availability and access depend on the source and provider.
+DMC Sources is DMC Player's own automatic source-search and AllDebrid integration, using public Torrents CSV metadata and your account. The player also has its own compatible add-on browser and playback integration. It supports the Stremio manifest/catalog/meta/stream JSON protocol, direct HTTP/HTTPS media, YouTube video results and BitTorrent v1 info-hash or magnet results with optional file selection. You supply configured add-ons; DMC does not bundle a movie/TV torrent index or a paid resolver account. A catalogue entry is not a promise of a playable source. Add-ons requiring custom HTTP headers, DRM, external players, archives or unsupported filters are not playable here. Availability and access depend on the source and provider.
 
 ## What happens when I play a torrent source?
 

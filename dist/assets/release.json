@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "product":  "DMC Player",
-    "version":  "2.10.4",
-    "preparedAtUtc":  "2026-11-06T11:57:31.3165651Z",
+    "version":  "2.11.0",
+    "preparedAtUtc":  "2026-11-06T19:14:30.3537766Z",
     "platform":  {
                      "operatingSystem":  "Windows",
                      "architecture":  "x64",
@@ -11,9 +11,9 @@
     "files":  [
                   {
                       "kind":  "installer",
-                      "filename":  "DMC-Player-Setup-2.10.4.exe",
-                      "sizeBytes":  113856214,
-                      "sha256":  "094cc416036e7b9d098b64cb7a3f2b641932b3dfd504b09564e483244000e1b4",
+                      "filename":  "DMC-Player-Setup-2.11.0.exe",
+                      "sizeBytes":  113903476,
+                      "sha256":  "814540154561d259435fb025ba90b65d4f50fde85adf323b15afc7dbac535052",
                       "signed":  false,
                       "signatureStatus":  "NotSigned",
                       "architecture":  "x64",
@@ -21,9 +21,9 @@
                   },
                   {
                       "kind":  "portable",
-                      "filename":  "DMC-Player-2.10.4-win-x64.zip",
-                      "sizeBytes":  136679914,
-                      "sha256":  "6105118dd86edde3c21715ad7511274aad56b9a2eb32a1ac399f447711af6f7f",
+                      "filename":  "DMC-Player-2.11.0-win-x64.zip",
+                      "sizeBytes":  136739168,
+                      "sha256":  "503bc419d58c4df8a6be3848d1ab6c4961cae95c7fa1a644676269e1c8539d32",
                       "architecture":  "x64",
                       "installScope":  "none"
                   }
@@ -52,8 +52,8 @@
                           {
                               "kind":  "faq",
                               "filename":  "docs/FAQ.md",
-                              "sizeBytes":  21463,
-                              "sha256":  "cddc3ca981f3390073642c402088ee5df868beb14e448d1714dcbc539ec7ab70"
+                              "sizeBytes":  23868,
+                              "sha256":  "af8d50f88ae605b871018b46a0b16dc8e5bf24c07cef5ff731ecbc3ac612ac43"
                           },
                           {
                               "kind":  "tvSources",
@@ -248,7 +248,27 @@
                    "customRequestHeaders":  false,
                    "drmBypass":  false,
                    "watchTogetherVideoProxy":  true,
-                   "watchTogetherPlaylists":  false
+                   "watchTogetherPlaylists":  false,
+                   "dmcSources":  {
+                                      "minimumVersion":  "2.11.0",
+                                      "automaticTitleSearch":  true,
+                                      "index":  "Torrents CSV public API",
+                                      "selectedEpisodeMatching":  true,
+                                      "releaseYearMatching":  true,
+                                      "requiresAllDebrid":  true,
+                                      "serviceAvailabilityGuaranteed":  false
+                                  },
+                   "allDebrid":  {
+                                     "minimumVersion":  "2.11.0",
+                                     "pinSignIn":  true,
+                                     "apiKeySignIn":  true,
+                                     "encryptedCredentials":  true,
+                                     "accountFiles":  true,
+                                     "selectedSourceResolve":  true,
+                                     "onlySelectedMagnetAdded":  true,
+                                     "disconnectRemovesLocalKey":  true,
+                                     "remoteTransferDeleteOnCancel":  false
+                                 }
                },
     "updates":  {
                     "automaticCheckOnStartup":  true,

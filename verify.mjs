@@ -292,7 +292,7 @@ await check('mac_preview_guide_and_platform_limits_match_the_actual_app', async 
   for (const document of [guide, downloadPage]) {
     const table = document.match(/<table\b[^>]*class="comparison-table"[\s\S]*?<\/table>/i)?.[0];
     requireValue(table && /Windows/.test(table) && /Mac preview 0.1.0/.test(table), 'Both the download page and Mac guide need a platform comparison.');
-    for (const feature of ['Watch together and chat', 'add-ons and torrent sources', 'saved library', 'Automatic update notice', 'Not included', 'VLC'])
+    for (const feature of ['Watch together and chat', 'add-ons and torrent sources', 'DMC Sources and AllDebrid', 'saved library', 'Automatic update notice', 'Not included', 'VLC'])
       requireValue(visibleText(table).includes(feature), `The platform comparison omits ${feature}.`);
   }
   for (const filename of ['features.html', 'add-ons.html', 'live-tv.html', 'watch-together.html', 'help.html', 'about.html']) {
@@ -448,6 +448,40 @@ await check('addon_feature_page_matches_shipped_capabilities', async () => {
   requireValue(copy.includes('Actual DMC Player 2.9 native interface'), 'Native screenshot is not accurately captioned.');
   await access(resolve(dist, 'assets/dmc-addons.png'));
   return { nativeBrowser: true, torrentPlayback: true, bundledTorrentIndex: false, sourceAvailabilityGuaranteed: false };
+});
+
+await check('dmc_sources_and_alldebrid_are_documented_with_their_actual_limits', async () => {
+  const sources = release.addons?.dmcSources;
+  const debrid = release.addons?.allDebrid;
+  requireValue(sources?.minimumVersion === '2.11.0' && sources.automaticTitleSearch === true
+    && sources.index === 'Torrents CSV public API' && sources.selectedEpisodeMatching === true
+    && sources.releaseYearMatching === true && sources.requiresAllDebrid === true
+    && sources.serviceAvailabilityGuaranteed === false, 'DMC Sources metadata must describe the independent, bounded public-index integration.');
+  requireValue(debrid?.minimumVersion === '2.11.0' && debrid.pinSignIn === true && debrid.apiKeySignIn === true
+    && debrid.encryptedCredentials === true && debrid.accountFiles === true && debrid.selectedSourceResolve === true
+    && debrid.onlySelectedMagnetAdded === true && debrid.disconnectRemovesLocalKey === true
+    && debrid.remoteTransferDeleteOnCancel === false, 'AllDebrid metadata must describe native sign-in, selected-source resolution and local-only disconnect/cancel semantics.');
+  requireValue(release.addons.bundledTorrentIndex === false, 'The remote source index must not be described as a bundled database or server.');
+  const feature = visibleText(pages.get(resolve(dist, 'add-ons.html')).document);
+  for (const fact of ['Windows', '2.11', 'Connect AllDebrid', 'Browse films & TV', 'Play in DMC Player', 'Torrents CSV',
+    'release year', 'season and episode', 'Disable DMC Sources', 'AllDebrid files', 'Refresh files', 'Play selected file',
+    'Cancel opening', 'does not delete a transfer', 'Disconnect', 'locally saved key'])
+    requireValue(feature.includes(fact), `The DMC Sources walkthrough omits ${fact}.`);
+  requireValue(feature.includes('Only the selected source can add a magnet') && feature.includes('not a promise that AllDebrid has a ready copy')
+    && feature.includes('DMC Player stays free'), 'The page must distinguish metadata searches, selected playback, provider availability and DMC pricing.');
+  const privacy = pages.get(resolve(dist, 'privacy.html')).document;
+  const dataFlow = visibleText(privacy.match(/<section\b[^>]*id="dmc-sources"[\s\S]*?<\/section>/i)?.[0] ?? '');
+  for (const fact of ['Torrents CSV', 'title', 'release year', 'episode tag', 'DPAPI', 'alldebrid.dat',
+    'only to AllDebrid', 'not passed to the public search index', 'not keep a search or viewing history',
+    'Refresh files', 'loaded list in memory', 'does not delete a transfer', 'does not revoke the key'])
+    requireValue(dataFlow.includes(fact), `The new Windows privacy dataflow omits ${fact}.`);
+  const terms = visibleText(pages.get(resolve(dist, 'terms.html')).document);
+  requireValue(terms.includes('independent client for a public source-search index') && terms.includes('Only choosing Play can add the selected magnet')
+    && terms.includes('does not revoke that key'), 'Terms must describe the new functionality without promising remote deletion or automatic access.');
+  const mac = visibleText(pages.get(resolve(dist, 'mac.html')).document);
+  requireValue(mac.includes('DMC Sources and AllDebrid') && mac.includes('DMC Sources, AllDebrid, add-ons and torrents are not part of this Mac preview'),
+    'Windows account/source features must not be implied for the unchanged Mac preview.');
+  return { introducedIn: '2.11.0', index: sources.index, onlySelectedMagnetAdded: true, remoteTransferDeleteOnCancel: false, nativeKeyStoredEncrypted: true, macSupported: false };
 });
 
 const passed = checks.every(item => item.pass);

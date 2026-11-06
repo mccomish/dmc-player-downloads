@@ -45,6 +45,8 @@ Watch-together copy describes three source types: local files, direct streams an
 
 Watch-session chat requires 2.8 or later on both players. The Watch together page includes a labelled sample-text illustration using `watch-chat-section`, `watch-chat-layout` and `watch-chat-preview` classes. Keep the 280-character limit, three-message/six-second overlay, Chat / Ctrl+Alt+C controls, local hide choice and no automatic saved transcript or late-join replay clear. Privacy describes chat text, sender display name and message time going to the host and connected participants. Disney copy describes the checked UK sign-in page only; it does not certify sign-in or protected playback.
 
+Windows 2.11 adds the built-in DMC Sources public-index client and native AllDebrid connection. Feature copy lives in `scripts/addons-page.mjs`; matching `addons.dmcSources` and `addons.allDebrid` release flags are verified before publication. Searches send only the selected title/year or episode to Torrents CSV, and the native encrypted account key goes only to AllDebrid. Searching does not create remote transfers: only the selected Play action may add a magnet. Cancel stops local waiting, and Disconnect removes the local key; neither deletes remote transfers or revokes the provider key. Keep these differences, optional raw peer-to-peer playback, and the unchanged Mac preview's lack of AllDebrid/add-ons clear when editing product or privacy copy.
+
 ## Update a release
 
 1. Build and verify the new application release in the original player workspace.
