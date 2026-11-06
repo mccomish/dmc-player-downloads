@@ -283,7 +283,7 @@
       mini.classList.toggle('locked', locked); lock.setAttribute('aria-pressed', String(locked));
       lock.setAttribute('aria-label', locked ? 'Unlock demo position' : 'Lock demo position');
       const hint = one('#demo-hint');
-      if (hint) hint.textContent = locked ? 'Position locked. The app unlocks with Ctrl+Alt+L.' : 'Move it. Resize it. Try the lock.';
+      if (hint) hint.textContent = locked ? 'Locked in place. In the app, Ctrl+Alt+L unlocks it.' : 'Drag the player, resize it or try the lock.';
     }
     lock.addEventListener('click', toggleLock);
     play.addEventListener('click', () => {
