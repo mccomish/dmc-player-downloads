@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "product": "DMC Player",
-  "version": "2.9.0",
-  "preparedAtUtc": "2026-11-06T01:12:35.9726120Z",
-  "generatedAtUtc": "2026-11-06T01:12:53.257Z",
+  "version": "2.9.1",
+  "preparedAtUtc": "2026-11-06T02:31:24.6510400Z",
+  "generatedAtUtc": "2026-11-06T02:35:03.361Z",
   "platform": {
     "operatingSystem": "Windows",
     "architecture": "x64",
@@ -12,25 +12,25 @@
   "files": [
     {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.9.0.exe",
-      "sizeBytes": 113708403,
-      "sha256": "533a2a456e2fd171d704755b97260a354082390cade8f58d1182b87f17965430",
+      "filename": "DMC-Player-Setup-2.9.1.exe",
+      "sizeBytes": 113725858,
+      "sha256": "b0b2ad6e8920dda619bf6dd2bad5eea01cb4019965582090667c55c0e73f033f",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.9.0/DMC-Player-Setup-2.9.0.exe",
-      "sizeMiB": 108.4,
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.9.1/DMC-Player-Setup-2.9.1.exe",
+      "sizeMiB": 108.5,
       "sizeLabel": "113.7 MB"
     },
     {
       "kind": "portable",
-      "filename": "DMC-Player-2.9.0-win-x64.zip",
-      "sizeBytes": 136487086,
-      "sha256": "d02690696caec1a94328e11d69d7eea14c88eea619eec9d353731467d52aeb95",
+      "filename": "DMC-Player-2.9.1-win-x64.zip",
+      "sizeBytes": 136508717,
+      "sha256": "6a39abfdcc6bf46b97cc6e018012a2204415655d4eec3befa6a9540e032af850",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.9.0/DMC-Player-2.9.0-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.9.1/DMC-Player-2.9.1-win-x64.zip",
       "sizeMiB": 130.2,
       "sizeLabel": "136.5 MB"
     }
@@ -38,25 +38,25 @@
   "downloads": {
     "installer": {
       "kind": "installer",
-      "filename": "DMC-Player-Setup-2.9.0.exe",
-      "sizeBytes": 113708403,
-      "sha256": "533a2a456e2fd171d704755b97260a354082390cade8f58d1182b87f17965430",
+      "filename": "DMC-Player-Setup-2.9.1.exe",
+      "sizeBytes": 113725858,
+      "sha256": "b0b2ad6e8920dda619bf6dd2bad5eea01cb4019965582090667c55c0e73f033f",
       "signed": false,
       "signatureStatus": "NotSigned",
       "architecture": "x64",
       "installScope": "currentUser",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.9.0/DMC-Player-Setup-2.9.0.exe",
-      "sizeMiB": 108.4,
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.9.1/DMC-Player-Setup-2.9.1.exe",
+      "sizeMiB": 108.5,
       "sizeLabel": "113.7 MB"
     },
     "portable": {
       "kind": "portable",
-      "filename": "DMC-Player-2.9.0-win-x64.zip",
-      "sizeBytes": 136487086,
-      "sha256": "d02690696caec1a94328e11d69d7eea14c88eea619eec9d353731467d52aeb95",
+      "filename": "DMC-Player-2.9.1-win-x64.zip",
+      "sizeBytes": 136508717,
+      "sha256": "6a39abfdcc6bf46b97cc6e018012a2204415655d4eec3befa6a9540e032af850",
       "architecture": "x64",
       "installScope": "none",
-      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.9.0/DMC-Player-2.9.0-win-x64.zip",
+      "url": "https://github.com/mccomish/dmc-player-downloads/releases/download/v2.9.1/DMC-Player-2.9.1-win-x64.zip",
       "sizeMiB": 130.2,
       "sizeLabel": "136.5 MB"
     }
@@ -190,7 +190,26 @@
     "separateFromPlayQueue": true,
     "automaticRequestsOnOpen": false,
     "allListedChannelsGuaranteed": false,
-    "freeviewRequiresTunerForAerialChannels": true
+    "freeviewRequiresTunerForAerialChannels": true,
+    "playback": {
+      "minimumVersion": "2.9.1",
+      "networkCachingMs": 3000,
+      "adaptiveLiveDelayMs": 30000,
+      "adaptiveMaxBufferMs": 30000,
+      "qualitySelection": "Unchanged adaptive selection",
+      "liveHlsManagedTransport": true,
+      "upstreamHeaderTimeoutSeconds": 10,
+      "upstreamIdleReadTimeoutSeconds": 8,
+      "stalledPlaybackRecovery": true,
+      "startupGraceSeconds": 30,
+      "stallThresholdSeconds": 12,
+      "maximumRecoveryAttempts": 3,
+      "retryWindowMinutes": 5,
+      "stablePlaybackResetsBudgetSeconds": 60,
+      "pauseAndStopCancelRecovery": true,
+      "liveDvrResume": false,
+      "automaticLiveGuestDriftSeek": false
+    }
   },
   "addons": {
     "minimumVersion": "2.9.0",
@@ -264,7 +283,7 @@
     "portablePayloadVerified": true,
     "method": "Extraction and hashes; no application/runtime installation or system-default changes",
     "sourceFilesVerified": 9,
-    "releaseManifestSha256": "84330f9dac4214494b0fe9fc9d5287d05122fb96208fe2a2d836cd37183732f2",
-    "checksumFileSha256": "b81b74ca87c478e23dca4ebf6df8706f08a4a22415d5b52c8b2d1c7505431cca"
+    "releaseManifestSha256": "9aae074026b46071f14604224beff3801a813b1fbe93f1f5bc9613678e4d38af",
+    "checksumFileSha256": "b197ceff957010d016dc0e85fedc88d3818afcf855467acd14d5df145ef19a42"
   }
 }

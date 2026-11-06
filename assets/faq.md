@@ -1,5 +1,13 @@
 # DMC Player FAQ
 
+## Why does a live channel freeze, and what should I do?
+
+From version 2.9.1, channels opened through Live TV use a larger adaptive live-stream buffer, with a target delay of about 30 seconds. This gives the player more room to absorb brief network or broadcaster interruptions; it can put the picture further behind the live broadcast. Live HLS downloads have finite connection and idle-read deadlines so an interrupted video segment cannot keep the native player waiting indefinitely. Other files and ordinary on-demand links keep their normal playback settings. If the live picture and playback clock stop advancing, DMC can reopen the selected channel automatically. Recovery respects pause, Stop, source changes and closing the player. It uses up to three attempts in a five-minute window, resetting the budget after a minute of stable playback; if it still fails, press Play to retry. A broadcaster or network outage can still interrupt live TV. Update and reopen Sky News from File → Live TV to use the new settings.
+
+## Does live TV stay in exact sync in Watch together?
+
+Use version 2.9.1 or later on both players for the live-stream buffer and live-source marker. Live channel guests follow the live broadcast independently instead of repeatedly seeking to the host's sliding DVR time. A delay between viewers is possible. Play and pause still follow the host; local retry handles a guest's interrupted connection without changing everyone else's playback. Files and on-demand video retain position synchronization.
+
 ## How do films, TV and add-ons work?
 
 From version 2.9, choose File → Films & TV / add-ons. Browse DMC Open Films immediately, or use the Add-ons tab to install the optional Cinemeta metadata catalogue and your own compatible add-ons. Paste the provider's configured manifest.json or stremio:// link and inspect the preview before installing. Enable, disable, refresh or remove installed add-ons there. Browse a catalogue, search, choose a film or TV episode, find sources and press Play. Movies and episodes play on their own, without queue or history entries. Add-on sources are temporary and cannot be saved with Add current item; choose the title again to resolve a fresh source.
