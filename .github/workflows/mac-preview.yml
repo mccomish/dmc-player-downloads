@@ -95,9 +95,11 @@ jobs:
             reports[report.name]=data
           assert reports, 'Native verification reports missing'
           summary={'pass':True,'architecture':'arm64','sourceSha256':os.environ.get('DMC_EXPECTED_SHA',''),'package':package.name,'sizeBytes':package.stat().st_size,'sha256':hashlib.sha256(package.read_bytes()).hexdigest(),'runId':os.environ['GITHUB_RUN_ID'],'reports':reports}
+          fixtures=root/'mac-test-fixtures.zip'
+          summary['fixtures']={'filename':fixtures.name,'sizeBytes':fixtures.stat().st_size,'sha256':hashlib.sha256(fixtures.read_bytes()).hexdigest()}
           (root/'mac-arm64-verification.json').write_text(json.dumps(summary,indent=2)+'\n')
           PY
-          gh release upload "v$DMC_VERSION" "DMC-Player-$DMC_VERSION-macos-universal.zip" mac-arm64-verification.json --clobber --repo "$GITHUB_REPOSITORY"
+          gh release upload "v$DMC_VERSION" "DMC-Player-$DMC_VERSION-macos-universal.zip" mac-arm64-verification.json mac-test-fixtures.zip --clobber --repo "$GITHUB_REPOSITORY"
   intel:
     name: Test the same universal app on Intel
     needs: build
@@ -141,18 +143,21 @@ jobs:
           set -euo pipefail
           [[ "$DMC_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
           mkdir -p "$RUNNER_TEMP/dmc-mac-candidate"
-          gh release download "v$DMC_VERSION" --pattern "DMC-Player-$DMC_VERSION-macos-universal.zip" --pattern mac-arm64-verification.json --dir "$RUNNER_TEMP/dmc-mac-candidate" --repo "$GITHUB_REPOSITORY"
+          gh release download "v$DMC_VERSION" --pattern "DMC-Player-$DMC_VERSION-macos-universal.zip" --pattern mac-arm64-verification.json --pattern mac-test-fixtures.zip --dir "$RUNNER_TEMP/dmc-mac-candidate" --repo "$GITHUB_REPOSITORY"
           python3 - <<'PY'
           import hashlib,json,os,pathlib
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-mac-candidate'
           expected=json.loads((root/'mac-arm64-verification.json').read_text())
           package=root/expected['package']
           assert package.stat().st_size==expected['sizeBytes'] and hashlib.sha256(package.read_bytes()).hexdigest()==expected['sha256'], 'Candidate size/hash mismatch'
+          fixtures=root/expected['fixtures']['filename']
+          assert fixtures.stat().st_size==expected['fixtures']['sizeBytes'] and hashlib.sha256(fixtures.read_bytes()).hexdigest()==expected['fixtures']['sha256'], 'Fixture size/hash mismatch'
           PY
           ditto -x -k "$RUNNER_TEMP/dmc-mac-candidate/DMC-Player-$DMC_VERSION-macos-universal.zip" "$RUNNER_TEMP/dmc-mac-candidate/extracted"
+          ditto -x -k "$RUNNER_TEMP/dmc-mac-candidate/mac-test-fixtures.zip" "$RUNNER_TEMP/dmc-mac-candidate/test-data"
           unset GH_TOKEN
           cd "$RUNNER_TEMP/dmc-mac-source"
-          if ! bash scripts/mac-build.sh --version "$DMC_VERSION" --output "$RUNNER_TEMP/dmc-mac-intel-output" --verify-app "$RUNNER_TEMP/dmc-mac-candidate/extracted/DMC Player.app" >"$RUNNER_TEMP/dmc-intel-private.log" 2>&1; then
+          if ! bash scripts/mac-build.sh --version "$DMC_VERSION" --output "$RUNNER_TEMP/dmc-mac-intel-output" --verify-app "$RUNNER_TEMP/dmc-mac-candidate/extracted/DMC Player.app" --fixtures "$RUNNER_TEMP/dmc-mac-candidate/test-data/fixtures" >"$RUNNER_TEMP/dmc-intel-private.log" 2>&1; then
             python3 - <<'PY'
           import os,pathlib,re
           lines=(pathlib.Path(os.environ['RUNNER_TEMP'])/'dmc-intel-private.log').read_text(errors='replace').splitlines()
