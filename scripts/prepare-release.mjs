@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const websiteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repositoryRoot = path.resolve(websiteRoot, '..');
-const options = { version: '2.10.1', includeDownloads: false, downloadBase: './downloads' };
+const options = { version: '2.10.2', includeDownloads: false, downloadBase: './downloads' };
 for (let index = 2; index < process.argv.length; index++) {
   const argument = process.argv[index];
   if (argument === '--include-downloads') options.includeDownloads = true;
@@ -16,7 +16,7 @@ for (let index = 2; index < process.argv.length; index++) {
     if (!value || value.startsWith('--')) throw new Error(`Missing value for ${argument}.`);
     options[argument === '--version' ? 'version' : 'downloadBase'] = value;
   } else if (argument === '--help') {
-    console.log('Usage: node website/scripts/prepare-release.mjs [--version 2.10.1] [--include-downloads] [--download-base ./downloads|https://host/path]');
+    console.log('Usage: node website/scripts/prepare-release.mjs [--version 2.10.2] [--include-downloads] [--download-base ./downloads|https://host/path]');
     process.exit(0);
   } else throw new Error(`Unknown argument: ${argument}`);
 }
@@ -127,6 +127,7 @@ const data = {
   tvSourcesUrl: './assets/tv-sources.md',
   runtimes: release.runtimes,
   fileAssociations: release.fileAssociations,
+  startup: release.startup,
   viewModes: release.viewModes,
   queue: release.queue,
   playlistLibrary: release.playlistLibrary,

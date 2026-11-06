@@ -1,5 +1,9 @@
 # DMC Player FAQ
 
+## Why did the player take a long time to open?
+
+Version 2.10.2 lets the window appear before loading the VLC playback engine on a background worker, and includes a prepared native plug-in cache. A file opened immediately waits for that same engine to finish preparing. Update checks begin after the window has opened. Service browsers, playlist imports and torrent engines still start only when needed. The first launch after extraction, a slow disk or security scanning can take longer; this does not change stream buffering or download speed.
+
 ## Why did my M3U file open a blank screen?
 
 Before version 2.10, normal file opening handed an M3U container directly to the native player, which could immediately finish without playing its entries. Update to DMC Player 2.10 or later and open the M3U again. A one-video playlist starts its video automatically. A larger playlist opens the saved playlist library so you can select an entry. The original links must still be accessible; DMC cannot renew expired provider links or bypass sign-in requirements.

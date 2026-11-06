@@ -1,31 +1,32 @@
-# DMC Player 2.10.1
+# DMC Player 2.10.2
 
-The player's right-click menu now has a complete custom frame, removing the white strip left by Windows' default menu gutter.
+DMC Player now opens its window before loading the VLC playback engine, so native initialization no longer holds up the first screen.
 
-- Rounded charcoal surfaces, clear monochrome icons, consistent 34px rows and aligned shortcuts.
-- Full screen, Mini player, Always on top and Click-through lock remain directly available.
-- Playback, Volume, Open and Queue group related commands into shorter submenus. Open includes files, streams, Live TV, playlist libraries, films/add-ons, YouTube and streaming services.
-- Chat appears when a watch session is connected. Checked, disabled, highlighted and keyboard-focus states remain distinct.
-- The same menu surfaces apply to nested popups and the player's speed/track menus. Compact top-menu labels remain in place, with high-contrast colours and scrolling support.
+- Playback prepares on a background worker. A file opened immediately waits for that same engine; selecting something else or pressing Stop cancels the older pending selection.
+- Closing during initialization does not wait for native loading, and a late-created engine is released safely.
+- Installer and portable releases include VLC's plug-in cache. Missing or changed cache metadata triggers regeneration; normal native validation remains enabled. Installer timestamps are preserved in UTC, and portable extractions with changed timezones recover safely.
+- Right-click menus are created when first requested, the main window reuses the application theme, and automatic update checks begin after the window has opened.
+- Files, playlist libraries, service browsers and torrent engines are not scanned or started in advance.
 
-Playback, queues, saved libraries, streaming links and window shortcuts retain their existing behavior. The website's light theme, compact download counter and seven-game demo are retained.
+The website's light theme, small download counter and gameplay demo are retained.
 
 ## Updating
 
-Use Help > Check for updates or download this installer. Close the older running player when ready to install, then reopen DMC Player and right-click the picture. Your settings, manual queue, playlist libraries, TV favourites and service sign-ins are retained. Portable users should extract the complete folder. DMC Player remains free to download and use; the installer is unsigned.
+Use Help > Check for updates, or download the installer. Close the older player when ready to install, then reopen DMC Player. Settings, manual queues, playlist libraries, TV favourites and service sign-ins are retained. Portable users should extract the complete folder. DMC Player remains free; the installer is unsigned.
+
+## Startup measurements
+
+Five fresh-process observations per version on this PC measured a median first render of 620 ms before the change and 555 ms afterward, with about 154 MiB versus 123 MiB of working set at first paint. All five updated runs painted before playback initialization completed.
+
+These are warm-filesystem-cache measurements of an offscreen window with an empty temporary profile. The baseline models the previous synchronous native startup. The fixtures exclude singleton activation, global shortcuts and external integrations. They are not a cold-boot or low-spec-PC guarantee, and first paint is distinct from playback readiness. Disk speed, security scanning and stream buffering can still affect launch or playback.
 
 ## Verification
 
-- Native menu checks: 8/8, including command availability, recursive states, real pin/queue and fullscreen/F11 actions, icon rendering, shortcut alignment, nested menus and a short scrolling viewport.
-- Main menu rendered at 96, 120 and 144 DPI; Open, Playback, Volume and Queue submenus inspected. The pale vertical gutter is absent.
-- Window/view controls: 6/6; Help: 9/9.
-- Installer extraction and payload checks: 9/9; release package checks: 3/3; website: 12/12.
-
-Menu tests render closed production controls and detached submenu contents in isolated WPF fixtures with temporary stores. No popup was opened over the user's movie, no global shortcuts were registered and no user playback, profile, account, Windows default or installation was changed. DPI renders verify the layout at those scales; they do not certify moving a live popup between every monitor configuration.
+Startup resource lifecycle, pending-open cancellation, native playback, playlist/add-on playback, YouTube Watch together, view controls, Help, single-instance activation, installer extraction and release hashes were checked in isolated fixtures. No user installation, profile, Windows default or ongoing playback was changed during testing.
 
 ## SHA-256
 
 ```text
-e12d00b4595bcb80b5f58add338c9817b0d2ebc2a90e1277e434eab41d742c2c  DMC-Player-Setup-2.10.1.exe
-9f0ca01c806e8c75e40cecac88190589352d9083a8432b11ac7dc2458198213f  DMC-Player-2.10.1-win-x64.zip
+f08b3f138aa3a95bf24a0093c6d9e43bde4a592ead12ca8004580aeee5ae0e6f  DMC-Player-Setup-2.10.2.exe
+4ca4011cace9ac92000d30702f32af4663cbf6a0a90fb1b8b94eb109ebc32530  DMC-Player-2.10.2-win-x64.zip
 ```
