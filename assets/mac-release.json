@@ -1,0 +1,49 @@
+{
+    "schemaVersion":  1,
+    "product":  "DMC Player",
+    "version":  "0.1.0",
+    "releaseTag":  "v0.1.0",
+    "isPreview":  true,
+    "platform":  {
+                     "operatingSystem":  "macOS",
+                     "minimumVersion":  "13.0",
+                     "architectures":  [
+                                           "arm64",
+                                           "x86_64"
+                                       ]
+                 },
+    "signing":  {
+                    "identity":  "ad-hoc",
+                    "notarized":  false
+                },
+    "verification":  {
+                         "macOSLaunchPassed":  true,
+                         "nativeTestsPassed":  true,
+                         "ciRunId":  "42222196395",
+                         "ciUrl":  "https://github.com/mccomish/dmc-player-downloads/actions/runs/42222196395",
+                         "binarySha256":  "075cc2b3d94e4412b27fb5991dc955de51cfdefe672927510cb4bbab4cd3d488",
+                         "reports":  [
+                                         {
+                                             "architecture":  "arm64",
+                                             "filename":  "mac-arm64-verification.json",
+                                             "sha256":  "ecbd24bba392c8dd0c97a0ffdecef203c7314e095ba4bf948a20b6919f131194",
+                                             "url":  "https://github.com/mccomish/dmc-player-downloads/releases/download/v0.1.0/mac-arm64-verification.json"
+                                         },
+                                         {
+                                             "architecture":  "x86_64",
+                                             "filename":  "mac-intel-verification.json",
+                                             "sha256":  "7f8a0a4dd1ec89f74a3925d7257a9c9a3766d0f798ea62140cd2690b76b20ee6",
+                                             "url":  "https://github.com/mccomish/dmc-player-downloads/releases/download/v0.1.0/mac-intel-verification.json"
+                                         }
+                                     ]
+                     },
+    "files":  [
+                  {
+                      "architecture":  "universal",
+                      "filename":  "DMC-Player-0.1.0-macos-universal.zip",
+                      "sizeBytes":  356918,
+                      "sha256":  "aa4e57a45ed382426867bc2a30f4f1c8bbf339d87cf10a502668d812e3f988d8",
+                      "url":  "https://github.com/mccomish/dmc-player-downloads/releases/download/v0.1.0/DMC-Player-0.1.0-macos-universal.zip"
+                  }
+              ]
+}
